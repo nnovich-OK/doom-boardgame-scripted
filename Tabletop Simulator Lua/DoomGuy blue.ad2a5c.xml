@@ -1,0 +1,60 @@
+<Defaults>
+   <Button onClick="onClick" fontSize="80" fontStyle="Bold" textColor="#FFFFFF" color="#00000000"/>
+   <Text fontSize="80" fontStyle="Bold" color="#FFFFFF" outline="#000000"/>
+</Defaults>
+
+<Panel id="panel" position="0 0 -240" rotation="0 90 270" scale="0.2 0.2">
+   <Panel color="#000000" height="100" width="600">
+      <ProgressBar id="progressBar" height="90" width="590" showPercentageText="false" color="#000000" percentage="100" fillImageColor="#710000">
+      <!-- Defeat monster at 0 hp -->
+      <Panel id="defeatPanel" height="100" width="600" offsetXY="0 0" active="false">
+         <Button onClick="defeatClick" text="Defeat"/>
+      </Panel>
+      <!-- Health Bar -->
+      <HorizontalLayout>
+         <Panel id="healthSubPanel" active="false">
+            <Button id="subMax" onClick="hits(subMax)" text="◄"></Button>
+         </Panel>
+         <Panel id="health" width="300">
+            <Text id="healthbar" width="600"></Text>
+         </Panel>
+         <Panel id="healthAddPanel" active="false">
+            <Button id="addMax" onClick="hits(addMax)" text="►"></Button>
+         </Panel>
+      </HorizontalLayout>
+      <Button id="editButton" onClick="toggleCustomMonsterUI" width="300"></Button>
+   </ProgressBar>
+   </Panel>
+
+
+   <!-- Armor value / customization button
+    TODO: activate button should be here
+    TODO: picture of armor -->
+   <Panel id="armorPanel" height="200" width="150" offsetXY="-390 0">
+      <Button id="subNumber" width="150" offsetXY="0 -110" onClick="subNumber" text="▼" textColor="#FFFFFF" active="false">▼</Button>
+      <Button id="addNumber" width="150" offsetXY="0 110" onClick="addNumber" text="▲" textColor="#FFFFFF" active="false">▲</Button>
+      <Image image="shield" color="yellow" offsetXY="0 -8" height="250" width="250">
+        <Text id="armor" height="150" width="150" offsetXY="0 8" text="2" active="true"></Text>
+      </Image>
+   </Panel>
+
+   <!-- Status effects display TODO: set images and handle collisions-->
+   <Panel id="statePanel" height="260" width="0" offsetXY="0 325">
+      <VerticalLayout>
+         <HorizontalLayout spacing="5">
+            <Button id="Aim" active="false">
+               <Image image="Aim" preserveAspect="true"></Image>
+            </Button>
+            <Button id="Dodge" active="false">
+               <Image image="Dodge" preserveAspect="true"></Image>
+            </Button>
+            <Button id="Guard" active="false">
+               <Image image="Guard" preserveAspect="true"></Image>
+            </Button>
+            <Button id="Heal" active="false">
+               <Image image="Heal" preserveAspect="true"></Image>
+            </Button>
+         </HorizontalLayout>
+      </VerticalLayout>
+   </Panel>
+</Panel>

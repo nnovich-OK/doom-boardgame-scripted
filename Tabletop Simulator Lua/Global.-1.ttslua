@@ -1,0 +1,762 @@
+#include Console/console++
+
+shown = {
+  calculator = false,
+  stats = false
+}
+
+cumulativeStatsMode = false
+
+redRotationValues = {
+  {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
+  {value="range=0 dmg=4 ammo",      rotation={x=0, y=0, z=90}},
+  {value="miss",                    rotation={x=0, y=0, z=180}},
+  {value="range=2 dmg=2",           rotation={x=0, y=0, z=270}},
+  {value="range=1 dmg=3 ammo",      rotation={x=90, y=0, z=0}},
+  {value="range=1 dmg=3",           rotation={x=270, y=0, z=0}},
+}
+
+yellowRotationValues = {
+  {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
+  {value="range=4 dmg=0 ammo",      rotation={x=0, y=0, z=90}},
+  {value="miss",                    rotation={x=0, y=0, z=180}},
+  {value="range=3 dmg=1 ammo",      rotation={x=0, y=0, z=270}},
+  {value="range=1 dmg=3",           rotation={x=90, y=0, z=0}},
+  {value="range=2 dmg=2",           rotation={x=270, y=0, z=0}},
+}
+
+greenRotationValues = {
+  {value="range=1 dmg=1",           rotation={x=0, y=0, z=0}},
+  {value="range=2 dmg=0",           rotation={x=0, y=0, z=90}},
+  {value="range=3 dmg=0",           rotation={x=0, y=0, z=180}},
+  {value="range=2 dmg=1",           rotation={x=0, y=0, z=270}},
+  {value="range=3 dmg=0",           rotation={x=90, y=0, z=0}},
+  {value="range=2 dmg=0",           rotation={x=270, y=0, z=0}},
+}
+blueRotationValues = {
+  {value="range=1 dmg=1",           rotation={x=0, y=0, z=0}},
+  {value="range=0 dmg=2",           rotation={x=0, y=0, z=90}},
+  {value="range=0 dmg=3",           rotation={x=0, y=0, z=180}},
+  {value="range=0 dmg=2",           rotation={x=0, y=0, z=270}},
+  {value="range=0 dmg=3",           rotation={x=90, y=0, z=0}},
+  {value="range=1 dmg=2",           rotation={x=270, y=0, z=0}},
+}
+
+-- weight for duplicated sides
+redDie = {
+  "miss",
+  {range=0, dmg=4, weight=1},
+  {range=1, dmg=3, weight=2},
+  {range=2, dmg=2, weight=1},
+  {range=3, dmg=1, weight=1},
+}
+
+yellowDie = {
+  "miss",
+  {range=1, dmg=3, weight=1},
+  {range=2, dmg=2, weight=1},
+  {range=3, dmg=1, weight=2},
+  {range=4, dmg=0, weight=1},
+}
+
+greenDie = {
+  {range=1, dmg=1, weight=1},
+  {range=2, dmg=1, weight=1},
+  {range=2, dmg=0, weight=2},
+  {range=3, dmg=0, weight=2},
+}
+
+blueDie = {
+  {range=0, dmg=3, weight=2},
+  {range=0, dmg=2, weight=2},
+  {range=1, dmg=2, weight=1},
+  {range=1, dmg=1, weight=1},
+}
+
+-- will also store dieObj with reference to actual object
+diceCollection = {
+  red    = {state = false, die = redDie, guid = "3e0276", rotVal = redRotationValues},
+  yellow = {state = false, die = yellowDie, guid = "d1aad4", rotVal = yellowRotationValues},
+  green1 = {state = false, die = greenDie, guid = "3e7c9c", rotVal = greenRotationValues},
+  green2 = {state = false, die = greenDie, guid = "c3ae7e", rotVal = greenRotationValues},
+  blue1  = {state = false, die = blueDie, guid = "6128fe", rotVal = blueRotationValues},
+  blue2  = {state = false, die = blueDie, guid = "bdba03", rotVal = blueRotationValues},
+}
+
+
+
+paramRange = {
+   -- max hit distance is 15 plus accuracy bonus
+  distance = { min = 0, max = 15 },
+
+  -- max pure dmg is 15 plus deadly bonus
+  -- max zombie armor is 5
+  -- I believe, 10 armor should be enough for everyone :)
+  armor   = { min = 1, max = 10 },
+  accuracy = { min = 0, max = 10 },
+  deadly   = { min = 0, max = 10 },
+}
+
+doomGuys = {}
+
+mnstStats = {
+  Zombie     = {speed=3, armor=2, health=2,
+                attack = {"red", "blue1"},
+                attackMod = {melee=true},
+              },
+
+  Trite      = {speed=5, armor=1, health=1,
+                attack = {"red", "green1"},
+                attackMod = {melee=true},
+              },
+
+  Imp        = {speed=4, armor=2, health=1,
+                attack = {"yellow", "blue2"},
+                attackMod = {accuracy=1},
+              },
+
+  Demon      = {speed=4, armor=3, health=2,
+                attack = {"red", "blue1", "blue2"},
+                attackMod = {melee=true},
+              },
+
+  Mancubus   = {speed=2, armor=3, health=3,
+                attack = {"yellow", "green2" ,"blue2"},
+                attackMod = {deadly=1}
+              },
+
+  Archvile   = {speed=4, armor=3, health=2,
+                attack = {"yellow", "green1", "green2" ,"blue2"},
+                attackMod = {accuracy=4},
+            },
+
+  Hellknight = {speed=3, armor=4, health=3,
+                attack = {"red", "blue1", "blue2"},
+                attackMod = {melee=true},
+              },
+
+  Cyberdemon = {speed=4, armor=5, health=4,
+                attack = {"red", "yellow", "green1", "green2", "blue1", "blue2"},
+                attackMod = {},
+              },
+}
+
+function onload()
+  initParams()
+
+  Wait.time(updateDiceFaces, 0.25, -1)
+  Wait.time(bringDiceBack, 0.5, -1)
+end
+
+
+function setDefaultParams()
+    -- Set params to default (min) value
+  prm = {}
+  for k,v in pairs(paramRange) do
+    setParam(k, v.min)
+  end
+
+  for k in pairs(diceCollection) do
+    setDice(k, false)
+  end
+end
+
+function clearCalc()
+  setDefaultParams()
+
+  for _,v in pairs(diceCollection) do
+    v.dieObj.highlightOff()
+  end
+end
+
+function setParam(name, value)
+  prm[name] = value
+  displayParam(name)
+end
+
+
+function displayParam(name)
+  -- DISTANCE
+  if name == "distance" then
+    if prm[name] == 0 then
+      Global.UI.setAttribute(name, "text", "melee")
+      Global.UI.setAttribute(name, "color", "red")
+    else
+      Global.UI.setAttribute(name, "text", prm[name])
+      Global.UI.setAttribute(name, "color", "white")
+    end
+
+  elseif name == "accuracy" then
+    if prm[name] == 0 then
+      Global.UI.setAttribute(name, "text", "-")
+    elseif prm[name] <= 4 then  -- can't fit more
+      local emojiStr = ""
+      for i = 1,prm[name] do
+        emojiStr = emojiStr .. "◎"
+      end
+      Global.UI.setAttribute(name, "text", emojiStr)
+    else
+      Global.UI.setAttribute(name, "text", prm[name])
+    end
+
+  elseif name == "deadly" then
+    if prm[name] == 0 then
+      Global.UI.setAttribute(name, "text", "-")
+    elseif prm[name] <= 3 then -- can't fit more
+      local emojiStr = ""
+      for i = 1,prm[name] do
+        emojiStr = emojiStr .. "☠"
+      end
+      Global.UI.setAttribute(name, "text", emojiStr)
+    else
+      Global.UI.setAttribute(name, "text", prm[name])
+    end
+
+
+  else
+    Global.UI.setAttribute(name, "text", prm[name])
+  end
+end
+
+function setDice(id, active)
+  diceCollection[id].state = active
+
+  if active then
+    Global.UI.setAttribute(id.."Text", "text", "") --"✓"
+    Global.UI.setAttribute(id.."Image", "color", "rgb(1,1,1)")
+  else
+    Global.UI.setAttribute(id.."Text", "text", "X")
+    Global.UI.setAttribute(id.."Image", "color", "rgb(0.5,0.5,0.5)")
+  end
+
+  Global.UI.setAttribute(id, "isOn", tostring(not active))
+end
+
+function initParams()
+  setDefaultParams()
+
+  -- Save reference to dice into collection
+  -- also assign rotation values
+  for k,v in pairs(diceCollection) do
+    v.dieObj = getObjectFromGUID(v.guid)
+    if v.dieObj == nil then
+      print("Can't find dice " .. k)
+    else
+      v.dieObj.setLock(false)
+      v.dieObj.highlightOff()
+      v.dieObj.setRotationValues(v.rotVal)
+    end
+  end
+
+  for _,obj in ipairs(getAllObjects()) do
+    if obj.getName() == "DoomGuy red" then
+      doomGuys.red = obj.getGUID()
+    elseif obj.getName() == "DoomGuy green" then
+      doomGuys.green = obj.getGUID()
+    elseif obj.getName() == "DoomGuy blue" then
+       doomGuys.blue = obj.getGUID()
+    end
+  end
+
+end
+
+--[[ The Update function. This is called once per frame. --]]
+function update ()
+end
+
+function showCalc()
+  if shown.calculator == false then
+     Global.UI.show("calculator")
+     shown.calculator = true
+     Global.UI.setAttribute("showCalc", "text", "DMG Calc ▲")
+     Global.UI.setAttribute("showCalc", "textColor", "rgb(1, 1, 1)")
+  else
+     Global.UI.hide("calculator")
+     shown.calculator = false
+     Global.UI.setAttribute("showCalc", "text", "DMG Calc ▼")
+     Global.UI.setAttribute("showCalc", "textColor", "rgb(1, 1, 1)")
+  end
+end
+
+function statsClose(player, value, id)
+  Global.UI.hide("stats")
+  shown.stats = false
+end
+
+function toggleDice(player, value, id)
+  -- Current color scheme is lit when false and dim when true
+  -- It's easier to revert reported values than to update color scheme
+  -- Also value initially is a goddamn string, not boolean
+  value = (value == "False")
+  log(id .. "=" .. tostring(value))
+
+  setDice(id, value)
+end
+
+function getParamName(id)
+  for k in pairs(paramRange) do
+    if string.find(id, k, 1, true) then
+      return k
+    end
+  end
+end
+
+function getParamChange(id)
+  if string.find(id, "+", 1, true) then
+    return 1;
+  else
+    return -1;
+  end
+end
+
+function adjustParam(player, value, id)
+  local name = getParamName(id)
+  local delta = getParamChange(id)
+  local min = paramRange[name].min
+  local max = paramRange[name].max
+
+  if delta < 0  and prm[name] > min then
+    setParam(name, prm[name] - 1)
+  elseif delta > 0 and prm[name] < max then
+    setParam(name, prm[name] + 1)
+  end
+
+  log(name .. "=" .. prm[name])
+end
+
+
+
+function calculate(player, value, id)
+  local dice = {}
+  for _,v in pairs(diceCollection) do
+    if v.state then table.insert(dice, v.die) end
+  end
+
+  if dice[1] == nil then
+    broadcastToColor("Choose at least one die", player.color, stringColorToRGB(player.color))
+    return
+  end
+
+  broadcastToAll(player.steam_name .. " calculates...", stringColorToRGB(player.color))
+
+  -- caclulate number of cases for each outcome
+  local state = {range=0, dmg=0, weight=1}
+  result = {} --isn't local intentionally
+  calcIteration(dice, 1, state, result)
+
+  -- convert to percentage
+  local totalCases = 6^#dice
+  for k,v in pairs(result) do
+    result[k] = result[k] * 100 / totalCases
+  end
+
+  -- add ammo consumption statistics
+  -- red and yellow dice has chance of 1/3 to spend ammo each
+  local ammoDices = 0
+  if diceCollection.red.state then ammoDices = ammoDices + 1 end
+  if diceCollection.yellow.state then ammoDices = ammoDices + 1 end
+  result["ammo"] = (1 - (2/3)^ammoDices) * 100
+
+  showStats()
+end
+
+-- caclulate number of cases for each outcome
+function calcIteration(dice, depth, state, result)
+  -- if reached the bottom, save results and exit
+  if dice[depth] == nil then
+    if prm.distance > (state.range + prm.accuracy) then
+      result["miss"] = (result["miss"] or 0) + state.weight
+    else
+      local hit = math.floor((state.dmg + prm.deadly) / prm.armor)
+      result[hit] = (result[hit] or 0) + state.weight
+    end
+    return
+  end
+
+  for i,v in ipairs(dice[depth]) do
+    if v == "miss" then
+      -- handle miss separately
+      local diceLeft = #dice - depth
+      local missWeight = state.weight * (6^diceLeft)
+      result["miss"] = (result["miss"] or 0) + missWeight
+    else
+      -- go to the next depth
+      local newState = {
+        range = state.range + v.range,
+        dmg = state.dmg + v.dmg,
+        weight = state.weight * v.weight,
+      }
+
+      calcIteration(dice, depth+1, newState, result)
+    end
+  end
+end
+
+function showStats()
+  --common stats
+  Global.UI.setAttribute("ammoPb", "percentage", result["ammo"] or 0)
+  Global.UI.setAttribute("missPb", "percentage", result["miss"] or 0)
+
+  --specific stats
+  if not cumulativeStatsMode then
+    setExactStats()
+  else
+    setCumulativeStats()
+  end
+
+  Global.UI.show("stats")
+  shown.stats = true
+end
+
+
+function setExactStats()
+  for i = 0,15 do
+    Global.UI.setAttribute(tostring(i) .. "t", "text", tostring(i) .. "dmg")
+    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", result[i] or 0)
+  end
+end
+
+function setCumulativeStats()
+  local sum = 0
+  -- even though there are only 15 bars to display, to get proper sum of chances we should
+  -- iterate result from maxdmg+maxdeadly or more
+  -- TODO: redefine all magic numbers through named variables
+  for i=25,0,-1 do
+    sum = sum + (result[i] or 0)
+    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", sum)
+    Global.UI.setAttribute(tostring(i) .. "t", "text", "≥" .. tostring(i) .. "dmg")
+  end
+end
+
+function toggleStatsMode(player, value, id)
+  cumulativeStatsMode = not cumulativeStatsMode
+  showStats()
+end
+
+
+function rollWatch()
+  for i,v in pairs(diceCollection) do
+    if v.state and not v.dieObj.resting then
+      return false
+    end
+  end
+  return true
+end
+
+function rollEnd(player)
+  -- print each dice individually and count sum
+  log(" --- Roll end --- ")
+  local sum = {range=0, dmg=0, ammo=false, miss=false}
+  for k,v in pairs(diceCollection) do
+    if v.state then
+      log(v.dieObj.getRotationValue(), k .." from " .. player.color .. ": ")
+      local value = getRotationValueTable(v.dieObj)
+      sum.range = sum.range + (value.range or 0)
+      sum.dmg = sum.dmg + (value.dmg or 0)
+      sum.ammo = sum.ammo or value.ammo
+      sum.miss = sum.miss or value.miss
+    end
+  end
+
+  -- raw sum report
+  local total = ""
+  if sum.miss then
+    total = total .. "MISS "
+  end
+  total = total .. tostring(sum.range) .. "range"
+  if prm.accuracy ~= 0 then
+    total = total .. "+" .. tostring(prm.accuracy)
+  end
+
+  total = total .. " " .. tostring(sum.dmg) .. "dmg"
+  if prm.deadly ~= 0 then
+    total = total .. "+" .. tostring(prm.deadly)
+  end
+
+  if sum.ammo then total = total .. " ammo" end
+  broadcastToAll(total, stringColorToRGB(player.color))
+
+  -- bonus/armor/distance accounted
+  if sum.miss then
+    broadcastToAll("MISS on dice", stringColorToRGB("Pink"))
+  else
+    if sum.range + prm.accuracy < prm.distance then
+      broadcastToAll("MISS: Range + accuracy is too low", stringColorToRGB("Pink"))
+    else
+      local hit = math.floor((sum.dmg + prm.deadly) / prm.armor)
+      if hit == 0 then
+        broadcastToAll("HIT: no penetration", stringColorToRGB("Pink"))
+      else
+        broadcastToAll("HIT: " .. hit .. " wounds", stringColorToRGB("Pink"))
+      end
+    end
+  end
+
+  -- highlight ammo consumption in CAPS if not melee and not invader player
+  if sum.ammo and player.color ~= "White" and prm.distance ~= 0 then
+    broadcastToAll("AMMO LOST", stringColorToRGB("Pink"))
+  end
+
+  updateDiceFaces()
+  -- This MUST be called, and also this should be the last thing to execute
+  toggleInteraction(true)
+end
+
+function rollDice(player, value, id)
+  local rollHappened = false
+  for _,v in pairs(diceCollection) do
+    if v.state then
+      v.dieObj.roll()
+      v.dieObj.highlightOn(Color.pink, 45)
+      rollHappened = true
+    else
+      v.dieObj.highlightOff()
+    end
+  end
+
+  if not rollHappened then return end
+  --shut down controls, so nobody messes with parameters
+  toggleInteraction(false)
+  broadcastToAll(player.steam_name .. " rolls...", stringColorToRGB(player.color))
+
+  Wait.condition(
+    function() return rollEnd(player) end,
+    rollWatch
+  )
+end
+
+function getRotationValueTable(obj)
+  local str = obj.getRotationValue()
+  local rez = {}
+  for k, v in string.gmatch(str, "(%w+)=?(%w*)") do
+    if v == nil or v == "" then
+      rez[k] = true
+    else
+      rez[k] = v
+    end
+  end
+  return rez
+end
+
+function toggleInteraction(active)
+  rollOngoing = not active
+  Global.UI.setAttribute("distance-", "interactable", active)
+  Global.UI.setAttribute("distance+", "interactable", active)
+
+  Global.UI.setAttribute("armor-", "interactable", active)
+  Global.UI.setAttribute("armor+", "interactable", active)
+
+  Global.UI.setAttribute("accuracy-", "interactable", active)
+  Global.UI.setAttribute("accuracy+", "interactable", active)
+
+  Global.UI.setAttribute("deadly-", "interactable", active)
+  Global.UI.setAttribute("deadly+", "interactable", active)
+
+  Global.UI.setAttribute("red", "interactable", active)
+  Global.UI.setAttribute("yellow", "interactable", active)
+  Global.UI.setAttribute("green1", "interactable", active)
+  Global.UI.setAttribute("green2", "interactable", active)
+  Global.UI.setAttribute("blue1", "interactable", active)
+  Global.UI.setAttribute("blue2", "interactable", active)
+
+  Global.UI.setAttribute("rollDice", "interactable", active)
+  Global.UI.setAttribute("rollDice", "textColor", "white")
+
+  Global.UI.setAttribute("clearPrm", "interactable", active)
+  Global.UI.setAttribute("clearPrm", "textColor", "white")
+end
+
+
+function getDistance(doomGuy, monster)
+  local monsterPos = monster.getPosition()
+  local doomGuyPos = doomGuy.getPosition()
+
+  local monsterShiftFromBorderX = monsterPos.x - math.floor(monsterPos.x)
+  local isLargeX = (monsterShiftFromBorderX < 0.25 or monsterShiftFromBorderX > 0.75)
+  local monsterShiftFromBorderZ = monsterPos.z - math.floor(monsterPos.z)
+  local isLargeZ = (monsterShiftFromBorderZ < 0.25 or monsterShiftFromBorderZ > 0.75)
+
+  local roundingDeltaX = 0.5
+  if isLargeX then
+    roundingDeltaX = 0
+  end
+
+  local roundingDeltaZ = 0.5
+  if isLargeZ then
+    roundingDeltaZ = 0
+  end
+
+  local dx = math.floor(math.abs(monsterPos.x - doomGuyPos.x) + roundingDeltaX)
+  local dz = math.floor(math.abs(monsterPos.z - doomGuyPos.z) + roundingDeltaZ)
+
+  return math.max(dx, dz)
+end
+
+
+function onScriptingButtonDown(index,  player_color)
+
+  if index == 1 then
+    -- setting monster for attack preparation
+    if rollOngoing then
+      broadcastToColor("Wait untill roll finishes",
+        player_color,
+        stringColorToRGB(player_color))
+      return
+    end
+
+    if player_color ~= "White" then
+      prepareAttackOnMonster(player_color)
+    else
+      saveAttackingMonster(player_color)
+    end
+  end
+
+  if index == 2 and player_color == "White" then
+    if rollOngoing then
+      broadcastToColor("Wait untill roll finishes",
+        player_color,
+        stringColorToRGB(player_color))
+      return
+    end
+    prepareAttackOnDoomGuy(player_color)
+  end
+
+
+end
+
+function getMonsterStats(name)
+  for k,v in pairs(mnstStats) do
+    if (string.find(name, k, 1, true)) then
+      return v
+    end
+  end
+end
+
+-- prepare params for attack targeting monster hovered over
+function prepareAttackOnMonster(player_color)
+  local doomGuy = getObjectFromGUID(doomGuys[string.lower(player_color)])
+
+  if not doomGuy then
+    broadcastToColor("Can't find your doom guy figure",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  local monster = Player[player_color].getHoverObject()
+
+  if not monster then
+    broadcastToColor("Please hover over targeted monster first",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  local stats = getMonsterStats(monster.getName())
+  if not stats then
+    broadcastToColor("Please hover over targeted monster first",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  setParam("armor", stats.armor)
+
+  local dist = getDistance(doomGuy, monster)
+  if dist >= 15 then dist = 15 end
+  setParam("distance", dist)
+
+  printToAll("Armor and distance are set for " .. player_color
+    .. " attacking " .. monster.getName(),
+    stringColorToRGB(player_color))
+end
+
+function saveAttackingMonster(player_color)
+  -- set attacker, wait for target
+  attackingMonster = nil -- MUST BE GLOBAL
+  local candidate = Player[player_color].getHoverObject()
+  if not candidate then
+    broadcastToColor("Please hover over attacking monster first",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  local stats = getMonsterStats(candidate.getName())
+  if not stats then
+    broadcastToColor("Please hover over attacking monster first",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  attackingMonster = candidate
+  printToColor("Attacker set to " .. attackingMonster.getName(),
+    player_color,
+    stringColorToRGB(player_color))
+end
+
+
+function prepareAttackOnDoomGuy(player_color)
+  if not attackingMonster then
+    broadcastToColor("Choose attacking monster first with Numpad_1, then use Numpad_2 to set target",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  local doomGuy = Player[player_color].getHoverObject()
+  if not doomGuy or not string.find(doomGuy.getName(), "DoomGuy", 1, true) then
+    broadcastToColor("Please hover over targeted DoomGuy first",
+      player_color,
+      stringColorToRGB(player_color))
+    return
+  end
+
+  printToAll("Params are set for " .. attackingMonster.getName()
+    .. " attacking " .. doomGuy.getName(),
+    stringColorToRGB(player_color))
+
+  setDefaultParams()
+
+  local armor = tonumber(doomGuy.UI.getAttribute("armor", "text"))
+  setParam("armor", armor)
+
+  local stats = getMonsterStats(attackingMonster.getName()) --guaranteed to exist
+  for i,v in ipairs(stats.attack) do
+    setDice(v, true)
+  end
+
+  for k,v in pairs(stats.attackMod) do
+    if k ~= "melee" then
+      setParam(k, v)
+    end
+  end
+
+  local dist = getDistance(doomGuy, attackingMonster)
+  if dist >= 15 then dist = 15 end
+
+  if stats.attackMod and stats.attackMod.melee then
+    dist = 0
+  end
+
+  setParam("distance", dist)
+  attackingMonster = nil
+end
+
+function updateDiceFaces()
+  for k,v in pairs(diceCollection) do
+    local clr = string.match(k, "(%a+)%d*")
+    Global.UI.setAttribute(k.."Image", "image", clr .. " " .. v.dieObj.getRotationValue())
+  end
+end
+
+function bringDiceBack()
+  for k,v in pairs(diceCollection) do
+    if v.dieObj.getPosition().y < -5 then
+      broadcastToAll(k .. " die dropped off the table, returning...", stringColorToRGB("Pink"))
+      v.dieObj.setPosition({-8.50, 13.00, 34.00})
+      v.dieObj.setVelocity({0, 0, 0})
+    end
+  end
+end
