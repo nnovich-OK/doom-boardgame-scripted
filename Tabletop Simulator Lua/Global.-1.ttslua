@@ -146,6 +146,39 @@ function onload()
 
   Wait.time(updateDiceFaces, 0.25, -1)
   Wait.time(bringDiceBack, 0.5, -1)
+
+  -- assets sometimes load later than they are needed by objects
+  -- so blank squares are shown instead of images for armor, speed etc
+  -- workaround - refresh XML to redraw interfaces
+  refreshObjectUI()
+end
+
+
+function initParams()
+  setDefaultParams()
+
+  -- Save reference to dice into collection
+  -- also assign rotation values
+  for k,v in pairs(diceCollection) do
+    v.dieObj = getObjectFromGUID(v.guid)
+    if v.dieObj == nil then
+      print("Can't find dice " .. k)
+    else
+      v.dieObj.setLock(false)
+      v.dieObj.highlightOff()
+      v.dieObj.setRotationValues(v.rotVal)
+    end
+  end
+
+  for _,obj in ipairs(getAllObjects()) do
+    if obj.getName() == "DoomGuy red" then
+      doomGuys.red = obj.getGUID()
+    elseif obj.getName() == "DoomGuy green" then
+      doomGuys.green = obj.getGUID()
+    elseif obj.getName() == "DoomGuy blue" then
+       doomGuys.blue = obj.getGUID()
+    end
+  end
 end
 
 
@@ -232,32 +265,13 @@ function setDice(id, active)
   Global.UI.setAttribute(id, "isOn", tostring(not active))
 end
 
-function initParams()
-  setDefaultParams()
 
-  -- Save reference to dice into collection
-  -- also assign rotation values
-  for k,v in pairs(diceCollection) do
-    v.dieObj = getObjectFromGUID(v.guid)
-    if v.dieObj == nil then
-      print("Can't find dice " .. k)
-    else
-      v.dieObj.setLock(false)
-      v.dieObj.highlightOff()
-      v.dieObj.setRotationValues(v.rotVal)
-    end
-  end
-
-  for _,obj in ipairs(getAllObjects()) do
-    if obj.getName() == "DoomGuy red" then
-      doomGuys.red = obj.getGUID()
-    elseif obj.getName() == "DoomGuy green" then
-      doomGuys.green = obj.getGUID()
-    elseif obj.getName() == "DoomGuy blue" then
-       doomGuys.blue = obj.getGUID()
-    end
-  end
-
+function onPlayerConnect(player)
+  -- assets sometimes load later than they are needed by objects
+  -- so blank squares are shown instead of images for armor, speed etc
+  -- workaround - refresh UI for all objects
+  -- needed to be done for each player individually
+  refreshObjectUI()
 end
 
 --[[ The Update function. This is called once per frame. --]]
@@ -759,4 +773,18 @@ function bringDiceBack()
       v.dieObj.setVelocity({0, 0, 0})
     end
   end
+end
+
+function refreshObjectUI()
+  Wait.time(
+    function()
+      broadcastToAll("Refreshing object interfaces after new player connected", stringColorToRGB("Pink"))
+      for _,v in ipairs(getAllObjects()) do
+        local xml = v.UI.getXml()
+        if xml and xml ~= "" then
+          v.UI.setXml(xml)
+        end
+      end
+    end,
+    5)
 end
