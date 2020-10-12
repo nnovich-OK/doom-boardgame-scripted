@@ -90,14 +90,14 @@ paramRange = {
   distance = { min = 0, max = 15 },
 
   -- max pure dmg is 15 plus deadly bonus
-  -- max zombie armor is 5
+  -- max monster armor is 5
   -- I believe, 10 armor should be enough for everyone :)
   armor   = { min = 1, max = 10 },
   accuracy = { min = 0, max = 10 },
   deadly   = { min = 0, max = 10 },
 }
 
-doomGuys = {}
+marines = {}
 
 mnstStats = {
   Zombie     = {speed=3, armor=2, health=2,
@@ -171,12 +171,12 @@ function initParams()
   end
 
   for _,obj in ipairs(getAllObjects()) do
-    if obj.getName() == "DoomGuy red" then
-      doomGuys.red = obj.getGUID()
-    elseif obj.getName() == "DoomGuy green" then
-      doomGuys.green = obj.getGUID()
-    elseif obj.getName() == "DoomGuy blue" then
-       doomGuys.blue = obj.getGUID()
+    if obj.getName() == "Red Marine" then
+      marines.red = obj.getGUID()
+    elseif obj.getName() == "Green Marine" then
+      marines.green = obj.getGUID()
+    elseif obj.getName() == "Blue Marine" then
+       marines.blue = obj.getGUID()
     end
   end
 end
@@ -581,9 +581,9 @@ function toggleInteraction(active)
 end
 
 
-function getDistance(doomGuy, monster)
+function getDistance(marine, monster)
   local monsterPos = monster.getPosition()
-  local doomGuyPos = doomGuy.getPosition()
+  local marinePos = marine.getPosition()
 
   local monsterShiftFromBorderX = monsterPos.x - math.floor(monsterPos.x)
   local isLargeX = (monsterShiftFromBorderX < 0.25 or monsterShiftFromBorderX > 0.75)
@@ -600,8 +600,8 @@ function getDistance(doomGuy, monster)
     roundingDeltaZ = 0
   end
 
-  local dx = math.floor(math.abs(monsterPos.x - doomGuyPos.x) + roundingDeltaX)
-  local dz = math.floor(math.abs(monsterPos.z - doomGuyPos.z) + roundingDeltaZ)
+  local dx = math.floor(math.abs(monsterPos.x - marinePos.x) + roundingDeltaX)
+  local dz = math.floor(math.abs(monsterPos.z - marinePos.z) + roundingDeltaZ)
 
   return math.max(dx, dz)
 end
@@ -632,7 +632,7 @@ function onScriptingButtonDown(index,  player_color)
         stringColorToRGB(player_color))
       return
     end
-    prepareAttackOnDoomGuy(player_color)
+    prepareAttackOnMarine(player_color)
   end
 
 
@@ -648,10 +648,10 @@ end
 
 -- prepare params for attack targeting monster hovered over
 function prepareAttackOnMonster(player_color)
-  local doomGuy = getObjectFromGUID(doomGuys[string.lower(player_color)])
+  local marine = getObjectFromGUID(marines[string.lower(player_color)])
 
-  if not doomGuy then
-    broadcastToColor("Can't find your doom guy figure",
+  if not marine then
+    broadcastToColor("Can't find your marine figure",
       player_color,
       stringColorToRGB(player_color))
     return
@@ -676,7 +676,7 @@ function prepareAttackOnMonster(player_color)
 
   setParam("armor", stats.armor)
 
-  local dist = getDistance(doomGuy, monster)
+  local dist = getDistance(marine, monster)
   if dist >= 15 then dist = 15 end
   setParam("distance", dist)
 
@@ -711,7 +711,7 @@ function saveAttackingMonster(player_color)
 end
 
 
-function prepareAttackOnDoomGuy(player_color)
+function prepareAttackOnMarine(player_color)
   if not attackingMonster then
     broadcastToColor("Choose attacking monster first with Numpad_1, then use Numpad_2 to set target",
       player_color,
@@ -719,21 +719,21 @@ function prepareAttackOnDoomGuy(player_color)
     return
   end
 
-  local doomGuy = Player[player_color].getHoverObject()
-  if not doomGuy or not string.find(doomGuy.getName(), "DoomGuy", 1, true) then
-    broadcastToColor("Please hover over targeted DoomGuy first",
+  local marine = Player[player_color].getHoverObject()
+  if not marine or not string.find(marine.getName(), "Marine", 1, true) then
+    broadcastToColor("Please hover over targeted Marine first",
       player_color,
       stringColorToRGB(player_color))
     return
   end
 
   printToAll("Params are set for " .. attackingMonster.getName()
-    .. " attacking " .. doomGuy.getName(),
+    .. " attacking " .. marine.getName(),
     stringColorToRGB(player_color))
 
   setDefaultParams()
 
-  local armor = tonumber(doomGuy.UI.getAttribute("armor", "text"))
+  local armor = tonumber(marine.UI.getAttribute("armor", "text"))
   setParam("armor", armor)
 
   local stats = getMonsterStats(attackingMonster.getName()) --guaranteed to exist
@@ -747,7 +747,7 @@ function prepareAttackOnDoomGuy(player_color)
     end
   end
 
-  local dist = getDistance(doomGuy, attackingMonster)
+  local dist = getDistance(marine, attackingMonster)
   if dist >= 15 then dist = 15 end
 
   if stats.attackMod and stats.attackMod.melee then
