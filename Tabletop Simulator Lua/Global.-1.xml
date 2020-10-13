@@ -51,50 +51,71 @@
   active="false"
   >
 
-  <TableLayout id="dice"
-    cellSpacing="10"
-    padding = "6 6 6 6"
+  <VerticalLayout id="diceConfig"
+    padding="12 12 12 12"
+    rectAlignment="UpperRight"
+    childForceExpandHeight="false"
     color="rgba(0, 0, 0, 0.95)"
-    cellBackgroundColor="clear"
-    autoCalculateHeight="true">
+    >
 
-    <!-- Row 1 -->
-    <Row class="tgl">
-        <Cell class="tgl"><ToggleButton class="die" color="red" id="red">
-          <Image id="redImage">
-            <Text id="redText" class="tgl"/>
-          </Image>
-        </ToggleButton></Cell>
-        <Cell class="tgl"><ToggleButton class="die" color="green" id="green1">
-          <Image id="green1Image">
-            <Text id="green1Text" class="tgl"/>
-          </Image>
-        </ToggleButton></Cell>
-        <Cell class="tgl"><ToggleButton class="die" color="blue" id="blue1">
-          <Image id="blue1Image">
-            <Text id="blue1Text" class="tgl"/>
-          </Image>
-        </ToggleButton></Cell>
-    </Row>
-    <!-- Row 2 -->
-    <Row class="tgl">
-        <Cell class="tgl"><ToggleButton class="die" color="yellow" id="yellow">
-          <Image id="yellowImage">
-            <Text id="yellowText" class="tgl"/>
-          </Image>
-        </ToggleButton></Cell>
-        <Cell class="tgl"><ToggleButton class="die" color="green" id="green2">
-          <Image id="green2Image">
-            <Text id="green2Text" class="tgl"/>
-          </Image>
-        </ToggleButton></Cell>
-        <Cell class="tgl"><ToggleButton class="die" color="blue" id="blue2">
-          <Image id="blue2Image">
-            <Text id="blue2Text" class="tgl"/>
-          </Image>
-        </ToggleButton></Cell>
-    </Row>
-  </TableLayout>
+    <TableLayout id="dice"
+      cellSpacing="10"
+      cellBackgroundColor="clear"
+      autoCalculateHeight="true">
+
+      <!-- Row 1 -->
+      <Row class="tgl">
+          <Cell class="tgl"><ToggleButton class="die" color="red" id="red">
+            <Image id="redImage">
+              <Text id="redText" class="tgl"/>
+            </Image>
+          </ToggleButton></Cell>
+          <Cell class="tgl"><ToggleButton class="die" color="green" id="green1">
+            <Image id="green1Image">
+              <Text id="green1Text" class="tgl"/>
+            </Image>
+          </ToggleButton></Cell>
+          <Cell class="tgl"><ToggleButton class="die" color="blue" id="blue1">
+            <Image id="blue1Image">
+              <Text id="blue1Text" class="tgl"/>
+            </Image>
+          </ToggleButton></Cell>
+      </Row>
+      <!-- Row 2 -->
+      <Row class="tgl">
+          <Cell class="tgl"><ToggleButton class="die" color="yellow" id="yellow">
+            <Image id="yellowImage">
+              <Text id="yellowText" class="tgl"/>
+            </Image>
+          </ToggleButton></Cell>
+          <Cell class="tgl"><ToggleButton class="die" color="green" id="green2">
+            <Image id="green2Image">
+              <Text id="green2Text" class="tgl"/>
+            </Image>
+          </ToggleButton></Cell>
+          <Cell class="tgl"><ToggleButton class="die" color="blue" id="blue2">
+            <Image id="blue2Image">
+              <Text id="blue2Text" class="tgl"/>
+            </Image>
+          </ToggleButton></Cell>
+      </Row>
+    </TableLayout>
+
+    <HorizontalLayout
+      childForceExpandWidth="false"
+      childForceExpandHeight="false"
+      padding="35 35 0 0"
+      spacing="5">
+      <Toggle
+        id="reroll"
+        preferredHeight="20"
+        preferredWidth="20"
+        flexibleWidth="0"
+        rectAlignment="MiddleCenter"
+        onValueChanged="rerollToggle"/>
+      <Text flexibleWidth="0" rectAlignment="MiddleCenter">Reroll</Text>
+    </HorizontalLayout>
+  </VerticalLayout>
 
   <VerticalLayout
     preferredHeight="100"

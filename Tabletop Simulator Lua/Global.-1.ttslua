@@ -83,6 +83,9 @@ diceCollection = {
   blue2  = {state = false, die = blueDie, guid = "bdba03", rotVal = blueRotationValues},
 }
 
+-- will store state and value for all dices of the last roll
+lastRoll = {}
+reroll = false
 
 
 paramRange = {
@@ -466,19 +469,37 @@ function rollWatch()
   return true
 end
 
+function addDieValue(sum, value)
+  sum.range = sum.range + (value.range or 0)
+  sum.dmg = sum.dmg + (value.dmg or 0)
+  sum.ammo = sum.ammo or value.ammo
+  sum.miss = sum.miss or value.miss
+end
+
 function rollEnd(player)
   -- print each dice individually and count sum
   log(" --- Roll end --- ")
+
+  local currentRoll = {}
   local sum = {range=0, dmg=0, ammo=false, miss=false}
   for k,v in pairs(diceCollection) do
     if v.state then
-      log(v.dieObj.getRotationValue(), k .." from " .. player.color .. ": ")
       local value = getRotationValueTable(v.dieObj)
-      sum.range = sum.range + (value.range or 0)
-      sum.dmg = sum.dmg + (value.dmg or 0)
-      sum.ammo = sum.ammo or value.ammo
-      sum.miss = sum.miss or value.miss
+      log(value, k .." rolled by " .. player.color .. ": ")
+      addDieValue(sum, value)
+      currentRoll[k] = value
+    else
+      currentRoll[k] = nil
+      if reroll and lastRoll[k] then
+        -- die wasn't rolled now, but it's part of previous roll, which is rerolled
+        addDieValue(sum, lastRoll[k])
+        log(lastRoll[k], k .. " used from previous roll: " )
+      end
     end
+  end
+
+  if not reroll then
+    lastRoll = currentRoll
   end
 
   -- raw sum report
@@ -521,6 +542,7 @@ function rollEnd(player)
   end
 
   updateDiceFaces()
+
   -- This MUST be called, and also this should be the last thing to execute
   toggleInteraction(true)
 end
@@ -587,6 +609,8 @@ function toggleInteraction(active)
 
   Global.UI.setAttribute("clearPrm", "interactable", active)
   Global.UI.setAttribute("clearPrm", "textColor", "white")
+
+  Global.UI.setAttribute("reroll", "interactable", active)
 end
 
 -- return true if figure is 2 or more spaces width in direction of X and Z
@@ -834,4 +858,22 @@ end
 
 function isCharacter(obj)
   return isMonster(obj) or isMarine(obj)
+end
+
+function rerollToggle(player, value, id)
+  reroll = (value == "True")
+  log(id .. "=" .. tostring(reroll))
+
+  if reroll then
+    for k in pairs(diceCollection) do
+      if not lastRoll[k] then
+        Global.UI.setAttribute(k, "active", "false")
+        setDice(k, false)
+      end
+    end
+  else
+    for k in pairs(diceCollection) do
+      Global.UI.setAttribute(k, "active", "true")
+    end
+  end
 end
