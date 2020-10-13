@@ -98,6 +98,7 @@ paramRange = {
 }
 
 marines = {}
+attackingChar = {}
 
 mnstStats = {
   Zombie     = {speed=3, armor=2, health=2,
@@ -580,37 +581,42 @@ function toggleInteraction(active)
   Global.UI.setAttribute("clearPrm", "textColor", "white")
 end
 
+-- return true if figure is 2 or more spaces width in direction of X and Z
+function isLarge(figure)
+  local bounds = figure.getBounds()
+  return {
+    x = (bounds.size.x > 1.5),
+    z = (bounds.size.z > 1.5)
+  }
+end
 
-function getDistance(marine, monster)
-  local monsterPos = monster.getPosition()
-  local marinePos = marine.getPosition()
+function getDistance(first, second)
 
-  local monsterShiftFromBorderX = monsterPos.x - math.floor(monsterPos.x)
-  local isLargeX = (monsterShiftFromBorderX < 0.25 or monsterShiftFromBorderX > 0.75)
-  local monsterShiftFromBorderZ = monsterPos.z - math.floor(monsterPos.z)
-  local isLargeZ = (monsterShiftFromBorderZ < 0.25 or monsterShiftFromBorderZ > 0.75)
+  local roundingDelta = {x = 0.5, z = 0.5}
+  for _, figure in ipairs({first, second}) do
+    local isLargeFigure = isLarge(figure)
+    if isLargeFigure.x then
+      roundingDelta.x = roundingDelta.x - 0.5
+    end
 
-  local roundingDeltaX = 0.5
-  if isLargeX then
-    roundingDeltaX = 0
+    if isLargeFigure.z then
+      roundingDelta.z = roundingDelta.z - 0.5
+    end
   end
 
-  local roundingDeltaZ = 0.5
-  if isLargeZ then
-    roundingDeltaZ = 0
-  end
+  local firstPos = first.getPosition()
+  local secondPos = second.getPosition()
 
-  local dx = math.floor(math.abs(monsterPos.x - marinePos.x) + roundingDeltaX)
-  local dz = math.floor(math.abs(monsterPos.z - marinePos.z) + roundingDeltaZ)
+  local dx = math.floor(math.abs(secondPos.x - firstPos.x) + roundingDelta.x)
+  local dz = math.floor(math.abs(secondPos.z - firstPos.z) + roundingDelta.z)
 
   return math.max(dx, dz)
 end
 
 
 function onScriptingButtonDown(index,  player_color)
-
-  if index == 1 then
-    -- setting monster for attack preparation
+  if index == 10 then
+    -- set attacking figure
     if rollOngoing then
       broadcastToColor("Wait untill roll finishes",
         player_color,
@@ -618,21 +624,17 @@ function onScriptingButtonDown(index,  player_color)
       return
     end
 
-    if player_color ~= "White" then
-      prepareAttackOnMonster(player_color)
-    else
-      saveAttackingMonster(player_color)
-    end
+    saveAttackingCharacter(player_color)
   end
 
-  if index == 2 and player_color == "White" then
+  if index == 1 then
     if rollOngoing then
       broadcastToColor("Wait untill roll finishes",
         player_color,
         stringColorToRGB(player_color))
       return
     end
-    prepareAttackOnMarine(player_color)
+    prepareAttackParameters(player_color)
   end
 
 
@@ -646,121 +648,114 @@ function getMonsterStats(name)
   end
 end
 
--- prepare params for attack targeting monster hovered over
-function prepareAttackOnMonster(player_color)
-  local marine = getObjectFromGUID(marines[string.lower(player_color)])
-
-  if not marine then
-    broadcastToColor("Can't find your marine figure",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
-
-  local monster = Player[player_color].getHoverObject()
-
-  if not monster then
-    broadcastToColor("Please hover over targeted monster first",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
-
-  local stats = getMonsterStats(monster.getName())
-  if not stats then
-    broadcastToColor("Please hover over targeted monster first",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
-
-  setParam("armor", stats.armor)
-
-  local dist = getDistance(marine, monster)
-  if dist >= 15 then dist = 15 end
-  setParam("distance", dist)
-
-  printToAll("Armor and distance are set for " .. player_color
-    .. " attacking " .. monster.getName(),
-    stringColorToRGB(player_color))
-
-  if shown.calculator == false then
-    showCalc()
-  end
-end
-
-function saveAttackingMonster(player_color)
+function saveAttackingCharacter(player_color)
   -- set attacker, wait for target
-  attackingMonster = nil -- MUST BE GLOBAL
+
+  if attackingChar[player_color] then
+    attackingChar[player_color].highlightOff()
+    attackingChar[player_color] = nil
+  end
+
   local candidate = Player[player_color].getHoverObject()
-  if not candidate then
-    broadcastToColor("Please hover over attacking monster first",
+  if not candidate or not isCharacter(candidate) then
+    broadcastToColor(
+    "Hotkey is intended to mark figurine which is hovered over as attacker. " ..
+    "Please hover over attacking character first.",
       player_color,
       stringColorToRGB(player_color))
     return
   end
 
-  local stats = getMonsterStats(candidate.getName())
-  if not stats then
-    broadcastToColor("Please hover over attacking monster first",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
 
-  attackingMonster = candidate
-  printToColor("Attacker set to " .. attackingMonster.getName(),
+  attackingChar[player_color] = candidate
+  attackingChar[player_color].highlightOn(stringColorToRGB(player_color), 3600)
+  printToColor("Attacker set to " .. attackingChar[player_color].getName(),
     player_color,
     stringColorToRGB(player_color))
 end
 
 
-function prepareAttackOnMarine(player_color)
-  if not attackingMonster then
-    broadcastToColor("Choose attacking monster first with Numpad_1, then use Numpad_2 to set target",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
-
-  local marine = Player[player_color].getHoverObject()
-  if not marine or not string.find(marine.getName(), "Marine", 1, true) then
-    broadcastToColor("Please hover over targeted Marine first",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
-
-  printToAll("Params are set for " .. attackingMonster.getName()
-    .. " attacking " .. marine.getName(),
-    stringColorToRGB(player_color))
-
-  setDefaultParams()
-
-  local armor = tonumber(marine.UI.getAttribute("armor", "text"))
-  setParam("armor", armor)
-
-  local stats = getMonsterStats(attackingMonster.getName()) --guaranteed to exist
-  for i,v in ipairs(stats.attack) do
-    setDice(v, true)
-  end
-
-  for k,v in pairs(stats.attackMod) do
-    if k ~= "melee" then
-      setParam(k, v)
+function prepareAttackParameters(player_color)
+  if not attackingChar[player_color] then
+    if player_color == "White" then
+      broadcastToColor(
+        "You are trying to mark figurine hovered over as target, " ..
+        "but you need to mark attacker first with Numpad0",
+        player_color,
+        stringColorToRGB(player_color))
+      return
+    else
+      attackingChar[player_color] = getObjectFromGUID(marines[string.lower(player_color)])
+      if not attackingChar[player_color] then
+        broadcastToColor("Can't find your marine figure",
+          player_color,
+          stringColorToRGB(player_color))
+        return
+      end
     end
   end
 
-  local dist = getDistance(marine, attackingMonster)
-  if dist >= 15 then dist = 15 end
-
-  if stats.attackMod and stats.attackMod.melee then
-    dist = 0
+  local target = Player[player_color].getHoverObject()
+  if not target or not isCharacter(target) then
+    broadcastToColor(
+      "Hotkey is intended to mark figurine which is hovered over as target." ..
+      "Please hover over targeted character first.",
+      player_color,
+      stringColorToRGB(player_color))
+    return
   end
 
+  printToAll("Params are set for " .. attackingChar[player_color].getName()
+    .. " attacking " .. target.getName(),
+    stringColorToRGB(player_color))
+
+
+  local isMelee = false -- TODO: tricky thing for marines
+                        -- probably can guess out of: last clicked weapon and single red die in play
+
+  -- ATTACKER PARAMETERS: dice, accuracy and deadly bonuses
+  --                      set for monster attacks only
+  if isMonster(attackingChar[player_color]) then
+    setDefaultParams()
+
+    local stats = getMonsterStats(attackingChar[player_color].getName()) --guaranteed to exist
+    for i,v in ipairs(stats.attack) do
+      setDice(v, true)
+    end
+
+    for k,v in pairs(stats.attackMod) do
+      if k ~= "melee" then
+        setParam(k, v)
+      end
+    end
+
+    if stats.attackMod and stats.attackMod.melee then
+      isMelee = true
+    end
+  end
+
+  -- TARGET PARAMETERS: distance and armor
+  local armor = 1
+  if isMonster(target) then
+    armor = getMonsterStats(target.getName()).armor
+  else
+    armor = tonumber(target.UI.getAttribute("armor", "text"))
+  end
+  setParam("armor", armor)
+
+  local dist = getDistance(attackingChar[player_color], target)
+  if dist >= 15 then dist = 15 end
+
+  if isMelee then
+    dist = 0
+  end
   setParam("distance", dist)
 
-  attackingMonster = nil
+  -- indicate with highlight
+  attackingChar[player_color].highlightOn(stringColorToRGB(player_color), 5)
+  attackingChar[player_color] = nil
+  target.highlightOn(stringColorToRGB(player_color), 5)
+
   if shown.calculator == false then
     showCalc()
   end
@@ -795,4 +790,36 @@ function refreshObjectUI()
       end
     end,
     5)
+end
+
+
+function isSingleFigurine(obj)
+  return obj.tag == "Figurine" and obj.getQuantity() == -1
+end
+
+function isMonster(obj)
+  if not isSingleFigurine(obj) then
+    return false
+  end
+
+  local name = obj.getName()
+  for k,v in pairs(mnstStats) do
+    if (string.find(name, k, 1, true)) then
+      return true
+    end
+  end
+
+  return false
+end
+
+function isMarine(obj)
+  if not isSingleFigurine(obj) then
+    return false
+  end
+
+  return (string.find(obj.getName(), "Marine", 1, true) ~= nil)
+end
+
+function isCharacter(obj)
+  return isMonster(obj) or isMarine(obj)
 end
