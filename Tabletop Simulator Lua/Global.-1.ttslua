@@ -204,6 +204,9 @@ function setDefaultParams()
   for k in pairs(diceCollection) do
     setDice(k, false)
   end
+
+  Global.UI.setAttribute("reroll", "isOn", "false")
+  rerollToggle(nil, "False", "reroll")
 end
 
 function clearCalc()
