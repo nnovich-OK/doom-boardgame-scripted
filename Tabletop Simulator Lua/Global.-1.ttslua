@@ -104,41 +104,49 @@ mnstStats = {
   Zombie     = {speed=3, armor=2, health=2,
                 attack = {"red", "blue1"},
                 attackMod = {melee=true},
+                reminder = "",
               },
 
   Trite      = {speed=5, armor=1, health=1,
                 attack = {"red", "green1"},
                 attackMod = {melee=true},
+                reminder = "scuttle",
               },
 
   Imp        = {speed=4, armor=2, health=1,
                 attack = {"yellow", "blue2"},
                 attackMod = {accuracy=1},
+                reminder = "",
               },
 
   Demon      = {speed=4, armor=3, health=2,
                 attack = {"red", "blue1", "blue2"},
                 attackMod = {melee=true},
+                reminder = "watchful",
               },
 
   Mancubus   = {speed=2, armor=3, health=3,
                 attack = {"yellow", "green2" ,"blue2"},
-                attackMod = {deadly=1}
+                attackMod = {deadly=1},
+                reminder = "blow-through",
               },
 
   Archvile   = {speed=4, armor=3, health=2,
                 attack = {"yellow", "green1", "green2" ,"blue2"},
                 attackMod = {accuracy=4},
+                reminder = "aimed",
             },
 
   Hellknight = {speed=3, armor=4, health=3,
                 attack = {"red", "blue1", "blue2"},
                 attackMod = {melee=true},
+                reminder = "sweep, knockback",
               },
 
   Cyberdemon = {speed=4, armor=5, health=4,
                 attack = {"red", "yellow", "green1", "green2", "blue1", "blue2"},
                 attackMod = {},
+                reminder = "aimed",
               },
 }
 
@@ -731,6 +739,10 @@ function prepareAttackParameters(player_color)
 
     if stats.attackMod and stats.attackMod.melee then
       isMelee = true
+    end
+
+    if stats.reminder and stats.reminder ~= "" then
+      printToAll("Reminder: " .. stats.reminder, Color.Orange)
     end
   end
 
