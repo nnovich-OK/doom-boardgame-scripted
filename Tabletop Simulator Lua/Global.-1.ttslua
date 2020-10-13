@@ -683,6 +683,10 @@ function prepareAttackOnMonster(player_color)
   printToAll("Armor and distance are set for " .. player_color
     .. " attacking " .. monster.getName(),
     stringColorToRGB(player_color))
+
+  if shown.calculator == false then
+    showCalc()
+  end
 end
 
 function saveAttackingMonster(player_color)
@@ -755,7 +759,11 @@ function prepareAttackOnMarine(player_color)
   end
 
   setParam("distance", dist)
+
   attackingMonster = nil
+  if shown.calculator == false then
+    showCalc()
+  end
 end
 
 function updateDiceFaces()
