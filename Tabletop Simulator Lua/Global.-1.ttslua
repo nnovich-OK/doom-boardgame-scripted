@@ -313,13 +313,8 @@ function statsClose(player, value, id)
 end
 
 function toggleDice(player, value, id)
-  -- Current color scheme is lit when false and dim when true
-  -- It's easier to revert reported values than to update color scheme
-  -- Also value initially is a goddamn string, not boolean
-  value = (value == "False")
-  log(id .. "=" .. tostring(value))
-
-  setDice(id, value)
+  log(id .. "=" .. tostring(not diceCollection[id].state))
+  setDice(id, not diceCollection[id].state)
 end
 
 function getParamName(id)

@@ -13,15 +13,11 @@
     onClick="adjustParam"/>
   <Text fontSize="16" color="rgb(1, 1, 1)" flexibleWidth="1"/>
   <Text class="tgl" fontStyle="Bold" fontSize="32" color="rgb(0.8,0.8,0.8)" />
-  <ToggleButton
+  <Button
     class="die"
-    fontStyle="Bold"
-    fontSize="20"
-    text="X"
     preferredHeight="40"
     preferredWidth="40"
-    onValueChanged="toggleDice"
-    isOn="true"
+    onClick="toggleDice"
     />
   <Cell class="tgl" childForceExpandWidth="false" childForceExpandHeight="false"/>
   <Row class="tgl" preferredHeight="50"/>
@@ -65,39 +61,39 @@
 
       <!-- Row 1 -->
       <Row class="tgl">
-          <Cell class="tgl"><ToggleButton class="die" color="red" id="red">
+          <Cell class="tgl"><Button class="die" id="red">
             <Image id="redImage">
               <Text id="redText" class="tgl"/>
             </Image>
-          </ToggleButton></Cell>
-          <Cell class="tgl"><ToggleButton class="die" color="green" id="green1">
+          </Button></Cell>
+          <Cell class="tgl"><Button class="die" color="green" id="green1">
             <Image id="green1Image">
               <Text id="green1Text" class="tgl"/>
             </Image>
-          </ToggleButton></Cell>
-          <Cell class="tgl"><ToggleButton class="die" color="blue" id="blue1">
+          </Button></Cell>
+          <Cell class="tgl"><Button class="die" color="blue" id="blue1">
             <Image id="blue1Image">
               <Text id="blue1Text" class="tgl"/>
             </Image>
-          </ToggleButton></Cell>
+          </Button></Cell>
       </Row>
       <!-- Row 2 -->
       <Row class="tgl">
-          <Cell class="tgl"><ToggleButton class="die" color="yellow" id="yellow">
+          <Cell class="tgl"><Button class="die" color="yellow" id="yellow">
             <Image id="yellowImage">
               <Text id="yellowText" class="tgl"/>
             </Image>
-          </ToggleButton></Cell>
-          <Cell class="tgl"><ToggleButton class="die" color="green" id="green2">
+          </Button></Cell>
+          <Cell class="tgl"><Button class="die" color="green" id="green2">
             <Image id="green2Image">
               <Text id="green2Text" class="tgl"/>
             </Image>
-          </ToggleButton></Cell>
-          <Cell class="tgl"><ToggleButton class="die" color="blue" id="blue2">
+          </Button></Cell>
+          <Cell class="tgl"><Button class="die" color="blue" id="blue2">
             <Image id="blue2Image">
               <Text id="blue2Text" class="tgl"/>
             </Image>
-          </ToggleButton></Cell>
+          </Button></Cell>
       </Row>
     </TableLayout>
 
