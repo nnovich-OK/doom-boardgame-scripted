@@ -9,23 +9,23 @@
     preferredWidth="28"
     preferredHeight="28"
     flexibleWidth="0"
-    onClick="adjustParam"/>
+    onClick="6411e1/adjustParam"/>
   <Text fontSize="16" color="rgb(1, 1, 1)" flexibleWidth="1"/>
   <Text class="tgl" fontStyle="Bold" fontSize="32" color="rgb(0.8,0.8,0.8)" />
   <Button
     class="die"
     preferredHeight="40"
     preferredWidth="40"
-    onClick="toggleDice"
+    onClick="6411e1/toggleDice"
     />
   <Cell class="tgl" childForceExpandWidth="false" childForceExpandHeight="false"/>
   <Row class="tgl" preferredHeight="50"/>
   <Image preserveAspect="true"/>
 </Defaults>
 
-<Button id="showCalc"
+<Button id="toggleCalc"
   class="ini"
-  onClick="showCalc"
+  onClick="6411e1/toggleCalc"
   width="125"
   height="50"
   text="DMG Calc &#x25BC;"
@@ -106,7 +106,7 @@
         preferredWidth="20"
         flexibleWidth="0"
         rectAlignment="MiddleCenter"
-        onValueChanged="rerollToggle"/>
+        onValueChanged="6411e1/rerollToggle"/>
       <Text flexibleWidth="0" rectAlignment="MiddleCenter">Reroll</Text>
     </HorizontalLayout>
   </VerticalLayout>
@@ -173,21 +173,21 @@
 
   <Button id="calculate"
     class="ini"
-    onClick="calculate"
+    onClick="6411e1/calculate"
     preferredHeight="50">
     Calculate
   </Button>
 
   <Button id="rollDice"
     class="ini"
-    onClick="rollDice"
+    onClick="6411e1/rollDice"
     preferredHeight="50">
     Roll
   </Button>
 
   <Button id="clearPrm"
     class="ini"
-    onClick="clearCalc"
+    onClick="6411e1/clearCalc"
     preferredHeight="50">
     Clear
   </Button>
@@ -300,14 +300,14 @@
     flexibleHeight = "0">
 
     <Button id="statsMode"
-      onClick="toggleStatsMode"
+      onClick="6411e1/toggleStatsMode"
       preferredHeight="50"
       preferredWidth="75">
       Mode
     </Button>
 
-    <Button id="statsClose"
-      onClick="statsClose"
+    <Button id="closeStats"
+      onClick="6411e1/closeStats"
       preferredHeight="50"
       preferredWidth="75">
       Close

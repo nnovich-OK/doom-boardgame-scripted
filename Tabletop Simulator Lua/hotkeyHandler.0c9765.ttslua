@@ -151,7 +151,7 @@ function saveAttackingCharacter(player_color)
   end
 
   local candidate = Player[player_color].getHoverObject()
-  if not candidate or not isCharacter(candidate) then
+  if not candidate or not Global.call("isCharacter", candidate) then
     broadcastToColor(
     "Hotkey is intended to mark figurine which is hovered over as attacker. " ..
     "Please hover over attacking character first.",
@@ -190,7 +190,7 @@ function prepareAttackParameters(player_color)
   end
 
   local target = Player[player_color].getHoverObject()
-  if not target or not isCharacter(target) then
+  if not target or not Global.call("isCharacter", target) then
     broadcastToColor(
       "Hotkey is intended to mark figurine which is hovered over as target." ..
       "Please hover over targeted character first.",
@@ -243,5 +243,5 @@ function prepareAttackParameters(player_color)
   attackingChar[player_color] = nil
   target.highlightOn(stringColorToRGB(player_color), 5)
 
-  Global.call(instances).calc.call("configure", params)
+  Global.call("instances").calc.call("configure", params)
 end

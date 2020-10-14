@@ -1,16 +1,26 @@
 #include Console/console++
 
-shown = {
-  calculator = false,
-  stats = false
-}
+shown = {Red={}, Green={}, Blue={}, White={}}
 
+-- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place
+mnstList = {
+  "Zombie",
+  "Trite",
+  "Imp",
+  "Demon",
+  "Mancubus",
+  "Archvile",
+  "Hellknight",
+  "Cyberdemon",
+}
 
 function onload()
   -- assets sometimes load later than they are needed by objects
   -- so blank squares are shown instead of images for armor, speed etc
   -- workaround - refresh XML to redraw interfaces
   refreshObjectUI()
+
+  instances().preproc.call("preprocess")
 end
 
 function onPlayerConnect(player)
@@ -31,21 +41,41 @@ function instances()
 end
 
 
-function showCalc()
-  if shown.calculator == false then
-     Global.UI.show("calculator")
-     shown.calculator = true
-  else
-     Global.UI.hide("calculator")
-     shown.calculator = false
+function interfaceRequestCorrect(req)
+  return req and req.id and req.color
+end
+
+
+--TODO group and rework
+function showInterface(req)
+  if interfaceRequestCorrect(req)
+    and not shown[req.color][req.id]
+  then
+    shown[req.color][req.id] = true
+    Global.UI.show(req.id)  --TODO: set visibility
   end
 end
 
-function statsClose(player, value, id)
-  Global.UI.hide("stats")
-  shown.stats = false
+function hideInterface(req)
+  if interfaceRequestCorrect(req)
+    and shown[req.color][req.id]
+  then
+    shown[req.color][req.id] = false
+    Global.UI.hide(req.id)  --TODO: set visibility
+  end
 end
 
+function toggleInterface(req)
+  if interfaceRequestCorrect(req)
+  then
+    if not shown[req.color][req.id] then
+      Global.UI.show(req.id)  --TODO: set visibility
+    else
+      Global.UI.hide(req.id)
+    end
+    shown[req.color][req.id] = not shown[req.color][req.id]
+  end
+end
 
 function refreshObjectUI()
   Wait.time(
@@ -72,8 +102,8 @@ function isMonster(obj)
   end
 
   local name = obj.getName()
-  for k,v in pairs(mnstStats) do
-    if (string.find(name, k, 1, true)) then
+  for i,v in ipairs(mnstList) do
+    if (string.find(name, v, 1, true)) then
       return true
     end
   end

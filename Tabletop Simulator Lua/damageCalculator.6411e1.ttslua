@@ -1,5 +1,3 @@
-cumulativeStatsMode = false
-
 redRotationValues = {
   {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=0 dmg=4 ammo",      rotation={x=0, y=0, z=90}},
@@ -80,8 +78,9 @@ diceCollection = {
 
 
 -- will store state and value for all dices of the last roll
-lastRoll = {}
+lastRoll = {Red={}, Green={}, Blue={}, White={}}
 reroll = {}
+cumulativeStatsMode = {}
 
 
 paramRange = {
@@ -97,9 +96,9 @@ paramRange = {
 }
 
 -- individual parameters of calculator of each player
-prm = {}
+prm = {Red={}, Green={}, Blue={}, White={}}
 -- damage prediction for each player
-result = {}
+predictedStats = {Red={}, Green={}, Blue={}, White={}}
 
 allColors = {"Red", "Green", "Blue", "White"}
 
@@ -146,19 +145,19 @@ function setDefaultParams(player_color, section)
   end
 
   if string.find(section, "target", 1, true) then
-    setParam("armor", paramRange.armor.min)
-    setParam("distance", paramRange.distance.min)
+    setParam(player_color, "armor", paramRange.armor.min)
+    setParam(player_color, "distance", paramRange.distance.min)
   end
 
   if string.find(section, "bonus", 1, true) then
-    setParam("accuracy", paramRange.accuracy.min)
-    setParam("deadly", paramRange.deadly.min)
+    setParam(player_color, "accuracy", paramRange.accuracy.min)
+    setParam(player_color, "deadly", paramRange.deadly.min)
   end
 end
 
 
-function clearCalc(player_color)
-  setDefaultParams(player_color)
+function clearCalc(player, value, id)
+  setDefaultParams(player.color)
 
   for _,v in pairs(diceCollection) do
     v.dieObj.highlightOff()
@@ -215,7 +214,7 @@ function displayParam(player_color, name)
   end
 end
 
-function setDice(player_color, active, id)
+function setDice(player_color, id, active)
   diceCollection[id].state[player_color] = active
 
   if active then
@@ -283,33 +282,33 @@ function calculate(player, value, id)
 
   -- caclulate number of cases for each outcome
   local state = {range=0, dmg=0, weight=1}
-  result[player.color] = {}
-  calcIteration(dice, 1, state, result[player.color])
+  predictedStats[player.color] = {}
+  calcIteration(dice, 1, state, prm[player.color], predictedStats[player.color])
 
   -- convert to percentage
   local totalCases = 6^#dice
-  for k,v in pairs(result[player.color]) do
-    result[player.color][k] = result[player.color][k] * 100 / totalCases
+  for k,v in pairs(predictedStats[player.color]) do
+    predictedStats[player.color][k] = predictedStats[player.color][k] * 100 / totalCases
   end
 
   -- add ammo consumption statistics
   -- red and yellow dice has chance of 1/3 to spend ammo each
   local ammoDices = 0
-  if diceCollection.red.state[player_color] then ammoDices = ammoDices + 1 end
-  if diceCollection.yellow.state[player_color] then ammoDices = ammoDices + 1 end
-  result[player.color]["ammo"] = (1 - (2/3)^ammoDices) * 100
+  if diceCollection.red.state[player.color] then ammoDices = ammoDices + 1 end
+  if diceCollection.yellow.state[player.color] then ammoDices = ammoDices + 1 end
+  predictedStats[player.color]["ammo"] = (1 - (2/3)^ammoDices) * 100
 
   showStats(player.color)
 end
 
 -- caclulate number of cases for each outcome
-function calcIteration(dice, depth, state, rez)
-  -- if reached the bottom, save results and exit
+function calcIteration(dice, depth, state, params, rez)
+  -- if reached the bottom, save predictedStatss and exit
   if dice[depth] == nil then
-    if prm[player_color].distance > (state.range + prm[player_color].accuracy) then
+    if params.distance > (state.range + params.accuracy) then
       rez["miss"] = (rez["miss"] or 0) + state.weight
     else
-      local hit = math.floor((state.dmg + prm[player_color].deadly) / prm[player_color].armor)
+      local hit = math.floor((state.dmg + params.deadly) / params.armor)
       rez[hit] = (rez[hit] or 0) + state.weight
     end
     return
@@ -329,54 +328,54 @@ function calcIteration(dice, depth, state, rez)
         weight = state.weight * v.weight,
       }
 
-      calcIteration(dice, depth+1, newState, rez)
+      calcIteration(dice, depth+1, newState, params, rez)
     end
   end
 end
 
 function showStats(player_color)
   --common stats
-  Global.UI.setAttribute("ammoPb", "percentage", result[player.color]["ammo"] or 0)
-  Global.UI.setAttribute("missPb", "percentage", result[player.color]["miss"] or 0)
+  Global.UI.setAttribute("ammoPb", "percentage", predictedStats[player_color]["ammo"] or 0)
+  Global.UI.setAttribute("missPb", "percentage", predictedStats[player_color]["miss"] or 0)
 
   --specific stats
-  if not cumulativeStatsMode then
+  if not cumulativeStatsMode[player_color] then
     setExactStats(player_color)
   else
     setCumulativeStats(player_color)
   end
 
-  Global.call("show", {id="stats", color=player_color})
+  Global.call("showInterface", {id="stats", color=player_color})
 end
 
 
 function setExactStats(player_color)
   for i = 0,15 do
     Global.UI.setAttribute(tostring(i) .. "t", "text", tostring(i) .. "dmg")
-    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", result[player_color][i] or 0)
+    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", predictedStats[player_color][i] or 0)
   end
 end
 
 function setCumulativeStats(player_color)
   local sum = 0
   -- even though there are only 15 bars to display, to get proper sum of chances we should
-  -- iterate result[player.color] from maxdmg+maxdeadly or more
+  -- iterate predictedStats[player.color] from maxdmg+maxdeadly or more
   -- TODO: redefine all magic numbers through named variables
   for i=25,0,-1 do
-    sum = sum + (result[player_color][i] or 0)
+    sum = sum + (predictedStats[player_color][i] or 0)
     Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", sum)
     Global.UI.setAttribute(tostring(i) .. "t", "text", "≥" .. tostring(i) .. "dmg")
   end
 end
 
 function toggleStatsMode(player, value, id)
-  cumulativeStatsMode = not cumulativeStatsMode
+  cumulativeStatsMode[player.color] = not cumulativeStatsMode[player.color]
   showStats(player.color)
 end
 
 
 function rollWatch(player_color)
-  for i,v in pairs(diceCollection) do
+  for k,v in pairs(diceCollection) do
     if v.state[player_color] and not v.dieObj.resting then
       return false
     end
@@ -467,13 +466,13 @@ function rollEnd(player_color)
   updateDiceFaces()
 
   -- This MUST be called, and also this should be the last thing to execute
-  toggleInteraction(true)
+  toggleInteraction(player_color, true)
 end
 
 function rollDice(player, value, id)
   local rollHappened = false
   for _,v in pairs(diceCollection) do
-    if v.state[player_color] then
+    if v.state[player.color] then
       v.dieObj.roll()
       v.dieObj.highlightOn(Color.pink, 45)
       rollHappened = true
@@ -484,7 +483,7 @@ function rollDice(player, value, id)
 
   if not rollHappened then return end
   --shut down controls, so nobody messes with parameters
-  toggleInteraction(false)
+  toggleInteraction(player.color, false)
 
   local actionStr = " rolls..."
   if reroll[player.color] then
@@ -494,7 +493,7 @@ function rollDice(player, value, id)
 
   Wait.condition(
     function() return rollEnd(player.color) end,
-    function() return rollWatch(player.color) end,
+    function() return rollWatch(player.color) end
   )
 end
 
@@ -580,7 +579,7 @@ function rerollToggle(player, value, id)
 
   if reroll[player.color] then
     for k in pairs(diceCollection) do
-      if not lastRoll[player_color][k] then
+      if not lastRoll[player.color][k] then
         Global.UI.setAttribute(k, "active", "false")
         setDice(player.color, k, false)
       end
@@ -592,11 +591,41 @@ function rerollToggle(player, value, id)
   end
 end
 
-function configure(player_color, params)
-  if not params.color then
+function configure(params)
+  log(params, "Params: ")
+  if not params or not params.color then
     log(params, "ERROR configure param missing color: ")
     return
   end
 
-  --TODO: FINISH
+  if params.dice then
+    setDefaultParams(params.color, "dice")
+    for i,v in ipairs(params.dice) do
+      setDice(params.color, v, true)
+    end
+  end
+
+  if params.target then
+    setDefaultParams(params.color, "target")
+    for k,v in pairs(params.target) do
+      setParam(params.color, k, v)
+    end
+  end
+
+  if params.bonus then
+    setDefaultParams(params.color, "bonus")
+    if params.bonus ~= "none" then
+      for k,v in pairs(params.bonus) do
+        setParam(params.color, k, v)
+      end
+    end
+  end
+end
+
+function toggleCalc(player, value, id)
+  Global.call("toggleInterface", {id="calculator", color=player.color})
+end
+
+function closeStats(player, value, id)
+  Global.call("hideInterface", {id="stats", color=player.color})
 end
