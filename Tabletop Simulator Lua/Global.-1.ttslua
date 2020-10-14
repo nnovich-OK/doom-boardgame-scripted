@@ -497,6 +497,14 @@ function rollEnd(player)
         -- die wasn't rolled now, but it's part of previous roll, which is rerolled
         addDieValue(sum, lastRoll[k])
         log(lastRoll[k], k .. " used from previous roll: " )
+
+        -- notify if displayed value and stored one are different
+        local oldValueString = rotationValueTableToString(lastRoll[k])
+        if v.dieObj.getRotationValue() ~= oldValueString then
+          broadcastToAll("Note: " .. k .. " isn't rerolled, but it has been moved since last roll. " ..
+          "Using " .. oldValueString .. " from last roll.",
+          Color.Orange)
+        end
       end
     end
   end
@@ -525,23 +533,23 @@ function rollEnd(player)
 
   -- bonus/armor/distance accounted
   if sum.miss then
-    broadcastToAll("MISS on dice", stringColorToRGB("Pink"))
+    broadcastToAll("MISS on dice", Color.Pink)
   else
     if sum.range + prm.accuracy < prm.distance then
-      broadcastToAll("MISS: Range + accuracy is too low", stringColorToRGB("Pink"))
+      broadcastToAll("MISS: Range + accuracy is too low", Color.Pink)
     else
       local hit = math.floor((sum.dmg + prm.deadly) / prm.armor)
       if hit == 0 then
-        broadcastToAll("HIT: no penetration", stringColorToRGB("Pink"))
+        broadcastToAll("HIT: no penetration", Color.Pink)
       else
-        broadcastToAll("HIT: " .. hit .. " wounds", stringColorToRGB("Pink"))
+        broadcastToAll("HIT: " .. hit .. " wounds", Color.Pink)
       end
     end
   end
 
   -- highlight ammo consumption in CAPS if not melee and not invader player
   if sum.ammo and player.color ~= "White" and prm.distance ~= 0 then
-    broadcastToAll("AMMO LOST", stringColorToRGB("Pink"))
+    broadcastToAll("AMMO LOST", Color.Pink)
   end
 
   updateDiceFaces()
@@ -565,12 +573,30 @@ function rollDice(player, value, id)
   if not rollHappened then return end
   --shut down controls, so nobody messes with parameters
   toggleInteraction(false)
-  broadcastToAll(player.steam_name .. " rolls...", stringColorToRGB(player.color))
+
+  local actionStr = " rolls..."
+  if reroll then
+    actionStr = " rerolls..."
+  end
+  broadcastToAll(player.steam_name .. actionStr, stringColorToRGB(player.color))
 
   Wait.condition(
     function() return rollEnd(player) end,
     rollWatch
   )
+end
+
+function rotationValueTableToString(value)
+  if value.miss then
+    return "miss"
+  end
+
+  local str = "range=" .. value.range .. " dmg=" .. value.dmg
+  if value.ammo then
+    return str .. " ammo"
+  else
+    return str
+  end
 end
 
 function getRotationValueTable(obj)
@@ -810,7 +836,7 @@ end
 function bringDiceBack()
   for k,v in pairs(diceCollection) do
     if v.dieObj.getPosition().y < -5 then
-      broadcastToAll(k .. " die dropped off the table, returning...", stringColorToRGB("Pink"))
+      broadcastToAll(k .. " die dropped off the table, returning...", Color.Pink)
       v.dieObj.setPosition({-8.50, 13.00, 34.00})
       v.dieObj.setVelocity({0, 0, 0})
     end
@@ -820,7 +846,7 @@ end
 function refreshObjectUI()
   Wait.time(
     function()
-      broadcastToAll("Refreshing object interfaces after new player connected", stringColorToRGB("Pink"))
+      broadcastToAll("Refreshing object interfaces after new player connected", Color.Orange)
       for _,v in ipairs(getAllObjects()) do
         local xml = v.UI.getXml()
         if xml and xml ~= "" then
