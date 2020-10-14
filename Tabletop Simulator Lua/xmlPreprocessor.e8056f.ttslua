@@ -1,0 +1,4 @@
+function preprocess()
+  local xml = Global.UI.getXmlTable()
+  print(xml)
+end
