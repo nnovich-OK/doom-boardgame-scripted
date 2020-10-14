@@ -70,18 +70,18 @@ blueDie = {
 
 -- will also store dieObj with reference to actual object
 diceCollection = {
-  red    = {state = false, die = redDie, guid = "3e0276", rotVal = redRotationValues},
-  yellow = {state = false, die = yellowDie, guid = "d1aad4", rotVal = yellowRotationValues},
-  green1 = {state = false, die = greenDie, guid = "3e7c9c", rotVal = greenRotationValues},
-  green2 = {state = false, die = greenDie, guid = "c3ae7e", rotVal = greenRotationValues},
-  blue1  = {state = false, die = blueDie, guid = "6128fe", rotVal = blueRotationValues},
-  blue2  = {state = false, die = blueDie, guid = "bdba03", rotVal = blueRotationValues},
+  red    = {state = {}, die = redDie, guid = "3e0276", rotVal = redRotationValues},
+  yellow = {state = {}, die = yellowDie, guid = "d1aad4", rotVal = yellowRotationValues},
+  green1 = {state = {}, die = greenDie, guid = "3e7c9c", rotVal = greenRotationValues},
+  green2 = {state = {}, die = greenDie, guid = "c3ae7e", rotVal = greenRotationValues},
+  blue1  = {state = {}, die = blueDie, guid = "6128fe", rotVal = blueRotationValues},
+  blue2  = {state = {}, die = blueDie, guid = "bdba03", rotVal = blueRotationValues},
 }
 
 
 -- will store state and value for all dices of the last roll
 lastRoll = {}
-reroll = false
+reroll = {}
 
 
 paramRange = {
@@ -96,7 +96,12 @@ paramRange = {
   deadly   = { min = 0, max = 10 },
 }
 
+-- individual parameters of calculator of each player
+prm = {}
+-- damage prediction for each player
+result = {}
 
+allColors = {"Red", "Green", "Blue", "White"}
 
 function onload()
   initParams()
@@ -107,7 +112,9 @@ end
 
 
 function initParams()
-  setDefaultParams()
+  for _,color in ipairs(allColors) do
+    setDefaultParams(color)
+  end
 
   -- Save reference to dice into collection
   -- also assign rotation values
@@ -124,24 +131,34 @@ function initParams()
 end
 
 
-function setDefaultParams()
-    -- Set params to default (min) value
-  prm = {}
-  for k,v in pairs(paramRange) do
-    setParam(k, v.min)
+function setDefaultParams(player_color, section)
+  if not section or section == "" then
+    section = "dice target bonus"
   end
 
-  for k in pairs(diceCollection) do
-    setDice(k, false)
+  if string.find(section, "dice", 1, true) then
+    for k in pairs(diceCollection) do
+      setDice(player_color, k, false)
+    end
+
+    Global.UI.setAttribute("reroll", "isOn", "false")
+    rerollToggle(Player[player_color], "False", "reroll")
   end
 
-  Global.UI.setAttribute("reroll", "isOn", "false")
-  rerollToggle(nil, "False", "reroll")
+  if string.find(section, "target", 1, true) then
+    setParam("armor", paramRange.armor.min)
+    setParam("distance", paramRange.distance.min)
+  end
+
+  if string.find(section, "bonus", 1, true) then
+    setParam("accuracy", paramRange.accuracy.min)
+    setParam("deadly", paramRange.deadly.min)
+  end
 end
 
 
-function clearCalc()
-  setDefaultParams()
+function clearCalc(player_color)
+  setDefaultParams(player_color)
 
   for _,v in pairs(diceCollection) do
     v.dieObj.highlightOff()
@@ -149,57 +166,57 @@ function clearCalc()
 end
 
 
-function setParam(name, value)
-  prm[name] = value
-  displayParam(name)
+function setParam(player_color, name, value)
+  prm[player_color][name] = value
+  displayParam(player_color, name)
 end
 
 
-function displayParam(name)
+function displayParam(player_color, name)
   -- DISTANCE
   if name == "distance" then
-    if prm[name] == 0 then
+    if prm[player_color][name] == 0 then
       Global.UI.setAttribute(name, "text", "melee")
       Global.UI.setAttribute(name, "color", "red")
     else
-      Global.UI.setAttribute(name, "text", prm[name])
+      Global.UI.setAttribute(name, "text", prm[player_color][name])
       Global.UI.setAttribute(name, "color", "white")
     end
 
   elseif name == "accuracy" then
-    if prm[name] == 0 then
+    if prm[player_color][name] == 0 then
       Global.UI.setAttribute(name, "text", "-")
-    elseif prm[name] <= 4 then  -- can't fit more
+    elseif prm[player_color][name] <= 4 then  -- can't fit more
       local emojiStr = ""
-      for i = 1,prm[name] do
+      for i = 1,prm[player_color][name] do
         emojiStr = emojiStr .. "◎"
       end
       Global.UI.setAttribute(name, "text", emojiStr)
     else
-      Global.UI.setAttribute(name, "text", prm[name])
+      Global.UI.setAttribute(name, "text", prm[player_color][name])
     end
 
   elseif name == "deadly" then
-    if prm[name] == 0 then
+    if prm[player_color][name] == 0 then
       Global.UI.setAttribute(name, "text", "-")
-    elseif prm[name] <= 3 then -- can't fit more
+    elseif prm[player_color][name] <= 3 then -- can't fit more
       local emojiStr = ""
-      for i = 1,prm[name] do
+      for i = 1,prm[player_color][name] do
         emojiStr = emojiStr .. "☠"
       end
       Global.UI.setAttribute(name, "text", emojiStr)
     else
-      Global.UI.setAttribute(name, "text", prm[name])
+      Global.UI.setAttribute(name, "text", prm[player_color][name])
     end
 
 
   else
-    Global.UI.setAttribute(name, "text", prm[name])
+    Global.UI.setAttribute(name, "text", prm[player_color][name])
   end
 end
 
 function setDice(player_color, active, id)
-  diceCollection[id].state = active
+  diceCollection[id].state[player_color] = active
 
   if active then
     Global.UI.setAttribute(id.."Text", "text", "") --"✓"
@@ -214,8 +231,8 @@ end
 
 
 function toggleDice(player, value, id)
-  log(id .. "=" .. tostring(not diceCollection[id].state))
-  setDice(id, not diceCollection[id].state)
+  log(id .. "=" .. tostring(not diceCollection[id].state[player.color]))
+  setDice(player.color, id, not diceCollection[id].state[player.color])
 end
 
 function getParamName(id)
@@ -240,13 +257,13 @@ function adjustParam(player, value, id)
   local min = paramRange[name].min
   local max = paramRange[name].max
 
-  if delta < 0  and prm[name] > min then
-    setParam(name, prm[name] - 1)
-  elseif delta > 0 and prm[name] < max then
-    setParam(name, prm[name] + 1)
+  if delta < 0  and prm[player.color][name] > min then
+    setParam(player.color, name, prm[player.color][name] - 1)
+  elseif delta > 0 and prm[player.color][name] < max then
+    setParam(player.color, name, prm[player.color][name] + 1)
   end
 
-  log(name .. "=" .. prm[name])
+  log(name .. "=" .. prm[player.color][name])
 end
 
 
@@ -254,7 +271,7 @@ end
 function calculate(player, value, id)
   local dice = {}
   for _,v in pairs(diceCollection) do
-    if v.state then table.insert(dice, v.die) end
+    if v.state[player.color] then table.insert(dice, v.die) end
   end
 
   if dice[1] == nil then
@@ -266,34 +283,34 @@ function calculate(player, value, id)
 
   -- caclulate number of cases for each outcome
   local state = {range=0, dmg=0, weight=1}
-  result = {} --isn't local intentionally
-  calcIteration(dice, 1, state, result)
+  result[player.color] = {}
+  calcIteration(dice, 1, state, result[player.color])
 
   -- convert to percentage
   local totalCases = 6^#dice
-  for k,v in pairs(result) do
-    result[k] = result[k] * 100 / totalCases
+  for k,v in pairs(result[player.color]) do
+    result[player.color][k] = result[player.color][k] * 100 / totalCases
   end
 
   -- add ammo consumption statistics
   -- red and yellow dice has chance of 1/3 to spend ammo each
   local ammoDices = 0
-  if diceCollection.red.state then ammoDices = ammoDices + 1 end
-  if diceCollection.yellow.state then ammoDices = ammoDices + 1 end
-  result["ammo"] = (1 - (2/3)^ammoDices) * 100
+  if diceCollection.red.state[player_color] then ammoDices = ammoDices + 1 end
+  if diceCollection.yellow.state[player_color] then ammoDices = ammoDices + 1 end
+  result[player.color]["ammo"] = (1 - (2/3)^ammoDices) * 100
 
-  showStats()
+  showStats(player.color)
 end
 
 -- caclulate number of cases for each outcome
-function calcIteration(dice, depth, state, result)
+function calcIteration(dice, depth, state, rez)
   -- if reached the bottom, save results and exit
   if dice[depth] == nil then
-    if prm.distance > (state.range + prm.accuracy) then
-      result["miss"] = (result["miss"] or 0) + state.weight
+    if prm[player_color].distance > (state.range + prm[player_color].accuracy) then
+      rez["miss"] = (rez["miss"] or 0) + state.weight
     else
-      local hit = math.floor((state.dmg + prm.deadly) / prm.armor)
-      result[hit] = (result[hit] or 0) + state.weight
+      local hit = math.floor((state.dmg + prm[player_color].deadly) / prm[player_color].armor)
+      rez[hit] = (rez[hit] or 0) + state.weight
     end
     return
   end
@@ -303,7 +320,7 @@ function calcIteration(dice, depth, state, result)
       -- handle miss separately
       local diceLeft = #dice - depth
       local missWeight = state.weight * (6^diceLeft)
-      result["miss"] = (result["miss"] or 0) + missWeight
+      rez["miss"] = (rez["miss"] or 0) + missWeight
     else
       -- go to the next depth
       local newState = {
@@ -312,42 +329,41 @@ function calcIteration(dice, depth, state, result)
         weight = state.weight * v.weight,
       }
 
-      calcIteration(dice, depth+1, newState, result)
+      calcIteration(dice, depth+1, newState, rez)
     end
   end
 end
 
-function showStats()
+function showStats(player_color)
   --common stats
-  Global.UI.setAttribute("ammoPb", "percentage", result["ammo"] or 0)
-  Global.UI.setAttribute("missPb", "percentage", result["miss"] or 0)
+  Global.UI.setAttribute("ammoPb", "percentage", result[player.color]["ammo"] or 0)
+  Global.UI.setAttribute("missPb", "percentage", result[player.color]["miss"] or 0)
 
   --specific stats
   if not cumulativeStatsMode then
-    setExactStats()
+    setExactStats(player_color)
   else
-    setCumulativeStats()
+    setCumulativeStats(player_color)
   end
 
-  Global.UI.show("stats")
-  shown.stats = true
+  Global.call("show", {id="stats", color=player_color})
 end
 
 
-function setExactStats()
+function setExactStats(player_color)
   for i = 0,15 do
     Global.UI.setAttribute(tostring(i) .. "t", "text", tostring(i) .. "dmg")
-    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", result[i] or 0)
+    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", result[player_color][i] or 0)
   end
 end
 
-function setCumulativeStats()
+function setCumulativeStats(player_color)
   local sum = 0
   -- even though there are only 15 bars to display, to get proper sum of chances we should
-  -- iterate result from maxdmg+maxdeadly or more
+  -- iterate result[player.color] from maxdmg+maxdeadly or more
   -- TODO: redefine all magic numbers through named variables
   for i=25,0,-1 do
-    sum = sum + (result[i] or 0)
+    sum = sum + (result[player_color][i] or 0)
     Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", sum)
     Global.UI.setAttribute(tostring(i) .. "t", "text", "≥" .. tostring(i) .. "dmg")
   end
@@ -355,13 +371,13 @@ end
 
 function toggleStatsMode(player, value, id)
   cumulativeStatsMode = not cumulativeStatsMode
-  showStats()
+  showStats(player.color)
 end
 
 
-function rollWatch()
+function rollWatch(player_color)
   for i,v in pairs(diceCollection) do
-    if v.state and not v.dieObj.resting then
+    if v.state[player_color] and not v.dieObj.resting then
       return false
     end
   end
@@ -375,27 +391,27 @@ function addDieValue(sum, value)
   sum.miss = sum.miss or value.miss
 end
 
-function rollEnd(player)
+function rollEnd(player_color)
   -- print each dice individually and count sum
   log(" --- Roll end --- ")
 
   local currentRoll = {}
   local sum = {range=0, dmg=0, ammo=false, miss=false}
   for k,v in pairs(diceCollection) do
-    if v.state then
+    if v.state[player_color] then
       local value = getRotationValueTable(v.dieObj)
-      log(value, k .." rolled by " .. player.color .. ": ")
+      log(value, k .." rolled by " .. player_color .. ": ")
       addDieValue(sum, value)
       currentRoll[k] = value
     else
       currentRoll[k] = nil
-      if reroll and lastRoll[k] then
+      if reroll[player_color] and lastRoll[player_color][k] then
         -- die wasn't rolled now, but it's part of previous roll, which is rerolled
-        addDieValue(sum, lastRoll[k])
-        log(lastRoll[k], k .. " used from previous roll: " )
+        addDieValue(sum, lastRoll[player_color][k])
+        log(lastRoll[player_color][k], k .. " used from previous roll: " )
 
         -- notify if displayed value and stored one are different
-        local oldValueString = rotationValueTableToString(lastRoll[k])
+        local oldValueString = rotationValueTableToString(lastRoll[player_color][k])
         if v.dieObj.getRotationValue() ~= oldValueString then
           broadcastToAll("Note: " .. k .. " isn't rerolled, but it has been moved since last roll. " ..
           "Using " .. oldValueString .. " from last roll.",
@@ -405,8 +421,8 @@ function rollEnd(player)
     end
   end
 
-  if not reroll then
-    lastRoll = currentRoll
+  if not reroll[player_color] then
+    lastRoll[player_color] = currentRoll
   end
 
   -- raw sum report
@@ -415,26 +431,26 @@ function rollEnd(player)
     total = total .. "MISS "
   end
   total = total .. tostring(sum.range) .. "range"
-  if prm.accuracy ~= 0 then
-    total = total .. "+" .. tostring(prm.accuracy)
+  if prm[player_color].accuracy ~= 0 then
+    total = total .. "+" .. tostring(prm[player_color].accuracy)
   end
 
   total = total .. " " .. tostring(sum.dmg) .. "dmg"
-  if prm.deadly ~= 0 then
-    total = total .. "+" .. tostring(prm.deadly)
+  if prm[player_color].deadly ~= 0 then
+    total = total .. "+" .. tostring(prm[player_color].deadly)
   end
 
   if sum.ammo then total = total .. " ammo" end
-  broadcastToAll(total, stringColorToRGB(player.color))
+  broadcastToAll(total, stringColorToRGB(player_color))
 
   -- bonus/armor/distance accounted
   if sum.miss then
     broadcastToAll("MISS on dice", Color.Pink)
   else
-    if sum.range + prm.accuracy < prm.distance then
+    if sum.range + prm[player_color].accuracy < prm[player_color].distance then
       broadcastToAll("MISS: Range + accuracy is too low", Color.Pink)
     else
-      local hit = math.floor((sum.dmg + prm.deadly) / prm.armor)
+      local hit = math.floor((sum.dmg + prm[player_color].deadly) / prm[player_color].armor)
       if hit == 0 then
         broadcastToAll("HIT: no penetration", Color.Pink)
       else
@@ -444,7 +460,7 @@ function rollEnd(player)
   end
 
   -- highlight ammo consumption in CAPS if not melee and not invader player
-  if sum.ammo and player.color ~= "White" and prm.distance ~= 0 then
+  if sum.ammo and player_color ~= "White" and prm[player_color].distance ~= 0 then
     broadcastToAll("AMMO LOST", Color.Pink)
   end
 
@@ -457,7 +473,7 @@ end
 function rollDice(player, value, id)
   local rollHappened = false
   for _,v in pairs(diceCollection) do
-    if v.state then
+    if v.state[player_color] then
       v.dieObj.roll()
       v.dieObj.highlightOn(Color.pink, 45)
       rollHappened = true
@@ -471,14 +487,14 @@ function rollDice(player, value, id)
   toggleInteraction(false)
 
   local actionStr = " rolls..."
-  if reroll then
+  if reroll[player.color] then
     actionStr = " rerolls..."
   end
   broadcastToAll(player.steam_name .. actionStr, stringColorToRGB(player.color))
 
   Wait.condition(
-    function() return rollEnd(player) end,
-    rollWatch
+    function() return rollEnd(player.color) end,
+    function() return rollWatch(player.color) end,
   )
 end
 
@@ -508,7 +524,7 @@ function getRotationValueTable(obj)
   return rez
 end
 
-function toggleInteraction(active)
+function toggleInteraction(player_color, active)
   rollOngoing = not active
   Global.UI.setAttribute("distance-", "interactable", active)
   Global.UI.setAttribute("distance+", "interactable", active)
@@ -559,14 +575,14 @@ end
 
 
 function rerollToggle(player, value, id)
-  reroll = (value == "True")
-  log(id .. "=" .. tostring(reroll))
+  reroll[player.color] = (value == "True")
+  log(id .. "=" .. tostring(reroll[player.color]))
 
-  if reroll then
+  if reroll[player.color] then
     for k in pairs(diceCollection) do
-      if not lastRoll[k] then
+      if not lastRoll[player_color][k] then
         Global.UI.setAttribute(k, "active", "false")
-        setDice(k, false)
+        setDice(player.color, k, false)
       end
     end
   else
@@ -574,4 +590,13 @@ function rerollToggle(player, value, id)
       Global.UI.setAttribute(k, "active", "true")
     end
   end
+end
+
+function configure(player_color, params)
+  if not params.color then
+    log(params, "ERROR configure param missing color: ")
+    return
+  end
+
+  --TODO: FINISH
 end
