@@ -325,8 +325,8 @@ end
 
 function showStats(player_color)
   --common stats
-  Global.UI.setAttribute("ammoPb", "percentage", predictedStats[player_color]["ammo"] or 0)
-  Global.UI.setAttribute("missPb", "percentage", predictedStats[player_color]["miss"] or 0)
+  Global.UI.setAttribute("ammoPb" .. player_color, "percentage", predictedStats[player_color]["ammo"] or 0)
+  Global.UI.setAttribute("missPb" .. player_color, "percentage", predictedStats[player_color]["miss"] or 0)
 
   --specific stats
   if not cumulativeStatsMode[player_color] then
@@ -341,8 +341,14 @@ end
 
 function setExactStats(player_color)
   for i = 0,15 do
-    Global.UI.setAttribute(tostring(i) .. "t", "text", tostring(i) .. "dmg")
-    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", predictedStats[player_color][i] or 0)
+    Global.UI.setAttribute(
+      tostring(i) .. "t" .. player_color,
+      "text",
+      tostring(i) .. "dmg")
+    Global.UI.setAttribute(
+      tostring(i) .. "Pb" .. player_color,
+      "percentage",
+      predictedStats[player_color][i] or 0)
   end
 end
 
@@ -353,8 +359,8 @@ function setCumulativeStats(player_color)
   -- TODO: redefine all magic numbers through named variables
   for i=25,0,-1 do
     sum = sum + (predictedStats[player_color][i] or 0)
-    Global.UI.setAttribute(tostring(i) .. "Pb", "percentage", sum)
-    Global.UI.setAttribute(tostring(i) .. "t", "text", "≥" .. tostring(i) .. "dmg")
+    Global.UI.setAttribute(tostring(i) .. "Pb" .. player_color, "percentage", sum)
+    Global.UI.setAttribute(tostring(i) .. "t" .. player_color, "text", "≥" .. tostring(i) .. "dmg")
   end
 end
 

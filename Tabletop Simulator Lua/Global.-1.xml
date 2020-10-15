@@ -229,6 +229,7 @@
     columnWidths="80 450"
     childForceExpandWidth="true"
     flexibleHeight = "1"
+    preproc="split"
     >
 
     <Row>
