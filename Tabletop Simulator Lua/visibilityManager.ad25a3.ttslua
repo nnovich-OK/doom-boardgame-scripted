@@ -50,7 +50,7 @@ function addVisibility(id, color)
 
   if not string.find(vis or "", color, 1, true) then
     vis = fixPipes((vis or "") .. "|" .. color)
-    log("Show "..id.." to "..color..' with vis "'..vis..'"')
+    --log("Show "..id.." to "..color..' with vis "'..vis..'"')
     Global.UI.setAttribute(id, "visibility", vis)
   end
 
@@ -64,7 +64,7 @@ function removeVisibility(id, color)
   local act = Global.UI.getAttribute(id, "active")
 
   vis = fixPipes(string.gsub(vis or "", color, ""))
-  log("Hiding "..id.." from "..color..' with vis: "'..vis..'"')
+  --log("Hiding "..id.." from "..color..' with vis: "'..vis..'"')
   if act ~= "false" and not vis or vis=="" then
     Global.UI.setAttribute(id, "active", "false")
   end

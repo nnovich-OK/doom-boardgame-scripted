@@ -19,6 +19,7 @@
     preferredHeight="40"
     preferredWidth="40"
     onClick="6411e1/toggleDice"
+    visibility="White|Red|Green|Blue"
     />
   <Cell class="tgl" childForceExpandWidth="false" childForceExpandHeight="false"/>
   <Row class="tgl" preferredHeight="50"/>

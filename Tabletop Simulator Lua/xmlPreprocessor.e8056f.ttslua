@@ -36,7 +36,7 @@ end
 
 function performSplit(xml, pos)
   local node = xml[pos]
-  log(node, ">>> SPLIT HERE: ")
+  --log(node, ">>> SPLIT HERE: ")
   table.remove(xml, pos)
 
   node.attributes.preproc = nil
@@ -54,7 +54,7 @@ function performSplit(xml, pos)
     table.insert(xml, pos, newNode)
   end
 
-  log("<<< SPLIT RETURN\n")
+  --log("<<< SPLIT RETURN\n")
 end
 
 function findRename(xml, pos)
@@ -67,7 +67,7 @@ end
 function performRename(xml, pos, color)
   local node = xml[pos]
   node.attributes.id = (node.attributes.id or "") .. color
-  log(node, " -  NAMED HERE: ")
+  --log(node, " -  NAMED HERE: ")
 end
 
 

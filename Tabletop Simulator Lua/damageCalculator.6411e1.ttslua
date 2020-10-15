@@ -220,7 +220,7 @@ end
 
 
 function toggleDice(player, value, id)
-  log(id .. "=" .. tostring(not diceCollection[id].state[player.color]))
+  --log(id .. player.color .. "=" .. tostring(not diceCollection[id].state[player.color]))
   setDice(player.color, id, not diceCollection[id].state[player.color])
 end
 
@@ -252,7 +252,7 @@ function adjustParam(player, value, id)
     setParam(player.color, name, prm[player.color][name] + 1)
   end
 
-  log(name .. "=" .. prm[player.color][name])
+  --log(name .. player.color .. "=" .. prm[player.color][name])
 end
 
 
@@ -565,19 +565,19 @@ end
 
 function rerollToggle(player, value, id)
   reroll[player.color] = (value == "True")
-  log(id .. "=" .. tostring(reroll[player.color]))
+  --log(id .. player.color .. "=" .. tostring(reroll[player.color]))
 
   if reroll[player.color] then
     for k in pairs(diceCollection) do
       if not lastRoll[player.color][k] then
-        Global.UI.hide(k)
+        Global.call("instances").vis.call("hideInterface", {id=k, color=player.color})
         --Global.UI.setAttribute(k, "active", "false")
         setDice(player.color, k, false)
       end
     end
   else
     for k in pairs(diceCollection) do
-      Global.UI.setAttribute(k, "active", "true")
+      Global.call("instances").vis.call("showInterface", {id=k, color=player.color})
     end
   end
 end
