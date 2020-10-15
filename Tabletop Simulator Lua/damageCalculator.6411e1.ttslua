@@ -618,6 +618,8 @@ function configure(params)
       end
     end
   end
+
+  Global.call("showInterface", {id="calculator", color=params.color})
 end
 
 function toggleCalc(player, value, id)
