@@ -1,18 +1,16 @@
 shown = {Red={}, Green={}, Blue={}, White={}}
 
-
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
 end
 
 
---TODO group and rework
 function showInterface(req)
   if interfaceRequestCorrect(req)
     and not shown[req.color][req.id]
   then
     shown[req.color][req.id] = true
-    Global.UI.show(req.id)  --TODO: set visibility
+    addVisibility(req.id, req.color)
   end
 end
 
@@ -21,7 +19,7 @@ function hideInterface(req)
     and shown[req.color][req.id]
   then
     shown[req.color][req.id] = false
-    Global.UI.hide(req.id)  --TODO: set visibility
+    removeVisibility(req.id, req.color)
   end
 end
 
@@ -29,10 +27,47 @@ function toggleInterface(req)
   if interfaceRequestCorrect(req)
   then
     if not shown[req.color][req.id] then
-      Global.UI.show(req.id)  --TODO: set visibility
+      addVisibility(req.id, req.color)
     else
-      Global.UI.hide(req.id)
+      removeVisibility(req.id, req.color)
     end
     shown[req.color][req.id] = not shown[req.color][req.id]
   end
+end
+
+-- remove trailing, leading and double pipes
+-- "|Red||White|Blue|" becomes "Red|White|Blue"
+function fixPipes(str)
+  --trim
+  local trimmed = string.gsub(str, "^|*(.-)|*$", "%1")
+  --remove doulbes
+  return (string.gsub(trimmed, "||+", "|"))
+end
+
+function addVisibility(id, color)
+  local vis = Global.UI.getAttribute(id, "visibility")
+  local act = Global.UI.getAttribute(id, "active")
+
+  if not string.find(vis or "", color, 1, true) then
+    vis = fixPipes((vis or "") .. "|" .. color)
+    log("Show "..id.." to "..color..' with vis "'..vis..'"')
+    Global.UI.setAttribute(id, "visibility", vis)
+  end
+
+  if act~="true" then
+    Global.UI.setAttribute(id, "active", "true")
+  end
+end
+
+function removeVisibility(id, color)
+  local vis = Global.UI.getAttribute(id, "visibility")
+  local act = Global.UI.getAttribute(id, "active")
+
+  vis = fixPipes(string.gsub(vis or "", color, ""))
+  log("Hiding "..id.." from "..color..' with vis: "'..vis..'"')
+  if act ~= "false" and not vis or vis=="" then
+    Global.UI.setAttribute(id, "active", "false")
+  end
+
+  Global.UI.setAttribute(id, "visibility", vis)
 end

@@ -1,6 +1,8 @@
 <Defaults>
   <Button color="#828282"/>
   <Button class="ini" color="rgba(0, 0, 0, 0.95)" textColor="rgb(1, 1, 1)" fontSize="16"/>
+  <Button class="global" color="rgba(0, 0, 0, 0.95)" textColor="rgb(1, 1, 1)" fontSize="16"
+    visibility="White|Red|Green|Blue"/>
   <Button class="adjust"
     textColor="rgb(1, 1, 1)"
     fontSize="24"
@@ -24,7 +26,7 @@
 </Defaults>
 
 <Button id="toggleCalc"
-  class="ini"
+  class="global"
   onClick="6411e1/toggleCalc"
   width="125"
   height="50"
