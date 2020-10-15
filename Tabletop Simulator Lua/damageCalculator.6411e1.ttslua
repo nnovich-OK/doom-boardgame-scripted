@@ -173,42 +173,42 @@ function displayParam(player_color, name)
   -- DISTANCE
   if name == "distance" then
     if prm[player_color][name] == 0 then
-      Global.UI.setAttribute(name, "text", "melee")
-      Global.UI.setAttribute(name, "color", "red")
+      Global.UI.setAttribute(name..player_color, "text", "melee")
+      Global.UI.setAttribute(name..player_color, "color", "red")
     else
-      Global.UI.setAttribute(name, "text", prm[player_color][name])
-      Global.UI.setAttribute(name, "color", "white")
+      Global.UI.setAttribute(name..player_color, "text", prm[player_color][name])
+      Global.UI.setAttribute(name..player_color, "color", "white")
     end
 
   elseif name == "accuracy" then
     if prm[player_color][name] == 0 then
-      Global.UI.setAttribute(name, "text", "-")
+      Global.UI.setAttribute(name..player_color, "text", "-")
     elseif prm[player_color][name] <= 4 then  -- can't fit more
       local emojiStr = ""
       for i = 1,prm[player_color][name] do
         emojiStr = emojiStr .. "◎"
       end
-      Global.UI.setAttribute(name, "text", emojiStr)
+      Global.UI.setAttribute(name..player_color, "text", emojiStr)
     else
-      Global.UI.setAttribute(name, "text", prm[player_color][name])
+      Global.UI.setAttribute(name..player_color, "text", prm[player_color][name])
     end
 
   elseif name == "deadly" then
     if prm[player_color][name] == 0 then
-      Global.UI.setAttribute(name, "text", "-")
+      Global.UI.setAttribute(name..player_color, "text", "-")
     elseif prm[player_color][name] <= 3 then -- can't fit more
       local emojiStr = ""
       for i = 1,prm[player_color][name] do
         emojiStr = emojiStr .. "☠"
       end
-      Global.UI.setAttribute(name, "text", emojiStr)
+      Global.UI.setAttribute(name..player_color, "text", emojiStr)
     else
-      Global.UI.setAttribute(name, "text", prm[player_color][name])
+      Global.UI.setAttribute(name..player_color, "text", prm[player_color][name])
     end
 
 
   else
-    Global.UI.setAttribute(name, "text", prm[player_color][name])
+    Global.UI.setAttribute(name..player_color, "text", prm[player_color][name])
   end
 end
 

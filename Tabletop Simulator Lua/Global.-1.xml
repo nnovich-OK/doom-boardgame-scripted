@@ -136,7 +136,7 @@
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false">
       <Button class="adjust" id="distance-">-</Button>
-      <Text fontSize="30" color="red" id="distance">melee</Text>
+      <Text fontSize="30" color="red" id="distance" preproc="split">melee</Text>
       <Button class="adjust" id="distance+">+</Button>
 
     </HorizontalLayout>
@@ -151,7 +151,7 @@
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false">
       <Button class="adjust" id="armor-">-</Button>
-      <Text fontSize="30" id="armor">1</Text>
+      <Text fontSize="30" id="armor" preproc="split">1</Text>
       <Button class="adjust" id="armor+">+</Button>
 
     </HorizontalLayout>
@@ -166,7 +166,7 @@
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false">
       <Button class="adjust" id="accuracy-">-</Button>
-      <Text fontSize="32" id="accuracy">0</Text>
+      <Text fontSize="32" id="accuracy" preproc="split">0</Text>
       <Button class="adjust" id="accuracy+">+</Button>
 
     </HorizontalLayout>
@@ -181,7 +181,7 @@
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false">
       <Button class="adjust" id="deadly-">-</Button>
-      <Text fontSize="32" id="deadly">0</Text>
+      <Text fontSize="32" id="deadly" preproc="split">0</Text>
       <Button class="adjust" id="deadly+">+</Button>
 
     </HorizontalLayout>
