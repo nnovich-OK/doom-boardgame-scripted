@@ -64,21 +64,21 @@
           <Cell class="tgl"><Button class="die" id="red">
             <Image id="redImage">
               <Image id="redShade" color="rgba(0, 0, 0, 0.8)" preproc="split">
-                <Text id="redText" class="tgl" preproc="name" text="X"/>
+                <Text id="redText" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="green1">
             <Image id="green1Image">
               <Image id="green1Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
-                <Text id="green1Text" class="tgl" preproc="name" text="X"/>
+                <Text id="green1Text" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="blue1">
             <Image id="blue1Image">
               <Image id="blue1Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
-                <Text id="blue1Text" class="tgl" preproc="name" text="X"/>
+                <Text id="blue1Text" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
@@ -88,21 +88,21 @@
           <Cell class="tgl"><Button class="die" id="yellow">
             <Image id="yellowImage">
               <Image id="yellowShade" color="rgba(0, 0, 0, 0.8)" preproc="split">
-                <Text id="yellowText" class="tgl" preproc="name" text="X"/>
+                <Text id="yellowText" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="green2">
             <Image id="green2Image">
               <Image id="green2Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
-                <Text id="green2Text" class="tgl" preproc="name" text="X"/>
+                <Text id="green2Text" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="blue2">
             <Image id="blue2Image">
               <Image id="blue2Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
-                <Text id="blue2Text" class="tgl" preproc="name" text="X"/>
+                <Text id="blue2Text" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>

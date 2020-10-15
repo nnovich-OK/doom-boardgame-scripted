@@ -2,7 +2,6 @@ function preprocess()
   local xml = Global.UI.getXmlTable()
   walkDepth(xml, findSplit, performSplit)
   Global.UI.setXmlTable(xml)
-  log(Global.UI.getXml(), "XML from Global: ")
 end
 
 function walkDepth(xml, condition, action)
@@ -55,19 +54,18 @@ function performSplit(xml, pos)
     table.insert(xml, pos, newNode)
   end
 
-  log("<<< SPLIT RETURN")
+  log("<<< SPLIT RETURN\n")
 end
 
 function findRename(xml, pos)
   return xml
     and xml[pos]
     and xml[pos].attributes
-    and xml[pos].attributes.preproc == "name"
+    and xml[pos].attributes.id
 end
 
 function performRename(xml, pos, color)
   local node = xml[pos]
-  node.attributes.preproc = nil
   node.attributes.id = (node.attributes.id or "") .. color
   log(node, " -  NAMED HERE: ")
 end
