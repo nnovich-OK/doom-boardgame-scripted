@@ -1,0 +1,38 @@
+shown = {Red={}, Green={}, Blue={}, White={}}
+
+
+function interfaceRequestCorrect(req)
+  return req and req.id and req.color
+end
+
+
+--TODO group and rework
+function showInterface(req)
+  if interfaceRequestCorrect(req)
+    and not shown[req.color][req.id]
+  then
+    shown[req.color][req.id] = true
+    Global.UI.show(req.id)  --TODO: set visibility
+  end
+end
+
+function hideInterface(req)
+  if interfaceRequestCorrect(req)
+    and shown[req.color][req.id]
+  then
+    shown[req.color][req.id] = false
+    Global.UI.hide(req.id)  --TODO: set visibility
+  end
+end
+
+function toggleInterface(req)
+  if interfaceRequestCorrect(req)
+  then
+    if not shown[req.color][req.id] then
+      Global.UI.show(req.id)  --TODO: set visibility
+    else
+      Global.UI.hide(req.id)
+    end
+    shown[req.color][req.id] = not shown[req.color][req.id]
+  end
+end

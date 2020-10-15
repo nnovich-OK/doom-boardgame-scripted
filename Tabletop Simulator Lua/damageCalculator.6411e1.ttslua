@@ -335,7 +335,7 @@ function showStats(player_color)
     setCumulativeStats(player_color)
   end
 
-  Global.call("showInterface", {id="stats", color=player_color})
+  Global.call("instances").vis.call("showInterface", {id="stats", color=player_color})
 end
 
 
@@ -570,7 +570,8 @@ function rerollToggle(player, value, id)
   if reroll[player.color] then
     for k in pairs(diceCollection) do
       if not lastRoll[player.color][k] then
-        Global.UI.setAttribute(k, "active", "false")
+        Global.UI.hide(k)
+        --Global.UI.setAttribute(k, "active", "false")
         setDice(player.color, k, false)
       end
     end
@@ -611,13 +612,13 @@ function configure(params)
     end
   end
 
-  Global.call("showInterface", {id="calculator", color=params.color})
+  Global.call("instances").vis.call("showInterface", {id="calculator", color=params.color})
 end
 
 function toggleCalc(player, value, id)
-  Global.call("toggleInterface", {id="calculator", color=player.color})
+  Global.call("instances").vis.call("toggleInterface", {id="calculator", color=player.color})
 end
 
 function closeStats(player, value, id)
-  Global.call("hideInterface", {id="stats", color=player.color})
+  Global.call("instances").vis.call("hideInterface", {id="stats", color=player.color})
 end
