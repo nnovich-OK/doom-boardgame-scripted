@@ -76,12 +76,30 @@ diceCollection = {
   blue2  = {state = {}, die = blueDie, guid = "bdba03", rotVal = blueRotationValues},
 }
 
-
+-- if roll is ongoing, this variable keep color of player, who initiated it
+rollingPlayerColor = nil
 -- will store state and value for all dices of the last roll
 lastRoll = {Red={}, Green={}, Blue={}, White={}}
 reroll = {}
 cumulativeStatsMode = {}
 
+-- Contols listed below are disabled during dice roll
+freezedSharedUi = {
+  "rollDice",
+}
+
+freezedRollerUi = {
+  "distance-",
+  "distance+",
+  "armor-",
+  "armor+",
+  "accuracy-",
+  "accuracy+",
+  "deadly-",
+  "deadly+",
+  "clearPrm",
+  "reroll",
+}
 
 paramRange = {
    -- max hit distance is 15 plus accuracy bonus
@@ -99,6 +117,7 @@ paramRange = {
 prm = {Red={}, Green={}, Blue={}, White={}}
 -- damage prediction for each player
 predictedStats = {Red={}, Green={}, Blue={}, White={}}
+
 
 function onload()
   initParams()
@@ -138,7 +157,7 @@ function setDefaultParams(player_color, section)
       setDice(player_color, k, false)
     end
 
-    Global.UI.setAttribute("reroll", "isOn", "false")
+    Global.UI.setAttribute("reroll"..player_color, "isOn", "false")
     rerollToggle(Player[player_color], "False", "reroll")
   end
 
@@ -220,6 +239,11 @@ end
 
 
 function toggleDice(player, value, id)
+  if player.color == rollingPlayerColor then
+    -- ignore changes during roll
+    -- other inputs are blocked on UI level, but this one is shared across players
+    return
+  end
   --log(id .. player.color .. "=" .. tostring(not diceCollection[id].state[player.color]))
   setDice(player.color, id, not diceCollection[id].state[player.color])
 end
@@ -267,8 +291,6 @@ function calculate(player, value, id)
     broadcastToColor("Choose at least one die", player.color, stringColorToRGB(player.color))
     return
   end
-
-  broadcastToAll(player.steam_name .. " calculates...", stringColorToRGB(player.color))
 
   -- caclulate number of cases for each outcome
   local state = {range=0, dmg=0, weight=1}
@@ -520,40 +542,36 @@ function getRotationValueTable(obj)
 end
 
 function toggleInteraction(player_color, active)
-  rollOngoing = not active
-  Global.UI.setAttribute("distance-", "interactable", active)
-  Global.UI.setAttribute("distance+", "interactable", active)
+  for _, iface in ipairs(freezedRollerUi) do
+    Global.UI.setAttribute(iface..player_color, "interactable", active)
+  end
+  Global.UI.setAttribute("clearPrm"..player_color, "textColor", "white")
 
-  Global.UI.setAttribute("armor-", "interactable", active)
-  Global.UI.setAttribute("armor+", "interactable", active)
-
-  Global.UI.setAttribute("accuracy-", "interactable", active)
-  Global.UI.setAttribute("accuracy+", "interactable", active)
-
-  Global.UI.setAttribute("deadly-", "interactable", active)
-  Global.UI.setAttribute("deadly+", "interactable", active)
-
-  Global.UI.setAttribute("red", "interactable", active)
-  Global.UI.setAttribute("yellow", "interactable", active)
-  Global.UI.setAttribute("green1", "interactable", active)
-  Global.UI.setAttribute("green2", "interactable", active)
-  Global.UI.setAttribute("blue1", "interactable", active)
-  Global.UI.setAttribute("blue2", "interactable", active)
-
-  Global.UI.setAttribute("rollDice", "interactable", active)
+  for _, iface in ipairs(freezedSharedUi) do
+    Global.UI.setAttribute(iface, "interactable", active)
+  end
   Global.UI.setAttribute("rollDice", "textColor", "white")
 
-  Global.UI.setAttribute("clearPrm", "interactable", active)
-  Global.UI.setAttribute("clearPrm", "textColor", "white")
-
-  Global.UI.setAttribute("reroll", "interactable", active)
+  if active then
+    rollingPlayerColor = false
+  else
+    rollingPlayerColor = player_color
+  end
 end
 
 
 function updateDiceFaces()
+  previousDiceValues = {}
   for k,v in pairs(diceCollection) do
-    local clr = string.match(k, "(%a+)%d*")
-    Global.UI.setAttribute(k.."Image", "image", clr .. " " .. v.dieObj.getRotationValue())
+    local newValue = v.dieObj.getRotationValue()
+    if newValue != previousDiceValues[k] then
+      previousDiceValues[k] = newValue
+      local dieClr = string.match(k, "(%a+)%d*") -- get color without digit
+      Global.UI.setAttribute(
+        k.."Image",
+        "image",
+        dieClr .. " " .. v.dieObj.getRotationValue())
+    end
   end
 end
 
@@ -577,7 +595,6 @@ function rerollToggle(player, value, id)
     for k in pairs(diceCollection) do
       if not lastRoll[player.color][k] then
         Global.call("instances").vis.call("hideInterface", {id=k, color=player.color})
-        --Global.UI.setAttribute(k, "active", "false")
         setDice(player.color, k, false)
       end
     end
@@ -592,6 +609,15 @@ function configure(params)
   log(params, "Params: ")
   if not params or not params.color then
     log(params, "ERROR configure param missing color: ")
+    return
+  end
+
+  if params.color == rollingPlayerColor then
+    broadcastToColor(
+      "Hey, roll is already going, attack parameters can't be changed now",
+      params.color,
+      stringColorToRGB(params.color)
+      )
     return
   end
 

@@ -52,6 +52,8 @@ function addVisibility(id, color)
     vis = fixPipes((vis or "") .. "|" .. color)
     --log("Show "..id.." to "..color..' with vis "'..vis..'"')
     Global.UI.setAttribute(id, "visibility", vis)
+  else
+    --log('Already visible '..id..' with "' .. vis..'"')
   end
 
   if act~="true" then

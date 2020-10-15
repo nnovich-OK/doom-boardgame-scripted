@@ -104,33 +104,11 @@ end
 
 function onScriptingButtonDown(index,  player_color)
   if index == 10 then
-    -- set attacking figure
-    if rollOngoing then
-      broadcastToColor("Wait untill roll finishes",
-        player_color,
-        stringColorToRGB(player_color))
-      return
-    end
-
     saveAttackingCharacter(player_color)
   end
 
   if index == 1 then
-    if rollOngoing then
-      broadcastToColor("Wait untill roll finishes",
-        player_color,
-        stringColorToRGB(player_color))
-      return
-    end
     prepareAttackParameters(player_color)
-  end
-
-  -- TODO: remove, it's for testing only
-  if index==5 then
-    local tmp = Player[player_color].getHoverObject()
-    if tmp then
-      print(Global.call("isSingleFigurine", tmp))
-    end
   end
 end
 
@@ -153,8 +131,8 @@ function saveAttackingCharacter(player_color)
   local candidate = Player[player_color].getHoverObject()
   if not candidate or not Global.call("isCharacter", candidate) then
     broadcastToColor(
-    "Hotkey is intended to mark figurine which is hovered over as attacker. " ..
-    "Please hover over attacking character first.",
+    "Hotkey is intended to mark figurine as attacker. " ..
+    "Please hover your pointer over attacking character first.",
       player_color,
       stringColorToRGB(player_color))
     return
@@ -163,9 +141,9 @@ function saveAttackingCharacter(player_color)
 
   attackingChar[player_color] = candidate
   attackingChar[player_color].highlightOn(stringColorToRGB(player_color), 3600)
-  printToColor("Attacker set to " .. attackingChar[player_color].getName(),
+  printToColor(attackingChar[player_color].getName() .. " attacks... <target via Num1>",
     player_color,
-    stringColorToRGB(player_color))
+    Color.Grey)
 end
 
 
@@ -173,7 +151,7 @@ function prepareAttackParameters(player_color)
   if not attackingChar[player_color] then
     if player_color == "White" then
       broadcastToColor(
-        "You are trying to mark figurine hovered over as target, " ..
+        "You are trying to mark figurine hovered over as a target, " ..
         "but you need to mark attacker first with Numpad0",
         player_color,
         stringColorToRGB(player_color))
@@ -192,17 +170,18 @@ function prepareAttackParameters(player_color)
   local target = Player[player_color].getHoverObject()
   if not target or not Global.call("isCharacter", target) then
     broadcastToColor(
-      "Hotkey is intended to mark figurine which is hovered over as target." ..
-      "Please hover over targeted character first.",
+      "Hotkey is intended to mark figurine as a target." ..
+      "Please hover your pointer over targeted character first.",
       player_color,
       stringColorToRGB(player_color))
     return
   end
 
-  printToAll("Params are set for " .. attackingChar[player_color].getName()
-    .. " attacking " .. target.getName(),
-    stringColorToRGB(player_color))
 
+  printToColor(attackingChar[player_color].getName() .. " attacks "
+    .. target.getName() .. ". Ready to roll!",
+    player_color,
+    Color.Grey)
 
   local isMelee = false -- TODO: tricky thing for marines
                         -- probably can guess out of: last clicked weapon and single red die in play
@@ -218,7 +197,7 @@ function prepareAttackParameters(player_color)
     isMelee = stats.melee or false
 
     if stats.reminder and stats.reminder ~= "" then
-      printToAll("Reminder: " .. stats.reminder, Color.Orange)
+      printToColor("Reminder: " .. stats.reminder, player_color, Color.Grey)
     end
   end
 

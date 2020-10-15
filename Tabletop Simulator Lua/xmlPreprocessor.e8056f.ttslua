@@ -45,7 +45,10 @@ function performSplit(xml, pos)
     local newNode = deepcopy(node)
 
     newNode.attributes.visibility = color
-    newNode.attributes.id = (newNode.attributes.id or "") .. color
+    if newNode.attributes.id and newNode.attributes.id ~= "" then
+      newNode.attributes.id = newNode.attributes.id .. color
+    end
+
     walkDepth(
       newNode.children,
       findRename,
