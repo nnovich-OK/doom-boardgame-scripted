@@ -14,6 +14,8 @@ mnstList = {
   "Cyberdemon",
 }
 
+allPlayerColors = {"Red", "Green", "Blue", "White"}
+
 function onload()
   -- assets sometimes load later than they are needed by objects
   -- so blank squares are shown instead of images for armor, speed etc

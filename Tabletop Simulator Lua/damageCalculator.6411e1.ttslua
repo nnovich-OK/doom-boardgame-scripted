@@ -100,8 +100,6 @@ prm = {Red={}, Green={}, Blue={}, White={}}
 -- damage prediction for each player
 predictedStats = {Red={}, Green={}, Blue={}, White={}}
 
-allColors = {"Red", "Green", "Blue", "White"}
-
 function onload()
   initParams()
 
@@ -111,7 +109,7 @@ end
 
 
 function initParams()
-  for _,color in ipairs(allColors) do
+  for _,color in ipairs(Global.getTable("allPlayerColors")) do
     setDefaultParams(color)
   end
 
@@ -219,10 +217,10 @@ function setDice(player_color, id, active)
 
   if active then
     Global.UI.setAttribute(id.."Text", "text", "") --"✓"
-    Global.UI.setAttribute(id.."Image", "color", "rgb(1,1,1)")
+    Global.UI.setAttribute(id.."Tint", "color", "rgb(0, 0, 0, 0)")
   else
     Global.UI.setAttribute(id.."Text", "text", "X")
-    Global.UI.setAttribute(id.."Image", "color", "rgb(0.5,0.5,0.5)")
+    Global.UI.setAttribute(id.."Tint", "color", "rgb(0, 0, 0, 0.8)")
   end
 
   Global.UI.setAttribute(id, "isOn", tostring(not active))

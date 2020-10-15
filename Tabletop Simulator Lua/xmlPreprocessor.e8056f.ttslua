@@ -1,4 +1,89 @@
 function preprocess()
   local xml = Global.UI.getXmlTable()
-  log(xml, "XML from Global: ")
+  walkDepth(xml, findSplit, performSplit)
+  Global.UI.setXmlTable(xml)
+  log(Global.UI.getXml(), "XML from Global: ")
+end
+
+function walkDepth(xml, condition, action)
+  if not xml then
+    return false
+  end
+
+  local result = false
+  for i,v in ipairs(xml) do
+    -- always go for the children first
+    -- this way nodes are processes from the max depth earlier
+    local chlidRez = walkDepth(v.children, condition, action)
+    result = result or chlidRez
+
+    -- then work on the current node
+    if condition(xml, i) then
+      action(xml, i)
+      result = true
+    end
+
+  end
+
+  return result
+end
+
+function findSplit(xml, pos)
+  return xml
+    and xml[pos]
+    and xml[pos].attributes
+    and xml[pos].attributes.preproc == "split"
+end
+
+function performSplit(xml, pos)
+  local node = xml[pos]
+  log(node, ">>> SPLIT HERE: ")
+  table.remove(xml, pos)
+
+  node.attributes.preproc = nil
+  for _,color in ipairs(Global.getTable("allPlayerColors")) do
+    -- make deep copy, so renaming newNode children doen't change original node
+    local newNode = deepcopy(node)
+
+    newNode.attributes.visibility = color
+    newNode.attributes.id = (newNode.attributes.id or "") .. color
+    walkDepth(
+      newNode.children,
+      findRename,
+      function(xml, pos) performRename(xml, pos, color) end
+    )
+    table.insert(xml, newNode)
+  end
+
+  log("<<< SPLIT RETURN")
+end
+
+function findRename(xml, pos)
+  return xml
+    and xml[pos]
+    and xml[pos].attributes
+    and xml[pos].attributes.preproc == "name"
+end
+
+function performRename(xml, pos, color)
+  local node = xml[pos]
+  node.attributes.preproc = nil
+  node.attributes.id = (node.attributes.id or "") .. color
+  log(node, " -  NAMED HERE: ")
+end
+
+
+function deepcopy(orig)
+    local orig_type = type(orig)
+    local copy
+    if orig_type == 'table' then
+        copy = {}
+        for orig_key, orig_value in next, orig, nil do
+            copy[deepcopy(orig_key)] = deepcopy(orig_value)
+        end
+        setmetatable(copy, deepcopy(getmetatable(orig)))
+    else -- number, string, boolean, etc
+        copy = orig
+    end
+    return copy
 end

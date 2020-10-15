@@ -61,35 +61,47 @@
       <Row class="tgl">
           <Cell class="tgl"><Button class="die" id="red">
             <Image id="redImage">
-              <Text id="redText" class="tgl"/>
+              <Image id="redTint" color="rgba(0, 0, 0, 0.8)" preproc="split">
+                <Text id="redText" class="tgl" preproc="name"/>
+              </Image>
             </Image>
           </Button></Cell>
-          <Cell class="tgl"><Button class="die" color="green" id="green1">
+          <Cell class="tgl"><Button class="die" id="green1">
             <Image id="green1Image">
-              <Text id="green1Text" class="tgl"/>
+              <Image id="green1Tint" color="rgba(0, 0, 0, 0.8)">
+                <Text id="green1Text" class="tgl"/>
+              </Image>
             </Image>
           </Button></Cell>
-          <Cell class="tgl"><Button class="die" color="blue" id="blue1">
+          <Cell class="tgl"><Button class="die" id="blue1">
             <Image id="blue1Image">
-              <Text id="blue1Text" class="tgl"/>
+              <Image id="blue1Tint" color="rgba(0, 0, 0, 0.8)">
+                <Text id="blue1Text" class="tgl"/>
+              </Image>
             </Image>
           </Button></Cell>
       </Row>
       <!-- Row 2 -->
       <Row class="tgl">
-          <Cell class="tgl"><Button class="die" color="yellow" id="yellow">
+          <Cell class="tgl"><Button class="die" id="yellow">
             <Image id="yellowImage">
-              <Text id="yellowText" class="tgl"/>
+              <Image id="yellowTint" color="rgba(0, 0, 0, 0.8)">
+                <Text id="yellowText" class="tgl"/>
+              </Image>
             </Image>
           </Button></Cell>
-          <Cell class="tgl"><Button class="die" color="green" id="green2">
+          <Cell class="tgl"><Button class="die" id="green2">
             <Image id="green2Image">
-              <Text id="green2Text" class="tgl"/>
+              <Image id="green2Tint" color="rgba(0, 0, 0, 0.8)">
+                <Text id="green2Text" class="tgl"/>
+              </Image>
             </Image>
           </Button></Cell>
-          <Cell class="tgl"><Button class="die" color="blue" id="blue2">
+          <Cell class="tgl"><Button class="die" id="blue2">
             <Image id="blue2Image">
-              <Text id="blue2Text" class="tgl"/>
+              <Image id="blue2Tint" color="rgba(0, 0, 0, 0.8)">
+                <Text id="blue2Text" class="tgl"/>
+              </Image>
             </Image>
           </Button></Cell>
       </Row>
