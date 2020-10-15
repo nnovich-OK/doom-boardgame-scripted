@@ -26,6 +26,95 @@
   <Image preserveAspect="true"/>
 </Defaults>
 
+
+<HorizontalLayout
+  padding="0 0 0 0"
+  spacing="10"
+  rectAlignment="UpperLeft"
+  offsetXY="80 -10"
+  height="40"
+  width="300"
+  color="clear"
+  >
+  <Button
+    id="frag"
+    class="ini"
+    onClick="showFrags"
+    text="Frags&#x25BC;" />
+
+  <Button
+    id="inventory"
+    class="ini"
+    onClick="showInventory"
+    text="Inv&#x25BC;"
+    textColor="red"/>
+  <Button
+    id="inventory"
+    class="ini"
+    onClick="showInventory"
+    text="Inv&#x25BC;"
+    textColor="green"/>
+  <Button
+    id="inventory"
+    class="ini"
+    onClick="showInventory"
+    text="Inv&#x25BC;"
+    textColor="blue"/>
+</HorizontalLayout>
+
+<VerticalLayout
+  padding="0 0 5 5"
+  spacing="5"
+  rectAlignment="UpperLeft"
+  offsetXY="160 -50"
+  width="300"
+  height="95">
+  <HorizontalLayout spacing="5">
+    <Button
+      id="invGainCOLOR"
+      class="ini"
+      onClick="inventoryMode"
+      text="Gain"
+      />
+    <Button
+      id="invLoseCOLOR"
+      class="ini"
+      onClick="inventoryMode"
+      text="Lose"
+      />
+    <Button
+      id="invGainCOLOR"
+      class="ini"
+      onClick="inventoryMode"
+      text="Autopick"
+      tooltip="Automatically picks ammunition from under your marine figurine"
+      />
+  </HorizontalLayout>
+  <HorizontalLayout spacing="5">
+    <Button
+      id="invGainCOLOR"
+      class="ini"
+      onClick="inventoryMode"
+      text="Gain"
+      />
+    <Button
+      id="invLoseCOLOR"
+      class="ini"
+      onClick="inventoryMode"
+      text="Lose"
+      />
+    <Button
+      id="invGainCOLOR"
+      class="ini"
+      onClick="inventoryMode"
+      text="Autopick"
+      tooltip="Automatically picks ammunition from under your marine figurine"
+      />
+  </HorizontalLayout>
+</VerticalLayout>
+
+
+<!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
 <Button id="toggleCalc"
   class="global"
   onClick="6411e1/toggleCalc"
