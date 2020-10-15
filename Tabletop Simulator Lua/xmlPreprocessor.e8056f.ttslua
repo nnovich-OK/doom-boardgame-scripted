@@ -52,7 +52,7 @@ function performSplit(xml, pos)
       findRename,
       function(xml, pos) performRename(xml, pos, color) end
     )
-    table.insert(xml, newNode)
+    table.insert(xml, pos, newNode)
   end
 
   log("<<< SPLIT RETURN")

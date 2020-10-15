@@ -215,15 +215,7 @@ end
 function setDice(player_color, id, active)
   diceCollection[id].state[player_color] = active
 
-  if active then
-    Global.UI.setAttribute(id.."Text", "text", "") --"✓"
-    Global.UI.setAttribute(id.."Tint", "color", "rgb(0, 0, 0, 0)")
-  else
-    Global.UI.setAttribute(id.."Text", "text", "X")
-    Global.UI.setAttribute(id.."Tint", "color", "rgb(0, 0, 0, 0.8)")
-  end
-
-  Global.UI.setAttribute(id, "isOn", tostring(not active))
+  Global.UI.setAttribute(id.."Shade"..player_color, "active", tostring(not active))
 end
 
 
