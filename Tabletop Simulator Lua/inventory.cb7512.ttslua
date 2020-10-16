@@ -1,6 +1,12 @@
 fragsScored = 0
 fragLimit = 6
 
+fragTintColors = {
+  ["Red died"]="rgba(1, 0.6, 0.6, 1)",
+  ["Green died"]="rgba(0.6, 1, 0.6, 1)",
+  ["Blue died"]="rgba(0.6 0.6, 1, 1)",
+}
+
 function onLoad()
 
 end
@@ -25,16 +31,37 @@ function updateFrag(player, value, id)
     buttonNumber = tonumber(buttonNumber, 10)
     if buttonNumber > fragsScored then
       -- inactive button is hit, add new frag
-      fragsScored = fragsScored+1
-      Global.UI.setAttribute("fragImage" .. fragsScored, "color", "white")
-      broadcastToAll("New frag (manual)! Total: " .. fragsScored, Color.Orange)
+      addFrag("manual")
     else
       -- active button is hit, remove frag
+      -- it's the only way to remove frag
       Global.UI.setAttribute("fragImage" .. fragsScored, "color", "rgba(0.4, 0.4, 0.4, 1)")
       fragsScored = fragsScored-1
       broadcastToAll("Frag manually removed! Total: " .. fragsScored, Color.Orange)
     end
   end
+end
+
+-- source must be "manual", "<Color> died" or "full deck"
+function addFrag(source)
+  if (fragsScored >= fragLimit) then
+    broadcastToAll("Can't add more frags! Already " .. fragLimit, Color.Orange)
+  end
+
+  fragsScored = fragsScored + 1
+
+  Global.UI.setAttribute(
+    "fragImage" .. fragsScored,
+    "color",
+    fragTintColors[source] or "White")
+  broadcastToAll("New frag (" .. source .. ")! Total: " .. fragsScored, Color.Orange)
+
+  --TODO: allow showing to multiple colors. Iteration isn't an answer as setAttribute
+  -- takes some time to apply
+  --[[Global.call("instances").vis.call(
+    "showInterface",
+    {id="fragsPanel", color="White|Red|Green|Blue"})]]
+
 end
 
 function showInventory(player, value, id)

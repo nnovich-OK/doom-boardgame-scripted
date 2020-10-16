@@ -246,4 +246,7 @@ function defeatClick(player, value, id)
   self.UI.setAttribute("armor", "text", armor)
 
   self.flip()
+
+  local color = Global.call("getCharacterColor", self)
+  Global.call("instances").inv.call("addFrag", color .. " died")
 end

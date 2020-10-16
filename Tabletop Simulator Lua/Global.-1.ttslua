@@ -88,3 +88,16 @@ end
 function isCharacter(obj)
   return isMonster(obj) or isMarine(obj)
 end
+
+function getCharacterColor(obj)
+  if isCharacter(obj) then
+    local name=obj.getName() or ""
+    for _, clr in ipairs(allPlayerColors) do
+      if string.find(name, clr, 1, yes) then
+        return clr
+      end
+    end
+  end
+
+  return nil
+end
