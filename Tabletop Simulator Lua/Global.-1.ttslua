@@ -51,7 +51,8 @@ function instances()
     hotkeys = getObjectFromGUID("0c9765"), -- hotkey handler
     preproc = getObjectFromGUID("e8056f"), -- xml preprocessor
     creator = getObjectFromGUID("4abf42"), -- monster creator
-    vis = getObjectFromGUID("ad25a3") -- interface visibility manager
+    vis = getObjectFromGUID("ad25a3"), -- interface visibility manager
+    inv = getObjectFromGUID("cb7512"), -- inventory
   }
 end
 

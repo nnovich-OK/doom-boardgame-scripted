@@ -26,7 +26,7 @@
   <Image preserveAspect="true"/>
 </Defaults>
 
-
+<!-- Global inventory and frag buttons-->
 <HorizontalLayout
   padding="0 0 0 0"
   spacing="10"
@@ -35,6 +35,7 @@
   height="40"
   width="300"
   color="clear"
+  visibility="White|Red|Green|Blue"
   >
   <Button
     id="frag"
@@ -62,6 +63,35 @@
     textColor="blue"/>
 </HorizontalLayout>
 
+<!-- Panel to show current frags -->
+<VerticalLayout
+  active="true"
+
+  rectAlignment="UpperLeft"
+  offsetXY="88 -60"
+  width="50"
+  height="280"
+
+  padding="8 8 4 4"
+  color="rgba(0, 0, 0, 0.95)"
+  >
+  <Button
+    id="frag"
+    class="ini"
+    onClick="showInventory"
+    text="Inv&#x25BC;"
+    textColor="green"
+    preproc="splitNumber6"
+    >
+    <Image
+      image="frag"
+      color="rgba(0.6, 0.6, 0.6, 1)"
+      preserveAspect="true"
+      />
+  </Button>
+</VerticalLayout>
+
+<!-- Inventory control buttons -->
 <VerticalLayout
   padding="0 0 5 5"
   spacing="5"
@@ -95,20 +125,22 @@
       id="invGainCOLOR"
       class="ini"
       onClick="inventoryMode"
-      text="Gain"
+      text="Give Red"
+      textColor="red"
       />
     <Button
       id="invLoseCOLOR"
       class="ini"
       onClick="inventoryMode"
-      text="Lose"
+      text="Give Green"
+      textColor="green"
       />
     <Button
       id="invGainCOLOR"
       class="ini"
       onClick="inventoryMode"
-      text="Autopick"
-      tooltip="Automatically picks ammunition from under your marine figurine"
+      text="Give Blue"
+      textColor="blue"
       />
   </HorizontalLayout>
 </VerticalLayout>
@@ -153,21 +185,21 @@
       <Row class="tgl">
           <Cell class="tgl"><Button class="die" id="red">
             <Image id="redImage">
-              <Image id="redShade" color="rgba(0, 0, 0, 0.8)" preproc="split">
+              <Image id="redShade" color="rgba(0, 0, 0, 0.8)" preproc="splitColor">
                 <Text id="redText" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="green1">
             <Image id="green1Image">
-              <Image id="green1Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
+              <Image id="green1Shade" color="rgba(0, 0, 0, 0.8)" preproc="splitColor">
                 <Text id="green1Text" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="blue1">
             <Image id="blue1Image">
-              <Image id="blue1Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
+              <Image id="blue1Shade" color="rgba(0, 0, 0, 0.8)" preproc="splitColor">
                 <Text id="blue1Text" class="tgl" text="X"/>
               </Image>
             </Image>
@@ -177,21 +209,21 @@
       <Row class="tgl">
           <Cell class="tgl"><Button class="die" id="yellow">
             <Image id="yellowImage">
-              <Image id="yellowShade" color="rgba(0, 0, 0, 0.8)" preproc="split">
+              <Image id="yellowShade" color="rgba(0, 0, 0, 0.8)" preproc="splitColor">
                 <Text id="yellowText" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="green2">
             <Image id="green2Image">
-              <Image id="green2Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
+              <Image id="green2Shade" color="rgba(0, 0, 0, 0.8)" preproc="splitColor">
                 <Text id="green2Text" class="tgl" text="X"/>
               </Image>
             </Image>
           </Button></Cell>
           <Cell class="tgl"><Button class="die" id="blue2">
             <Image id="blue2Image">
-              <Image id="blue2Shade" color="rgba(0, 0, 0, 0.8)" preproc="split">
+              <Image id="blue2Shade" color="rgba(0, 0, 0, 0.8)" preproc="splitColor">
                 <Text id="blue2Text" class="tgl" text="X"/>
               </Image>
             </Image>
@@ -211,7 +243,7 @@
         flexibleWidth="0"
         rectAlignment="MiddleCenter"
         onValueChanged="6411e1/rerollToggle"
-        preproc="split"/>
+        preproc="splitColor"/>
       <Text flexibleWidth="0" rectAlignment="MiddleCenter">Reroll</Text>
     </HorizontalLayout>
   </VerticalLayout>
@@ -224,7 +256,7 @@
     <Text preferredHeight="50">Distance (melee is 0)</Text>
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false"
-      preproc="split">
+      preproc="splitColor">
       <Button class="adjust" id="distance-">-</Button>
       <Text fontSize="30" color="red" id="distance">melee</Text>
       <Button class="adjust" id="distance+">+</Button>
@@ -240,7 +272,7 @@
     <Text preferredHeight="50">Target armor</Text>
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false"
-      preproc="split">
+      preproc="splitColor">
       <Button class="adjust" id="armor-">-</Button>
       <Text fontSize="30" id="armor">1</Text>
       <Button class="adjust" id="armor+">+</Button>
@@ -256,7 +288,7 @@
     <Text preferredHeight="50">Accuracy bonus</Text>
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false"
-      preproc="split">
+      preproc="splitColor">
       <Button class="adjust" id="accuracy-">-</Button>
       <Text fontSize="32" id="accuracy">0</Text>
       <Button class="adjust" id="accuracy+">+</Button>
@@ -272,7 +304,7 @@
     <Text preferredHeight="50">Deadly bonus</Text>
     <HorizontalLayout preferredHeight="50"
       childForceExpandWidth="false"
-      preproc="split">
+      preproc="splitColor">
       <Button class="adjust" id="deadly-">-</Button>
       <Text fontSize="32" id="deadly">0</Text>
       <Button class="adjust" id="deadly+">+</Button>
@@ -284,7 +316,7 @@
     class="ini"
     onClick="6411e1/calculate"
     preferredHeight="50">
-    Calculate
+    Predict
   </Button>
 
   <Button id="rollDice"
@@ -298,7 +330,7 @@
     class="ini"
     onClick="6411e1/clearCalc"
     preferredHeight="50"
-    preproc="split">
+    preproc="splitColor">
     Clear
   </Button>
 </VerticalLayout>
@@ -323,7 +355,7 @@
     columnWidths="80 450"
     childForceExpandWidth="true"
     flexibleHeight = "1"
-    preproc="split"
+    preproc="splitColor"
     >
 
     <Row>

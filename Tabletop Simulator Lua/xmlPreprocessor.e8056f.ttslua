@@ -31,7 +31,21 @@ function findSplit(xml, pos)
   return xml
     and xml[pos]
     and xml[pos].attributes
-    and xml[pos].attributes.preproc == "split"
+    and xml[pos].attributes.preproc
+    and string.find(xml[pos].attributes.preproc, "split", 1, true)
+end
+
+function getSplitAppendixes(preprocString)
+  if string.find(preprocString, "splitColor") then
+    return Global.getTable("allPlayerColors")
+  elseif string.find(preprocString, "splitNumber") then
+    local num = tonumber(string.gsub(preprocString, "splitNumber",""), 10)
+    local group = {}
+    for i = 1, num do
+      table.insert(group, i)
+    end
+    return group
+  end
 end
 
 function performSplit(xml, pos)
@@ -39,20 +53,25 @@ function performSplit(xml, pos)
   --log(node, ">>> SPLIT HERE: ")
   table.remove(xml, pos)
 
+  local splitGroup = getSplitAppendixes(node.attributes.preproc)
+  local changeVisibility = (node.attributes.preproc == "splitColor")
   node.attributes.preproc = nil
-  for _,color in ipairs(Global.getTable("allPlayerColors")) do
+  for _,appendix in ipairs(splitGroup) do
     -- make deep copy, so renaming newNode children doen't change original node
     local newNode = deepcopy(node)
 
-    newNode.attributes.visibility = color
+    if changeVisibility then
+      -- appendix is also a player color
+      newNode.attributes.visibility = appendix
+    end
     if newNode.attributes.id and newNode.attributes.id ~= "" then
-      newNode.attributes.id = newNode.attributes.id .. color
+      newNode.attributes.id = newNode.attributes.id .. appendix
     end
 
     walkDepth(
       newNode.children,
       findRename,
-      function(xml, pos) performRename(xml, pos, color) end
+      function(xml, pos) performRename(xml, pos, appendix) end
     )
     table.insert(xml, pos, newNode)
   end
@@ -67,9 +86,9 @@ function findRename(xml, pos)
     and xml[pos].attributes.id
 end
 
-function performRename(xml, pos, color)
+function performRename(xml, pos, appendix)
   local node = xml[pos]
-  node.attributes.id = (node.attributes.id or "") .. color
+  node.attributes.id = (node.attributes.id or "") .. appendix
   --log(node, " -  NAMED HERE: ")
 end
 
