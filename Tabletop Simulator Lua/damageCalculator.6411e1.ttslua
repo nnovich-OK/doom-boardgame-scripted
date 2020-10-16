@@ -566,7 +566,7 @@ function updateDiceFaces()
     local newValue = v.dieObj.getRotationValue()
     if newValue != previousDiceValues[k] then
       previousDiceValues[k] = newValue
-      local dieClr = string.match(k, "(%a+)%d*") -- get color without digit
+      local dieClr = string.match(k, "%a+") -- get color without digit
       Global.UI.setAttribute(
         k.."Image",
         "image",

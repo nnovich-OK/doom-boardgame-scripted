@@ -1,0 +1,25 @@
+clicks = {Red={}, Green={}, Blue={}, White={}}
+
+function onLoad()
+
+end
+
+
+-- returns true if previous single click on htis button by this player
+-- was not long ago, false otherwise
+function isDoubleClick(req)
+  if not req or not req.color or not req.id then
+    log(req, "ERROR bad request to isDoubleClick:")
+    return false
+  end
+  if clicks[req.color][req.id] then
+    return true
+  end
+
+  clicks[req.color][req.id] = true
+
+  Wait.time(
+    function() clicks[req.color][req.id] = false end,
+    0.2
+  )
+end

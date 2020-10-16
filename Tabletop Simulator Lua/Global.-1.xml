@@ -38,34 +38,31 @@
   visibility="White|Red|Green|Blue"
   >
   <Button
-    id="frag"
     class="ini"
-    onClick="showFrags"
+    onClick="cb7512/showFrags"
     text="Frags&#x25BC;" />
 
   <Button
-    id="inventory"
     class="ini"
-    onClick="showInventory"
+    onClick="cb7512/showInventory(Red)"
     text="Inv&#x25BC;"
     textColor="red"/>
   <Button
-    id="inventory"
     class="ini"
-    onClick="showInventory"
+    onClick="cb7512/showInventory(Green)"
     text="Inv&#x25BC;"
     textColor="green"/>
   <Button
-    id="inventory"
     class="ini"
-    onClick="showInventory"
+    onClick="cb7512/showInventory(Blue)"
     text="Inv&#x25BC;"
     textColor="blue"/>
 </HorizontalLayout>
 
 <!-- Panel to show current frags -->
 <VerticalLayout
-  active="true"
+  id="fragsPanel"
+  active="false"
 
   rectAlignment="UpperLeft"
   offsetXY="88 -60"
@@ -78,14 +75,15 @@
   <Button
     id="frag"
     class="ini"
-    onClick="showInventory"
+    onClick="cb7512/updateFrag"
     text="Inv&#x25BC;"
     textColor="green"
     preproc="splitNumber6"
     >
     <Image
+      id="fragImage"
       image="frag"
-      color="rgba(0.6, 0.6, 0.6, 1)"
+      color="rgba(0.4, 0.4, 0.4, 1)"
       preserveAspect="true"
       />
   </Button>
@@ -103,19 +101,19 @@
     <Button
       id="invGainCOLOR"
       class="ini"
-      onClick="inventoryMode"
+      onClick="cb7512/inventoryMode"
       text="Gain"
       />
     <Button
       id="invLoseCOLOR"
       class="ini"
-      onClick="inventoryMode"
+      onClick="cb7512/inventoryMode"
       text="Lose"
       />
     <Button
       id="invGainCOLOR"
       class="ini"
-      onClick="inventoryMode"
+      onClick="cb7512/inventoryMode"
       text="Autopick"
       tooltip="Automatically picks ammunition from under your marine figurine"
       />
@@ -124,21 +122,21 @@
     <Button
       id="invGainCOLOR"
       class="ini"
-      onClick="inventoryMode"
+      onClick="cb7512/inventoryMode"
       text="Give Red"
       textColor="red"
       />
     <Button
       id="invLoseCOLOR"
       class="ini"
-      onClick="inventoryMode"
+      onClick="cb7512/inventoryMode"
       text="Give Green"
       textColor="green"
       />
     <Button
       id="invGainCOLOR"
       class="ini"
-      onClick="inventoryMode"
+      onClick="cb7512/inventoryMode"
       text="Give Blue"
       textColor="blue"
       />

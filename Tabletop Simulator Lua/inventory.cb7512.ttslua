@@ -1,0 +1,42 @@
+fragsScored = 0
+fragLimit = 6
+
+function onLoad()
+
+end
+
+function showFrags(player, value, id)
+  Global.call("instances").vis.call(
+    "toggleInterface", {id="fragsPanel", color=player.color})
+end
+
+function updateFrag(player, value, id)
+  if player.color ~= "White" then
+    broadcastToColor("Only white player can change frags",
+      player.color,
+      stringColorToRGB(player.color))
+    return
+  end
+
+  if Global.call("instances").click.call("isDoubleClick",
+    {color = player.color, id = id})
+  then
+    local buttonNumber = string.match(id, "(%d+)")
+    buttonNumber = tonumber(buttonNumber, 10)
+    if buttonNumber > fragsScored then
+      -- inactive button is hit, add new frag
+      fragsScored = fragsScored+1
+      Global.UI.setAttribute("fragImage" .. fragsScored, "color", "white")
+      broadcastToAll("New frag (manual)! Total: " .. fragsScored, Color.Orange)
+    else
+      -- active button is hit, remove frag
+      Global.UI.setAttribute("fragImage" .. fragsScored, "color", "rgba(0.4, 0.4, 0.4, 1)")
+      fragsScored = fragsScored-1
+      broadcastToAll("Frag manually removed! Total: " .. fragsScored, Color.Orange)
+    end
+  end
+end
+
+function showInventory(player, value, id)
+
+end
