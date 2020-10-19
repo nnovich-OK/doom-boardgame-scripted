@@ -8,6 +8,7 @@ end
 -- returns true if previous single click on htis button by this player
 -- was not long ago, false otherwise
 function isDoubleClick(req)
+  --log(req, "isDoubleClick request:")
   if not req or not req.color or not req.id then
     log(req, "ERROR bad request to isDoubleClick:")
     return false

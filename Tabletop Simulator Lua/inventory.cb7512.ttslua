@@ -17,16 +17,16 @@ function showFrags(player, value, id)
 end
 
 function updateFrag(player, value, id)
-  if player.color ~= "White" then
-    broadcastToColor("Only white player can change frags",
-      player.color,
-      stringColorToRGB(player.color))
-    return
-  end
-
   if Global.call("instances").click.call("isDoubleClick",
     {color = player.color, id = id})
   then
+    if player.color ~= "White" then
+      broadcastToColor("Only white player can change frags",
+        player.color,
+        stringColorToRGB(player.color))
+      return
+    end
+
     local buttonNumber = string.match(id, "(%d+)")
     buttonNumber = tonumber(buttonNumber, 10)
     if buttonNumber > fragsScored then
@@ -36,6 +36,7 @@ function updateFrag(player, value, id)
       -- active button is hit, remove frag
       -- it's the only way to remove frag
       Global.UI.setAttribute("fragImage" .. fragsScored, "color", "rgba(0.4, 0.4, 0.4, 1)")
+      Global.UI.setAttribute("frag" .. fragsScored, "tooltip", "Double click to add")
       fragsScored = fragsScored-1
       broadcastToAll("Frag manually removed! Total: " .. fragsScored, Color.Orange)
     end
@@ -54,6 +55,7 @@ function addFrag(source)
     "fragImage" .. fragsScored,
     "color",
     fragTintColors[source] or "White")
+  Global.UI.setAttribute("frag" .. fragsScored, "tooltip", "Double click to remove")
   broadcastToAll("New frag (" .. source .. ")! Total: " .. fragsScored, Color.Orange)
 
   --TODO: allow showing to multiple colors. Iteration isn't an answer as setAttribute

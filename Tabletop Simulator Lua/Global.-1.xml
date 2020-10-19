@@ -79,6 +79,7 @@
     text="Inv&#x25BC;"
     textColor="green"
     preproc="splitNumber6"
+    tooltip="Double click to add"
     >
     <Image
       id="fragImage"
