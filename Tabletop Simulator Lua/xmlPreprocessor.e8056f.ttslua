@@ -2,6 +2,13 @@ function preprocess()
   local xml = Global.UI.getXmlTable()
   walkDepth(xml, findSplit, performSplit)
   Global.UI.setXmlTable(xml)
+
+  -- notify anyone interested
+  Wait.frames(function()
+      for _,v in ipairs({"inv"}) do
+        Global.call("instances")[v].call("onPreprocFinished")
+      end
+    end, 1)
 end
 
 function walkDepth(xml, condition, action)

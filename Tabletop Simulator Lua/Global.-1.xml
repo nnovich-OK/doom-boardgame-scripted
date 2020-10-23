@@ -104,22 +104,24 @@
   rectAlignment="UpperLeft"
   offsetXY="160 -50"
   width="300"
-  height="95">
+  height="95"
+
+  preproc="splitColor">
   <HorizontalLayout spacing="5">
     <Button
-      id="invGainCOLOR"
+      id="gainItem"
       class="ini"
       onClick="cb7512/inventoryMode"
       text="Gain"
       />
     <Button
-      id="invLoseCOLOR"
+      id="loseItem"
       class="ini"
       onClick="cb7512/inventoryMode"
       text="Lose"
       />
     <Button
-      id="invGainCOLOR"
+      id="autopickItem"
       class="ini"
       onClick="cb7512/inventoryMode"
       text="Autopick"
@@ -128,21 +130,21 @@
   </HorizontalLayout>
   <HorizontalLayout spacing="5">
     <Button
-      id="invGainCOLOR"
+      id="giveToRedItem"
       class="ini"
       onClick="cb7512/inventoryMode"
       text="Give Red"
       textColor="red"
       />
     <Button
-      id="invLoseCOLOR"
+      id="giveToGreenItem"
       class="ini"
       onClick="cb7512/inventoryMode"
       text="Give Green"
       textColor="green"
       />
     <Button
-      id="invGainCOLOR"
+      id="giveToBlueItem"
       class="ini"
       onClick="cb7512/inventoryMode"
       text="Give Blue"
@@ -155,8 +157,8 @@
 <!-- Inventory itself -->
 
 <Panel
-  id="inventoryPanle"
-  active="true"
+  id="inventoryPanel"
+  active="false"
 
   rectAlignment="UpperLeft"
   offsetXY="160 -150"
@@ -164,12 +166,14 @@
   height="240"
 
   padding="8 8 8 8"
-  color="rgba(0, 0.1, 0, 0.95)"
 
   childAlignment="UpperLeft"
   childForceExpandWidth="false"
   childForceExpandHeight="false"
-  spacing="25">
+  spacing="25"
+
+  preproc="splitColor"
+  >
 
   <!-- ALL WEAPONS -->
   <TableLayout

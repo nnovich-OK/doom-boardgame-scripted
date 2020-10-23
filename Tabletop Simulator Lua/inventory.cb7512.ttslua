@@ -7,8 +7,14 @@ fragTintColors = {
   ["Blue died"]="rgba(0.6 0.6, 1, 1)",
 }
 
-function onLoad()
+function onPreprocFinished()
+  Global.UI.setAttribute("inventoryPanel" .. "Red", "color", "rgba(0.14, 0, 0, 0.95)")
+  Global.UI.setAttribute("inventoryPanel" .. "Green", "color", "rgba(0, 0.1, 0, 0.95)")
+  Global.UI.setAttribute("inventoryPanel" .. "Blue", "color", "rgba(0, 0, 0.1, 0.95)")
 
+  Global.UI.setAttribute("giveToRedItemRed", "active", "false")
+  Global.UI.setAttribute("giveToGreenItemGreen", "active", "false")
+  Global.UI.setAttribute("giveToBlueItemBlue", "active", "false")
 end
 
 function showFrags(player, value, id)
@@ -67,5 +73,5 @@ function addFrag(source)
 end
 
 function showInventory(player, value, id)
-
+  Global.call("instances").vis.call("toggleInterface", {id="inventoryPanel"..value, color=player.color})
 end
