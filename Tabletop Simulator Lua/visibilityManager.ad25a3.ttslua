@@ -1,5 +1,3 @@
-shown = {Red={}, Green={}, Blue={}, White={}}
-
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
 end
@@ -7,31 +5,22 @@ end
 
 function showInterface(req)
   if interfaceRequestCorrect(req)
-    and not shown[req.color][req.id]
   then
-    shown[req.color][req.id] = true
-    addVisibility(req.id, req.color)
+    changeVisibility(req.id, req.color, "add")
   end
 end
 
 function hideInterface(req)
   if interfaceRequestCorrect(req)
-    and shown[req.color][req.id]
   then
-    shown[req.color][req.id] = false
-    removeVisibility(req.id, req.color)
+    changeVisibility(req.id, req.color, "rem")
   end
 end
 
 function toggleInterface(req)
   if interfaceRequestCorrect(req)
   then
-    if not shown[req.color][req.id] then
-      addVisibility(req.id, req.color)
-    else
-      removeVisibility(req.id, req.color)
-    end
-    shown[req.color][req.id] = not shown[req.color][req.id]
+    changeVisibility(req.id, req.color, "tgl")
   end
 end
 
@@ -44,32 +33,36 @@ function fixPipes(str)
   return (string.gsub(trimmed, "||+", "|"))
 end
 
-function addVisibility(id, color)
-  local vis = Global.UI.getAttribute(id, "visibility")
+-- mode is add/rem/tgl
+function changeVisibility(id, color, mode)
+  local visBase = Global.UI.getAttribute(id, "visibility")
   local act = Global.UI.getAttribute(id, "active")
 
-  if not string.find(vis or "", color, 1, true) then
-    vis = fixPipes((vis or "") .. "|" .. color)
-    --log("Show "..id.." to "..color..' with vis "'..vis..'"')
-    Global.UI.setAttribute(id, "visibility", vis)
-  else
-    --log('Already visible '..id..' with "' .. vis..'"')
+  local vis = visBase
+  for color in string.gmatch(color, "[^|]+") do
+    if not string.find(vis or "", color, 1, true) then
+      if mode == "add" or mode == "tgl" then
+        vis = (vis or "") .. "|" .. color
+      end
+    else
+      if mode == "rem" or mode == "tgl" then
+        vis = string.gsub(vis or "", color, "")
+      end
+    end
   end
 
-  if act~="true" then
+  vis=fixPipes(vis)
+  --log(
+  --  (visBase or "") .. " => " .. (vis or ""),
+  --  mode .. " visibility of " .. id .. " for " .. color .. ":")
+
+  if vis~=visBase then
+    Global.UI.setAttribute(id, "visibility", fixPipes(vis))
+  end
+
+  if act~="true" and vis and vis ~= "" then
     Global.UI.setAttribute(id, "active", "true")
-  end
-end
-
-function removeVisibility(id, color)
-  local vis = Global.UI.getAttribute(id, "visibility")
-  local act = Global.UI.getAttribute(id, "active")
-
-  vis = fixPipes(string.gsub(vis or "", color, ""))
-  --log("Hiding "..id.." from "..color..' with vis: "'..vis..'"')
-  if act ~= "false" and not vis or vis=="" then
+  elseif act=="true" and (not vis or vis == "") then
     Global.UI.setAttribute(id, "active", "false")
   end
-
-  Global.UI.setAttribute(id, "visibility", vis)
 end

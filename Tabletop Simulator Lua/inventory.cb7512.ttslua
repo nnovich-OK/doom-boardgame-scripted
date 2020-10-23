@@ -64,11 +64,9 @@ function addFrag(source)
   Global.UI.setAttribute("frag" .. fragsScored, "tooltip", "Double click to remove")
   broadcastToAll("New frag (" .. source .. ")! Total: " .. fragsScored, Color.Orange)
 
-  --TODO: allow showing to multiple colors. Iteration isn't an answer as setAttribute
-  -- takes some time to apply
-  --[[Global.call("instances").vis.call(
+  Global.call("instances").vis.call(
     "showInterface",
-    {id="fragsPanel", color="White|Red|Green|Blue"})]]
+    {id="fragsPanel", color="White|Red|Green|Blue"})
 
 end
 
