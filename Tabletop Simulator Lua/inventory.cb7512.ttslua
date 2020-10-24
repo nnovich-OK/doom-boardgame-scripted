@@ -9,6 +9,24 @@ fragTintColors = {
 
 invMode = {Red={}, Green={}, Blue={}, White={}}
 
+
+countActivationThreshold = {
+  fist = 2,
+  chainsaw = 2,
+  pistol = 2,
+  machinegun = 2,
+  shotgun = 2,
+  chaingun = 2,
+  grenade = 2,
+  launcher = 2,
+  plasma = 2,
+  bfg = 2,
+
+  bluekey = 2,
+  yellowkey = 2,
+  redkey = 2,
+}
+
 gunStats = {
   fist = {
     ammo = "",
@@ -160,34 +178,53 @@ function addFrag(source)
 end
 
 function onInventoryItemClick(player, value, id)
-  local item=string.gsub(id, "InvButton", "")
-  item = Global.call("stripXmlFieldColor", item)
+  local item, itemColor = Global.call(
+    "stripXmlFieldColor",
+    (string.gsub(id, "InvButton", "")))
 
-  --TODO check inventory mode, check berserk, check availability and not for white
+
+  --TODO check check berserk, check availability and not for white
   -- Set attack parameters
-  if gunStats[item] then
-    if player.color ~= "White" then
-      printToColor(player.color.." Marine uses " .. item .. " on... <target via Num1>",
-        player.color,
-        Color.Grey)
-    else
-      printToColor("Marine uses " .. item,
-        player.color,
-        Color.Grey)
-    end
-
-
-    if gunStats[item].reminder and gunStats[item].reminder ~= "" then
-      printToColor("Reminder: " .. gunStats[item].reminder, player.color, Color.Grey)
-    end
-
-    local params = {
-      color = player.color,
-      dice  = gunStats[item].attack,
-      bonus = gunStats[item].attackMod or "none",}
-
-    Global.call("instances").calc.call("configure", params)
+  if not invMode[player.color].action and gunStats[item] then
+    prepareGunAttack(player.color, item)
   end
+
+  if invMode[player.color].action == "gainItem" then
+    adjustItemCount(itemColor, item, 1)
+  end
+
+  if invMode[player.color].action == "loseItem" then
+    adjustItemCount(itemColor, item, -1)
+  end
+
+  if not invMode[player.color].sticky then
+    clearInvMode(player.color)
+  end
+end
+
+function prepareGunAttack(player_color, item)
+  if player_color ~= "White" then
+    printToColor(player_color.." Marine uses " .. item .. " on... <target via Num1>",
+      player_color,
+      Color.Grey)
+  else
+    printToColor("Marine uses " .. item,
+      player_color,
+      Color.Grey)
+  end
+
+
+  if gunStats[item].reminder and gunStats[item].reminder ~= "" then
+    printToColor("Reminder: " .. gunStats[item].reminder, player_color, Color.Grey)
+  end
+
+  local params = {
+    color = player_color,
+    dice  = gunStats[item].attack,
+    bonus = gunStats[item].attackMod or "none",}
+
+  Global.call("instances").calc.call("configure", params)
+  return
 end
 
 function showInventory(player, value, id)
@@ -236,4 +273,27 @@ end
 
 function onAutopickClick(player, value, id)
   broadcastToColor("Not yet implemented. Wanna help?", player.color, player.color)
+end
+
+function adjustItemCount(player_color, item, diff)
+  local count = tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
+  count = count + diff
+  if count < 0 then
+    count = 0
+  end
+
+  Global.UI.setAttribute(item.."InvText"..player_color, "text", count)
+
+  if count >= (countActivationThreshold[item] or 1) then
+    Global.UI.setAttribute(item.."InvText"..player_color, "active", "true")
+  else
+    Global.UI.setAttribute(item.."InvText"..player_color, "active", "false")
+  end
+
+  if count >= 1 then
+    Global.UI.setAttribute(item.."InvImage"..player_color, "color", "White")
+  else
+    Global.UI.setAttribute(item.."InvImage"..player_color, "color", "rgba(0.4, 0.4, 0.4, 1)")
+  end
+
 end
