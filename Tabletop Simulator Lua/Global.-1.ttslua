@@ -106,7 +106,7 @@ end
 function stripXmlFieldColor(str)
   for _, clr in ipairs(allPlayerColors) do
     if string.find(str, clr.."$") then
-      return string.gsub(str, clr.."$", "")
+      return string.gsub(str, clr.."$", ""), clr
     end
   end
   return str

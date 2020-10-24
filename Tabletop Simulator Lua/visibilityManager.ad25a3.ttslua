@@ -3,9 +3,24 @@ function interfaceRequestCorrect(req)
 end
 
 
+function hideOtherInventories(req)
+  local fieldName, fieldColor = Global.call("stripXmlFieldColor", req.id)
+
+  if fieldName == "inventoryPanel" then
+    -- remove visibility from all other panels
+    for _,clr in ipairs(Global.getTable("allPlayerColors")) do
+      if clr ~= "White" and clr ~= fieldColor then
+        changeVisibility("inventoryPanel" .. clr, req.color, "rem")
+      end
+    end
+  end
+end
+
 function showInterface(req)
   if interfaceRequestCorrect(req)
   then
+    hideOtherInventories(req)
+
     changeVisibility(req.id, req.color, "add")
   end
 end
@@ -20,6 +35,7 @@ end
 function toggleInterface(req)
   if interfaceRequestCorrect(req)
   then
+    hideOtherInventories(req)
     changeVisibility(req.id, req.color, "tgl")
   end
 end

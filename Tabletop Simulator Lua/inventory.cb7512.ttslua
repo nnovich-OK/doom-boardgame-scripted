@@ -7,6 +7,8 @@ fragTintColors = {
   ["Blue died"]="rgba(0.6 0.6, 1, 1)",
 }
 
+inventoryMode = {Red={}, Green={}, Blue={}, White={}}
+
 gunStats = {
   fist = {
     ammo = "",
@@ -94,6 +96,10 @@ function onPreprocFinished()
   Global.UI.setAttribute("inventoryPanel" .. "Red", "color", "rgba(0.14, 0, 0, 0.95)")
   Global.UI.setAttribute("inventoryPanel" .. "Green", "color", "rgba(0, 0.1, 0, 0.95)")
   Global.UI.setAttribute("inventoryPanel" .. "Blue", "color", "rgba(0, 0, 0.1, 0.95)")
+
+  Global.UI.setAttribute("inventoryPanel" .. "Red", "visibility", "")
+  Global.UI.setAttribute("inventoryPanel" .. "Green", "visibility", "")
+  Global.UI.setAttribute("inventoryPanel" .. "Blue", "visibility", "")
 
   Global.UI.setAttribute("giveToRedItemRed", "active", "false")
   Global.UI.setAttribute("giveToGreenItemGreen", "active", "false")
