@@ -54,20 +54,7 @@ mnstStats = {
 }
 
 
-marines = {}
 attackingChar = {}
-
-function onLoad()
-  for _,obj in ipairs(getAllObjects()) do
-    if obj.getName() == "Red Marine" then
-      marines.red = obj.getGUID()
-    elseif obj.getName() == "Green Marine" then
-      marines.green = obj.getGUID()
-    elseif obj.getName() == "Blue Marine" then
-       marines.blue = obj.getGUID()
-    end
-  end
-end
 
 -- return true if figure is 2 or more spaces width in direction of X and Z
 function isLarge(figure)
@@ -157,7 +144,7 @@ function prepareAttackParameters(player_color)
         stringColorToRGB(player_color))
       return
     else
-      attackingChar[player_color] = getObjectFromGUID(marines[string.lower(player_color)])
+      attackingChar[player_color] = Global.call("getMarine", player_color)
       if not attackingChar[player_color] then
         broadcastToColor("Can't find your marine figure",
           player_color,

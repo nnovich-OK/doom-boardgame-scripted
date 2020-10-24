@@ -12,6 +12,8 @@ mnstList = {
   "Cyberdemon",
 }
 
+local marines = {}
+
 allPlayerColors = {"Red", "Green", "Blue", "White"}
 
 function onload()
@@ -21,6 +23,16 @@ function onload()
   refreshObjectUI()
 
   instances().preproc.call("preprocess")
+
+  for _,obj in ipairs(getAllObjects()) do
+    if obj.getName() == "Red Marine" then
+      marines.red = obj.getGUID()
+    elseif obj.getName() == "Green Marine" then
+      marines.green = obj.getGUID()
+    elseif obj.getName() == "Blue Marine" then
+       marines.blue = obj.getGUID()
+    end
+  end
 end
 
 function onPlayerConnect(player)
@@ -110,4 +122,8 @@ function stripXmlFieldColor(str)
     end
   end
   return str
+end
+
+function getMarine(color)
+  return getObjectFromGUID(marines[string.lower(color)])
 end
