@@ -15,6 +15,7 @@ mnstList = {
 local marines = {}
 
 allPlayerColors = {"Red", "Green", "Blue", "White"}
+allMarineColors = {"Red", "Green", "Blue"}
 
 function onload()
   -- assets sometimes load later than they are needed by objects

@@ -34,6 +34,19 @@ pickableTokens = {
   ['Health']='health',
 }
 
+sharedItems = {
+  bluekey = true,
+  yellowkey = true,
+  redkey = true,
+}
+
+itemLimit = {
+  bluekey = 1,
+  yellowkey = 1,
+  redkey = 1,
+  berserk = 3, -- seems like picking the new one just refreshes the duration
+}
+
 countActivationThreshold = {
   fist = 2,
   chainsaw = 2,
@@ -214,10 +227,12 @@ function onInventoryItemClick(player, value, id)
   end
 
   if invMode[player.color].action == "gainItem" then
+    printToAll(Global.call("getMarine", itemColor).getName() .. " gained " .. item, player.color)
     adjustItemCount(itemColor, item, 1)
   end
 
   if invMode[player.color].action == "loseItem" then
+    printToAll(Global.call("getMarine", itemColor).getName() .. " lost " .. item, player.color)
     adjustItemCount(itemColor, item, -1)
   end
 
@@ -320,12 +335,19 @@ function onAutopickClick(player, value, id)
   for _, hit in ipairs(hitTable) do
     local item = pickableTokens[hit.hit_object.getName()]
     if hit.hit_object.tag == "Card" and item then
+
+      local picked = true
+      local amount = 1
       if item == "health" then
-        if marine.call("onHealthPickup", player.color) then
-          hit.hit_object.destruct()
-        end
-      else
-        adjustItemCount(player.color, item, 1)
+        amount = 0 -- no item is stored, health is applied immediately
+        picked = marine.call("onHealthPickup", player.color)
+      elseif item == "berserk" then
+        amount = 3
+      end
+
+      if picked then
+        adjustItemCount(player.color, item, amount)
+        printToAll(marine.getName() .. " picked " .. item, player.color)
         hit.hit_object.destruct()
       end
     end
@@ -333,24 +355,48 @@ function onAutopickClick(player, value, id)
 end
 
 function adjustItemCount(player_color, item, diff)
+  if diff == 0 then
+     return
+  end
+
   local count = tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
   count = count + diff
   if count < 0 then
     count = 0
   end
 
-  Global.UI.setAttribute(item.."InvText"..player_color, "text", count)
-
-  if count >= (countActivationThreshold[item] or 1) then
-    Global.UI.setAttribute(item.."InvText"..player_color, "active", "true")
-  else
-    Global.UI.setAttribute(item.."InvText"..player_color, "active", "false")
+  local changedItemColors = {player_color}
+  if sharedItems[item] then
+    changedItemColors = Global.getTable("allMarineColors")
   end
 
-  if count >= 1 then
-    Global.UI.setAttribute(item.."InvImage"..player_color, "color", "White")
-  else
-    Global.UI.setAttribute(item.."InvImage"..player_color, "color", "rgba(0.4, 0.4, 0.4, 1)")
+  if itemLimit[item] and count > itemLimit[item] then
+    count = itemLimit[item]
   end
 
+  for _, clr in ipairs(changedItemColors) do
+    Global.UI.setAttribute(item.."InvText"..clr, "text", count)
+
+    if count >= (countActivationThreshold[item] or 1) then
+      Global.UI.setAttribute(item.."InvText"..clr, "active", "true")
+    else
+      Global.UI.setAttribute(item.."InvText"..clr, "active", "false")
+    end
+
+    if count >= 1 then
+      Global.UI.setAttribute(item.."InvImage"..clr, "color", "White")
+    else
+      Global.UI.setAttribute(item.."InvImage"..clr, "color", "rgba(0.4, 0.4, 0.4, 1)")
+    end
+  end
+
+end
+
+function onPlayerTurnEnd(player_color_end, player_color_next)
+ -- TODO: test
+ -- when enabling turn system, first event contains neither nil nor "",
+ -- but still doesn't have any valid number
+  if player_color_end and string.find(player_color_end, "%a") then
+    adjustItemCount(player_color_end, "berserk", -1)
+  end
 end
