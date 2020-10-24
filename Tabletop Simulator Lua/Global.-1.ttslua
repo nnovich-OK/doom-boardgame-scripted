@@ -101,3 +101,13 @@ function getCharacterColor(obj)
 
   return nil
 end
+
+-- should be applied to strings like "myXmlFieldRed" to remove "Red"
+function stripXmlFieldColor(str)
+  for _, clr in ipairs(allPlayerColors) do
+    if string.find(str, clr.."$") then
+      return string.gsub(str, clr.."$", "")
+    end
+  end
+  return str
+end

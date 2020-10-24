@@ -12,6 +12,14 @@
     preferredHeight="28"
     flexibleWidth="0"
     onClick="6411e1/adjustParam"/>
+  <Button
+    class="die"
+    preferredHeight="40"
+    preferredWidth="40"
+    onClick="6411e1/toggleDice"
+    visibility="White|Red|Green|Blue"
+    />
+  <Button class="invItem" onClick="cb7512/onInventoryItemClick"/>
   <Text fontSize="16" color="rgb(1, 1, 1)" flexibleWidth="1"/>
   <Text class="tgl" fontStyle="Bold" fontSize="32" color="rgb(0.8,0.8,0.8)" />
   <Text
@@ -21,13 +29,6 @@
     fontSize="28"
     outline="black"
     color="white"/>
-  <Button
-    class="die"
-    preferredHeight="40"
-    preferredWidth="40"
-    onClick="6411e1/toggleDice"
-    visibility="White|Red|Green|Blue"
-    />
   <Cell class="tgl" childForceExpandWidth="false" childForceExpandHeight="false"/>
   <Row class="tgl" preferredHeight="50"/>
   <Row class="inventory" preferredHeight="50"/>
@@ -189,21 +190,21 @@
     <!-- MELEE WEAPONS -->
     <Row class="inventory">
         <Cell>
-          <Button id="armorInvButton">
+          <Button id="armorInvButton" class="invItem">
             <Image id="armorInvImage" class="invItem" image="armor">
               <Text id="armorInvText" class="invItem"/>
             </Image>
           </Button>
         </Cell>
         <Cell>
-          <Button id="fistInvButton">
+          <Button id="fistInvButton" class="invItem">
             <Image id="fistInvImage" class="invItem" image="chainsaw">
               <Text id="fistInvText" class="invItem"/>
             </Image>
           </Button>
         </Cell>
         <Cell>
-          <Button id="chainsawInvButton">
+          <Button id="chainsawInvButton" class="invItem">
             <Image id="chainsawInvImage" class="invItem" image="chainsaw">
               <Text id="chainsawInvText" class="invItem"/>
             </Image>
@@ -213,35 +214,35 @@
     <!-- BULLET WEAPONS -->
     <Row class="inventory">
       <Cell>
-        <Button id="shellInvButton">
+        <Button id="shellInvButton" class="invItem">
           <Image id="shellInvImage" class="invItem" image="shell">
             <Text id="shellInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="pistolInvButton">
+        <Button id="pistolInvButton" class="invItem">
           <Image id="pistolInvImage" class="invItem" image="shotgun">
             <Text id="pistolInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="machinegunInvButton">
+        <Button id="machinegunInvButton" class="invItem">
           <Image id="machinegunInvImage" class="invItem" image="machinegun">
             <Text id="machinegunInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="shotgunInvButton">
+        <Button id="shotgunInvButton" class="invItem">
           <Image id="shotgunInvImage" class="invItem" image="shotgun">
             <Text id="shotgunInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="chaingunInvButton">
+        <Button id="chaingunInvButton" class="invItem">
           <Image id="chaingunInvImage" class="invItem" image="chaingun">
             <Text id="chaingunInvText" class="invItem"/>
           </Image>
@@ -251,21 +252,21 @@
     <!-- EXPLOSIVE WEAPONS -->
     <Row class="inventory">
       <Cell>
-        <Button id="rocketInvButton">
+        <Button id="rocketInvButton" class="invItem">
           <Image id="rocketInvImage" class="invItem" image="rocket">
             <Text id="rocketInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="grenadeInvButton">
+        <Button id="grenadeInvButton" class="invItem">
           <Image id="grenadeInvImage" class="invItem" image="launcher">
             <Text id="grenadeInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="launcherInvButton">
+        <Button id="launcherInvButton" class="invItem">
           <Image id="launcherInvImage" class="invItem" image="launcher">
             <Text id="launcherInvText" class="invItem"/>
           </Image>
@@ -275,21 +276,21 @@
     <!-- ENERGY WEAPONS -->
     <Row class="inventory">
       <Cell>
-        <Button id="cellInvButton">
+        <Button id="cellInvButton" class="invItem">
           <Image id="cellInvImage" class="invItem" image="cell">
             <Text id="cellInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="plasmaInvButton">
+        <Button id="plasmaInvButton" class="invItem">
           <Image id="plasmaInvImage" class="invItem" image="plasma">
             <Text id="plasmaInvText" class="invItem"/>
           </Image>
         </Button>
       </Cell>
       <Cell>
-        <Button id="bfgInvButton">
+        <Button id="bfgInvButton" class="invItem">
           <Image id="bfgInvImage" class="invItem" image="bfg">
             <Text id="bfgInvText" class="invItem"/>
           </Image>
@@ -311,7 +312,7 @@
       >
       <Row class="inventory">
           <Cell>
-            <Button id="berserkInvButton">
+            <Button id="berserkInvButton" class="invItem">
               <Image id="berserkInvImage" class="invItem" image="berserk">
                 <Text id="berserkInvText" class="invItem"/>
               </Image>
@@ -326,7 +327,7 @@
 
       <Row class="inventory">
           <Cell>
-            <Button id="adrenalinInvButton">
+            <Button id="adrenalinInvButton" class="invItem">
               <Image id="adrenalinInvImage" class="invItem" image="adrenalin">
                 <Text id="adrenalinInvText" class="invItem"/>
               </Image>
@@ -336,7 +337,7 @@
 
       <Row class="inventory">
           <Cell>
-            <Button id="cancelInvButton">
+            <Button id="cancelInvButton" class="invItem">
               <Image id="cancelInvImage" class="invItem" image="cancel">
                 <Text id="cancelInvText" class="invItem"/>
               </Image>
@@ -360,7 +361,7 @@
     >
     <Row class="inventory">
         <Cell>
-          <Button id="aimInvButton">
+          <Button id="aimInvButton" class="invItem">
             <Image id="aimInvImage" class="invItem" image="aim">
               <Text id="aimInvText" class="invItem"/>
             </Image>
@@ -370,7 +371,7 @@
 
     <Row class="inventory">
         <Cell>
-          <Button id="guardInvButton">
+          <Button id="guardInvButton" class="invItem">
             <Image id="guardInvImage" class="invItem" image="guard">
               <Text id="guardInvText" class="invItem"/>
             </Image>
@@ -380,7 +381,7 @@
 
     <Row class="inventory">
         <Cell>
-          <Button id="dodgeInvButton">
+          <Button id="dodgeInvButton" class="invItem">
             <Image id="dodgeInvImage" class="invItem" image="dodge">
               <Text id="dodgeInvText" class="invItem"/>
             </Image>
@@ -390,7 +391,7 @@
 
     <Row class="inventory">
         <Cell>
-          <Button id="healInvButton">
+          <Button id="healInvButton" class="invItem">
             <Image id="healInvImage" class="invItem" image="heal">
               <Text id="healInvText" class="invItem"/>
             </Image>
@@ -413,7 +414,7 @@
       >
       <Row class="inventory">
           <Cell>
-            <Button id="bluekeyInvButton">
+            <Button id="bluekeyInvButton" class="invItem">
               <Image id="bluekeyInvImage" class="invItem" image="bluekey">
                 <Text id="bluekeyInvText" class="invItem"/>
               </Image>
@@ -423,7 +424,7 @@
 
       <Row class="inventory">
           <Cell>
-            <Button id="yellowkeyInvButton">
+            <Button id="yellowkeyInvButton" class="invItem">
               <Image id="yellowkeyInvImage" class="invItem" image="yellowkey">
                 <Text id="yellowkeyInvText" class="invItem"/>
               </Image>
@@ -433,7 +434,7 @@
 
       <Row class="inventory">
           <Cell>
-            <Button id="redkeyInvButton">
+            <Button id="redkeyInvButton" class="invItem">
               <Image id="redkeyInvImage" class="invItem" image="redkey">
                 <Text id="redkeyInvText" class="invItem"/>
               </Image>

@@ -7,6 +7,89 @@ fragTintColors = {
   ["Blue died"]="rgba(0.6 0.6, 1, 1)",
 }
 
+gunStats = {
+  fist = {
+    ammo = "",
+    attack = {"red"},
+    melee = true,
+    attackMod = {},
+    reminder = "",
+  },
+
+  chainsaw = {
+    ammo = "",
+    attack = {"red"},
+    melee = true,
+    attackMod = {deadly=1},
+    reminder = "sweep",
+  },
+
+  pistol = {
+    ammo = "shell",
+    attack = {"yellow", "green2"},
+    melee = false,
+    attackMod = {},
+    reminder = "",
+  },
+
+  machinegun = {
+    ammo = "shell",
+    attack = {"yellow", "blue2", "green2"},
+    melee = false,
+    attackMod = {accuracy=2},
+    reminder = "",
+  },
+
+  shotgun = {
+    ammo = "shell",
+    attack = {"red", "blue1"},
+    melee = false,
+    attackMod = {deadly=1},
+    reminder = "blow-through",
+  },
+
+  chaingun = {
+    ammo = "shell",
+    attack = {"red", "green1", "green2"},
+    melee = false,
+    attackMod = {accuracy=1},
+    reminder = "blow-through",
+  },
+
+  grenade = {
+    ammo = "rocket",
+    attack = {"yellow", "blue1", "blue2"},
+    melee = false,
+    attackMod = {},
+    reminder = "seeking, blast 1",
+  },
+
+  launcher = {
+    ammo = "rocket",
+    attack = {"yellow", "blue2", "green1", "green2"},
+    melee = false,
+    attackMod = {},
+    reminder = "blast 1, knockback",
+  },
+
+  plasma = {
+    ammo = "cell",
+    attack = {"red", "yellow", "blue1", "green1"},
+    melee = false,
+    attackMod = {accuracy=1},
+    reminder = "",
+  },
+
+  bfg = {
+    ammo = "cell",
+    attack = {"red", "yellow", "blue1", "green1", "blue2", "green2"},
+    melee = false,
+    attackMod = {deadly=1},
+    reminder = "blast 2",
+  },
+
+}
+
 function onPreprocFinished()
   Global.UI.setAttribute("inventoryPanel" .. "Red", "color", "rgba(0.14, 0, 0, 0.95)")
   Global.UI.setAttribute("inventoryPanel" .. "Green", "color", "rgba(0, 0.1, 0, 0.95)")
@@ -68,6 +151,37 @@ function addFrag(source)
     "showInterface",
     {id="fragsPanel", color="White|Red|Green|Blue"})
 
+end
+
+function onInventoryItemClick(player, value, id)
+  local item=string.gsub(id, "InvButton", "")
+  item = Global.call("stripXmlFieldColor", item)
+
+  --TODO check inventory mode, check berserk, check availability and not for white
+  -- Set attack parameters
+  if gunStats[item] then
+    if player.color ~= "White" then
+      printToColor(player.color.." Marine uses " .. item .. " on... <target via Num1>",
+        player.color,
+        Color.Grey)
+    else
+      printToColor("Marine uses " .. item,
+        player.color,
+        Color.Grey)
+    end
+
+
+    if gunStats[item].reminder and gunStats[item].reminder ~= "" then
+      printToColor("Reminder: " .. gunStats[item].reminder, player.color, Color.Grey)
+    end
+
+    local params = {
+      color = player.color,
+      dice  = gunStats[item].attack,
+      bonus = gunStats[item].attackMod or "none",}
+
+    Global.call("instances").calc.call("configure", params)
+  end
 end
 
 function showInventory(player, value, id)
