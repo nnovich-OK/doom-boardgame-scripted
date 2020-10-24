@@ -500,14 +500,28 @@ function rollDice(player, value, id)
   end
 
   if not rollHappened then return end
-  --shut down controls, so nobody messes with parameters
+  -- shut down controls, so nobody messes with parameters
   toggleInteraction(player.color, false)
 
+  -- roll announcement and details printing
   local actionStr = " rolls..."
   if reroll[player.color] then
-    actionStr = " rerolls..."
+    actionStr = " RErolls..."
   end
   broadcastToAll(player.steam_name .. actionStr, stringColorToRGB(player.color))
+
+  local diceString = "  "
+  for k, v in pairs(diceCollection) do
+    if v.state[player.color] then
+      diceString = diceString .. k .. ", "
+    end
+  end
+  diceString = string.gsub(diceString, ", $", "")
+  printToAll(diceString, stringColorToRGB(player.color))
+  printToAll(
+    "  dst=" .. prm[player.color].distance .. ", arm=" .. prm[player.color].armor
+      .. ", acc=" .. prm[player.color].accuracy .. ", deadly=" .. prm[player.color].deadly,
+    stringColorToRGB(player.color))
 
   Wait.condition(
     function() return rollEnd(player.color) end,
