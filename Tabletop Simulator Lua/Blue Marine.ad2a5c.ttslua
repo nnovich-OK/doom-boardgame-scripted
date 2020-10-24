@@ -130,6 +130,19 @@ function hits(player, change)
   healthChange(player.color, change)
 end
 
+--TODO: rework all these health adjustments
+function onHealthPickup(player_color)
+  if (health.value == health.max) then
+    return false
+  end
+
+  for i = 1, 3 do
+    healthChange(player_color, "add")
+  end
+
+  return true
+end
+
 function healthChange(playerColor, change)
   local oldHP = health.value
   local tabInfo = getNotebookTabs()

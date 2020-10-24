@@ -31,7 +31,7 @@ pickableTokens = {
   ['Yellow Key']='yellowkey',
   ['Red Key']='redkey',
 
-  --['Health']='health',
+  ['Health']='health',
 }
 
 countActivationThreshold = {
@@ -308,6 +308,11 @@ end
 
 
 function onAutopickClick(player, value, id)
+  if player.color == "White" then
+    -- TODO: should active inventory owner be used instead?
+    return
+  end
+
   local marine = Global.call("getMarine", player.color)
   local hitTable = Physics.cast(
     {origin=marine.getPosition(), direction={0,-1,0}, debug=false, max_distance=0.5})
@@ -315,8 +320,14 @@ function onAutopickClick(player, value, id)
   for _, hit in ipairs(hitTable) do
     local item = pickableTokens[hit.hit_object.getName()]
     if hit.hit_object.tag == "Card" and item then
-      adjustItemCount(player.color, item, 1)
-      hit.hit_object.destruct()
+      if item == "health" then
+        if marine.call("onHealthPickup", player.color) then
+          hit.hit_object.destruct()
+        end
+      else
+        adjustItemCount(player.color, item, 1)
+        hit.hit_object.destruct()
+      end
     end
   end
 end
