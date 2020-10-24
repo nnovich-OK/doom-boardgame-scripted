@@ -10,8 +10,28 @@ fragTintColors = {
 invMode = {Red={}, Green={}, Blue={}, White={}}
 
 pickableTokens = {
-  ['Shells/Bullets']='shells',
---  ['']='',
+  ['Armor']='armor',
+
+  ['Shells/Bullets']='shell',
+  ['Rockets/Grenades']='rocket',
+  ['Energy Cell']='cell',
+
+  ['Chainsaw']='chainsaw',
+  ['Shotgun']='shotgun',
+  ['Machine Gun']='machinegun',
+  ['Chain Gun']='chaingun',
+  ['Rocket Launcher']='launcher',
+  ['Plasma Gun']='plasma',
+  ['BFG']='bfg',
+
+  ['Berserk']='berserk',
+  ['Adrenaline']='adrenalin',
+
+  ['Blue Key']='bluekey',
+  ['Yellow Key']='yellowkey',
+  ['Red Key']='redkey',
+
+  --['Health']='health',
 }
 
 countActivationThreshold = {
@@ -290,10 +310,14 @@ end
 function onAutopickClick(player, value, id)
   local marine = Global.call("getMarine", player.color)
   local hitTable = Physics.cast(
-    {origin=marine.getPosition(), direction={0,-1,0}, debug=true, max_distance=0.5})
+    {origin=marine.getPosition(), direction={0,-1,0}, debug=false, max_distance=0.5})
 
   for _, hit in ipairs(hitTable) do
-    print("Tag: ".. hit.hit_object.tag)
+    local item = pickableTokens[hit.hit_object.getName()]
+    if hit.hit_object.tag == "Card" and item then
+      adjustItemCount(player.color, item, 1)
+      hit.hit_object.destruct()
+    end
   end
 end
 

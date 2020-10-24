@@ -106,6 +106,7 @@ end
 -- Apply a status effect by dropping a token on the standee
 -- TODO: modify, test
 function onCollisionEnter(a)
+    --[[
    local newState = a.collision_object.getName()
    if a.collision_object.getQuantity() ~= -1 then return end
    if newState == "Summon Marker" then
@@ -118,7 +119,7 @@ function onCollisionEnter(a)
          self.UI.setAttribute(newState, "active", true)
          updateUIStatPanel()
       end
-   end
+   end]]
 end
 
 function add(self, playerColor, value, id) healthChange(playerColor, "add") end
