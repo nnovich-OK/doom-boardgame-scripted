@@ -7,7 +7,7 @@ fragTintColors = {
   ["Blue died"]="rgba(0.6 0.6, 1, 1)",
 }
 
-inventoryMode = {Red={}, Green={}, Blue={}, White={}}
+invMode = {Red={}, Green={}, Blue={}, White={}}
 
 gunStats = {
   fist = {
@@ -192,4 +192,48 @@ end
 
 function showInventory(player, value, id)
   Global.call("instances").vis.call("toggleInterface", {id="inventoryPanel"..value, color=player.color})
+end
+
+function onModeControlClick(player, value, id)
+  if Global.call("instances").click.call("isDoubleClick",
+    {color = player.color, id = id})
+  then
+    setInvMode(player.color, invMode[player.color].action,  true)
+  else
+    local curMode = invMode[player.color].action
+    local newMode = Global.call("stripXmlFieldColor", id)
+    clearInvMode(player.color)
+    if curMode ~= newMode then
+      setInvMode(player.color, newMode,  false)
+    end
+  end
+end
+
+function clearInvMode(player_color)
+  if invMode[player_color].action then
+    Global.UI.setAttribute(invMode[player_color].action .. player_color, "color", "rgba(0, 0, 0, 0.95)")
+    Global.UI.setAttribute(invMode[player_color].action .. player_color, "textColor", "White")
+    invMode[player_color].action = nil
+  end
+  invMode[player_color].sticky = nil
+end
+
+function setInvMode(player_color, action, sticky)
+  if not action then -- empty action should be set with clear
+    return
+  end
+
+  invMode[player_color].action = action
+  invMode[player_color].sticky = sticky
+  if not sticky then
+    Global.UI.setAttribute(invMode[player_color].action .. player_color, "color", "yellow")
+  else
+    Global.UI.setAttribute(invMode[player_color].action .. player_color, "color", "orange")
+  end
+
+end
+
+
+function onAutopickClick(player, value, id)
+  broadcastToColor("Not yet implemented. Wanna help?", player.color, player.color)
 end

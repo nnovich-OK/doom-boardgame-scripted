@@ -112,19 +112,19 @@
     <Button
       id="gainItem"
       class="ini"
-      onClick="cb7512/inventoryMode"
+      onClick="cb7512/onModeControlClick"
       text="Gain"
       />
     <Button
       id="loseItem"
       class="ini"
-      onClick="cb7512/inventoryMode"
+      onClick="cb7512/onModeControlClick"
       text="Lose"
       />
     <Button
       id="autopickItem"
       class="ini"
-      onClick="cb7512/inventoryMode"
+      onClick="cb7512/onAutopickClick"
       text="Autopick"
       tooltip="Automatically picks ammunition from under your marine figurine"
       />
@@ -133,21 +133,21 @@
     <Button
       id="giveToRedItem"
       class="ini"
-      onClick="cb7512/inventoryMode"
+      onClick="cb7512/onModeControlClick"
       text="Give Red"
       textColor="red"
       />
     <Button
       id="giveToGreenItem"
       class="ini"
-      onClick="cb7512/inventoryMode"
+      onClick="cb7512/onModeControlClick"
       text="Give Green"
       textColor="green"
       />
     <Button
       id="giveToBlueItem"
       class="ini"
-      onClick="cb7512/inventoryMode"
+      onClick="cb7512/onModeControlClick"
       text="Give Blue"
       textColor="blue"
       />
