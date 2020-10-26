@@ -41,7 +41,7 @@
   padding="0 0 0 0"
   spacing="10"
   rectAlignment="UpperLeft"
-  offsetXY="80 -10"
+  offsetXY="80 -25"
   height="40"
   width="300"
   color="clear"
@@ -75,7 +75,7 @@
   active="false"
 
   rectAlignment="UpperLeft"
-  offsetXY="88 -60"
+  offsetXY="88 -70"
   width="50"
   height="280"
 
@@ -98,74 +98,13 @@
   </Button>
 </VerticalLayout>
 
-<!-- Inventory control buttons -->
-<VerticalLayout
-  id = "inventoryModePanel"
-  active="false"
-
-  padding="0 0 5 5"
-  rectAlignment="UpperLeft"
-  offsetXY="160 -70"
-  width="448"
-  height="45"
-
-  preproc="splitColorKeepVisibility">
-  <HorizontalLayout spacing="5">
-    <Button
-      id="gainItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Gain"
-      />
-    <Button
-      id="loseItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Lose"
-      />
-    <Button
-      id="autopickItem"
-      class="ini"
-      onClick="cb7512/onAutopickClick"
-      text="Pick"
-      tooltip="Automatically picks ammunition from under your marine figurine"
-      />
-    <Button
-      id="giveToBlueItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Give Blue"
-      textColor="blue"
-      minWidth="75"
-      />
-    <Button
-      id="giveToGreenItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Give Green"
-      textColor="green"
-      minWidth="75"
-      />
-    <Button
-      id="giveToRedItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Give Red"
-      textColor="red"
-      minWidth="75"
-      />
-  </HorizontalLayout>
-</VerticalLayout>
-
-
 <!-- Inventory itself -->
-
 <Panel
   id="inventoryPanel"
   active="false"
 
   rectAlignment="UpperLeft"
-  offsetXY="160 -120"
+  offsetXY="160 -70"
   width="448"
   height="240"
 
@@ -447,6 +386,66 @@
     </TableLayout>
   </Panel>
 </Panel>
+
+
+<!-- Inventory control buttons -->
+<VerticalLayout
+  id = "inventoryModePanel"
+  active="false"
+
+  padding="0 0 5 5"
+  rectAlignment="UpperLeft"
+  offsetXY="160 -310"
+  width="448"
+  height="45"
+
+  preproc="splitColorKeepVisibility">
+  <HorizontalLayout spacing="5">
+    <Button
+      id="gainItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Gain"
+      />
+    <Button
+      id="loseItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Lose"
+      />
+    <Button
+      id="autopickItem"
+      class="ini"
+      onClick="cb7512/onAutopickClick"
+      text="Pick"
+      tooltip="Automatically picks ammunition from under your marine figurine"
+      />
+    <Button
+      id="giveToBlueItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Blue"
+      textColor="blue"
+      minWidth="75"
+      />
+    <Button
+      id="giveToGreenItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Green"
+      textColor="green"
+      minWidth="75"
+      />
+    <Button
+      id="giveToRedItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Red"
+      textColor="red"
+      minWidth="75"
+      />
+  </HorizontalLayout>
+</VerticalLayout>
 
 
 
