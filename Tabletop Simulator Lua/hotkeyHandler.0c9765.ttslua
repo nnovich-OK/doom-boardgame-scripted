@@ -56,44 +56,9 @@ mnstStats = {
 local attackingChar = {}
 
 -- Local methods declaration
-local isLarge
-local getDistance
 local getMonsterStats
 local saveAttackingCharacter
 local prepareAttackParameters
-
-
--- return true if figure is 2 or more spaces width in direction of X and Z
-function isLarge(figure)
-  local bounds = figure.getBounds()
-  return {
-    x = (bounds.size.x > 1.5),
-    z = (bounds.size.z > 1.5)
-  }
-end
-
-function getDistance(first, second)
-
-  local roundingDelta = {x = 0.5, z = 0.5}
-  for _, figure in ipairs({first, second}) do
-    local isLargeFigure = isLarge(figure)
-    if isLargeFigure.x then
-      roundingDelta.x = roundingDelta.x - 0.5
-    end
-
-    if isLargeFigure.z then
-      roundingDelta.z = roundingDelta.z - 0.5
-    end
-  end
-
-  local firstPos = first.getPosition()
-  local secondPos = second.getPosition()
-
-  local dx = math.floor(math.abs(secondPos.x - firstPos.x) + roundingDelta.x)
-  local dz = math.floor(math.abs(secondPos.z - firstPos.z) + roundingDelta.z)
-
-  return math.max(dx, dz)
-end
 
 
 function onScriptingButtonDown(index,  player_color)
@@ -203,7 +168,7 @@ function prepareAttackParameters(player_color)
     armor = tonumber(target.UI.getAttribute("armor", "text"))
   end
 
-  local dist = getDistance(attackingChar[player_color], target)
+  local dist = Global.call("getDistance", {from=attackingChar[player_color], to=target})
   if dist >= 15 then dist = 15 end
   if isMelee then
     dist = 0

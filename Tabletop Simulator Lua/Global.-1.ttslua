@@ -19,6 +19,7 @@ allMarineColors = {"Red", "Green", "Blue"}
 
 -- Local methods declaration
 local refreshObjectUI
+local isLarge
 
 function onload()
   -- assets sometimes load later than they are needed by objects
@@ -105,17 +106,25 @@ function isCharacter(obj)
   return isMonster(obj) or isMarine(obj)
 end
 
-function getCharacterColor(obj)
-  if isCharacter(obj) then
-    local name=obj.getName() or ""
-    for _, clr in ipairs(allPlayerColors) do
-      if string.find(name, clr, 1, yes) then
+-- recursion is internal parameter, shouldn't be used from outside
+function getColor(str, recursion)
+  for _, clr in ipairs(allPlayerColors) do
+    if string.find(str, clr, 1, true) then
+      -- ensure it's the only color present in str
+      if not recursion and getColor(string.gsub(str, clr, "", 1), true) then
+        log(str, "ERROR getColor is used on string with two colors")
+        return nil
+      else
         return clr
       end
     end
   end
 
   return nil
+end
+
+function getActorLabel(color)
+  return Player[color].steam_name or getMarine(color).getName()
 end
 
 -- should be applied to strings like "myXmlFieldRed" to remove "Red"
@@ -130,4 +139,38 @@ end
 
 function getMarine(color)
   return getObjectFromGUID(marines[string.lower(color)])
+end
+
+
+-- return true if figure is 2 or more spaces width in direction of X and Z
+function isLarge(figure)
+  local bounds = figure.getBounds()
+  return {
+    x = (bounds.size.x > 1.5),
+    z = (bounds.size.z > 1.5)
+  }
+end
+
+function getDistance(req)
+  local first = req.from
+  local second = req.to
+  local roundingDelta = {x = 0.5, z = 0.5}
+  for _, figure in ipairs({first, second}) do
+    local isLargeFigure = isLarge(figure)
+    if isLargeFigure.x then
+      roundingDelta.x = roundingDelta.x - 0.5
+    end
+
+    if isLargeFigure.z then
+      roundingDelta.z = roundingDelta.z - 0.5
+    end
+  end
+
+  local firstPos = first.getPosition()
+  local secondPos = second.getPosition()
+
+  local dx = math.floor(math.abs(secondPos.x - firstPos.x) + roundingDelta.x)
+  local dz = math.floor(math.abs(secondPos.z - firstPos.z) + roundingDelta.z)
+
+  return math.max(dx, dz)
 end

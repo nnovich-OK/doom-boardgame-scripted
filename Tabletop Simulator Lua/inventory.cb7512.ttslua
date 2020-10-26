@@ -8,6 +8,7 @@ local fragTintColors = {
 }
 
 local invMode = {Red={}, Green={}, Blue={}, White={}}
+local lastInvMode = {Red={}, Green={}, Blue={}, White={}}
 
 local pickableTokens = {
   ['Armor']='armor',
@@ -32,6 +33,39 @@ local pickableTokens = {
   ['Red Key']='redkey',
 
   ['Health']='health',
+}
+
+local obtainableItems = {
+  armor=true,
+  shell=true,
+  rocket=true,
+  cell=true,
+  chainsaw=true,
+  machinegun=true,
+  shotgun=true,
+  chaingun=true,
+  launcher=true,
+  plasma=true,
+  bfg=true,
+  berserk=true,
+  adrenalin=true,
+  cancel=true,
+  bluekey=true,
+  yellowkey=true,
+  redkey=true,
+}
+
+local transferableItems = {
+  shell = true,
+  rocket = true,
+  cell = true,
+  chainsaw = true,
+  machinegun = true,
+  shotgun = true,
+  chaingun = true,
+  launcher = true,
+  plasma = true,
+  bfg = true,
 }
 
 local sharedItems = {
@@ -151,6 +185,7 @@ gunStats = {
 local prepareGunAttack
 local clearInvMode
 local setInvMode
+local getItemCount
 local adjustItemCount
 
 function onPreprocFinished()
@@ -226,28 +261,25 @@ function onInventoryItemClick(player, value, id)
   -- Set attack parameters
   if not invMode[player.color].action and gunStats[item] then
     prepareGunAttack(player.color, item)
-  end
 
-  if invMode[player.color].action == "gainItem" then
-    printToAll(Global.call("getMarine", itemColor).getName() .. " gained " .. item, player.color)
-    adjustItemCount(itemColor, item, 1)
-  end
+  elseif invMode[player.color].action == "gainItem" then
+    if obtainableItems[item] then
+      printToAll(Global.call("getActorLabel", itemColor) .. " gained " .. item, player.color)
+      adjustItemCount(itemColor, item, 1)
+    else
+      broadcastToColor("Can't gain " .. item, player.color, player.color)
+    end
 
-  if invMode[player.color].action == "loseItem" then
-    printToAll(Global.call("getMarine", itemColor).getName() .. " lost " .. item, player.color)
-    adjustItemCount(itemColor, item, -1)
-  end
+  elseif invMode[player.color].action == "loseItem" then
+    if obtainableItems[item] then
+      printToAll(Global.call("getActorLabel", itemColor) .. " lost " .. item, player.color)
+      adjustItemCount(itemColor, item, -1)
+    else
+      broadcastToColor("Can't lose " .. item, player.color, player.color)
+    end
 
-  if invMode[player.color].action == "giveToRedItem" then
-    broadcastToColor("Not yet implemented. Wanna help?", player.color, player.color)
-  end
-
-  if invMode[player.color].action == "giveToGreenItem" then
-    broadcastToColor("Not yet implemented. Wanna help?", player.color, player.color)
-  end
-
-  if invMode[player.color].action == "giveToBlueItem" then
-    broadcastToColor("Not yet implemented. Wanna help?", player.color, player.color)
+  elseif string.find(invMode[player.color].action or "", "giveTo") then
+    transferItem(player.color, itemColor, Global.call("getColor", invMode[player.color].action), item)
   end
 
   if not invMode[player.color].sticky then
@@ -266,7 +298,6 @@ function prepareGunAttack(player_color, item)
       Color.Grey)
   end
 
-
   if gunStats[item].reminder and gunStats[item].reminder ~= "" then
     printToColor("Reminder: " .. gunStats[item].reminder, player_color, Color.Grey)
   end
@@ -277,7 +308,6 @@ function prepareGunAttack(player_color, item)
     bonus = gunStats[item].attackMod or "none",}
 
   Global.call("instances").calc.call("configure", params)
-  return
 end
 
 function showInventory(player, value, id)
@@ -289,7 +319,7 @@ function onModeControlClick(player, value, id)
   if Global.call("instances").click.call("isDoubleClick",
     {color = player.color, id = id})
   then
-    setInvMode(player.color, invMode[player.color].action,  true)
+    setInvMode(player.color, lastInvMode[player.color].action,  true)
   else
     local curMode = invMode[player.color].action
     local newMode = Global.call("stripXmlFieldColor", id)
@@ -314,8 +344,22 @@ function setInvMode(player_color, action, sticky)
     return
   end
 
+  if string.find(action, "giveTo") then
+    local marineColor = (player_color == "White")
+      and Global.call("instances").vis.call("getActiveInventoryForWhite")
+      or player_color
+    local givingMarine = Global.call("getMarine", marineColor)
+    local takingMarine = Global.call("getMarine", Global.call("getColor", action))
+    local dist = Global.call("getDistance", {from = givingMarine, to = takingMarine})
+    if dist ~= 1 then
+      broadcastToColor(takingMarine.getName() .. " must be on adjacent space", player_color, player_color)
+      return
+    end
+  end
+
   invMode[player_color].action = action
   invMode[player_color].sticky = sticky
+  lastInvMode[player_color].action = action
   if not sticky then
     Global.UI.setAttribute(invMode[player_color].action .. player_color, "color", "yellow")
   else
@@ -357,15 +401,42 @@ function onAutopickClick(player, value, id)
   end
 end
 
-function adjustItemCount(player_color, item, diff)
-  if diff == 0 then
-     return
+-- all colors can be different: white player forcing blue marine to share with red one
+function transferItem(player_color, givingColor, takingColor, item)
+  if not transferableItems[item] then
+    broadcastToColor("Can't transfer " .. item, player_color, player_color)
+    return
   end
 
-  local count = tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
+  if adjustItemCount(givingColor, item, -1) == -1 then
+    adjustItemCount(takingColor, item, 1)
+    broadcastToAll(Global.call("getActorLabel", givingColor) .. " transfered " .. item .. " to " .. Global.call("getActorLabel", takingColor), player_color)
+  else
+    broadcastToColor("Can't transfer " .. item .. " since none is owned",
+      player_color,
+      player_color)
+  end
+end
+
+function getItemCount(player_color, item)
+  return tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
+end
+
+-- returns actual change in item count
+function adjustItemCount(player_color, item, diff)
+  if diff == 0 then
+     return 0
+  end
+
+  local originalCount = getItemCount(player_color, item)
+  local count = originalCount
   count = count + diff
   if count < 0 then
     count = 0
+  end
+
+  if item == "armor" and count < 1 then
+    count = 1
   end
 
   local changedItemColors = {player_color}
@@ -393,6 +464,7 @@ function adjustItemCount(player_color, item, diff)
     end
   end
 
+  return count - originalCount
 end
 
 function onPlayerTurnEnd(player_color_end, player_color_next)

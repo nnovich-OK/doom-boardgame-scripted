@@ -1,9 +1,9 @@
+local lastActiveInvForWhite = nil -- stores color only
+
 local interfaceGroups = {
-  inventoryPanelWhite="inventory",
   inventoryPanelRed="inventory",
   inventoryPanelGreen="inventory",
   inventoryPanelBlue="inventory",
-
 }
 
 -- Local methods declaration
@@ -45,7 +45,11 @@ function handleSpecialCases(req, mode)
 
         -- show proper "giveToColorItem" buttons
         for _, clr in ipairs(Global.getTable("allMarineColors")) do
-          local buttonMode = (clr == fieldColor) and "rem" or "add"
+          local buttonMode = "add"
+          if clr == fieldColor then
+            buttonMode = "rem"
+            lastActiveInvForWhite = clr
+          end
           changeVisibility("giveTo" .. clr .. "Item" .. req.color, req.color, buttonMode)
         end
       else
@@ -145,5 +149,14 @@ function changeVisibility(id, color, mode)
   if textColor then
     -- changes to visibility clears text color for some reason
     Global.UI.setAttribute(id, "textColor", textColor)
+  end
+end
+
+function getActiveInventoryForWhite()
+  if isVisible("inventoryPanel" .. lastActiveInvForWhite, "White") then
+    return lastActiveInvForWhite
+  else
+    log("ERROR no active inventory for white player at this time")
+    return nil
   end
 end
