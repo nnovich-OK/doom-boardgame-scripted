@@ -1,3 +1,9 @@
+-- Local methods declaration
+local interfaceRequestCorrect
+local hideOtherInventories
+local fixPipes
+local changeVisibility
+
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
 end

@@ -1,3 +1,13 @@
+-- Local methods declaration
+local walkDepth
+local findSplit
+local getSplitAppendixes
+local performSplit
+local findRename
+local performRename
+local deepcopy
+
+
 function preprocess()
   local xml = Global.UI.getXmlTable()
   walkDepth(xml, findSplit, performSplit)

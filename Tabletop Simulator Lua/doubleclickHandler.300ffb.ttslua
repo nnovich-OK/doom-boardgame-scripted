@@ -1,8 +1,4 @@
-clicks = {Red={}, Green={}, Blue={}, White={}}
-
-function onLoad()
-
-end
+local clicks = {Red={}, Green={}, Blue={}, White={}}
 
 
 -- returns true if previous single click on htis button by this player

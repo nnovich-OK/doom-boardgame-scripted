@@ -1,18 +1,29 @@
-statNames = {
+local statNames = {
   Aim = false,
   Dodge = false,
   Guard = false,
   Heal = false,
 }
 
-health = {
+local health = {
    value = 10,
    max = 10
 }
 
-armor = 2
+local armor = 2
 
-statsPanelStatWidth = 265
+local statsPanelStatWidth = 265
+
+-- Local methods declaration
+local checkLoaded
+local createBtns
+local checkStats
+local updateUIStatPanel
+local getStatsCount
+local healthChange
+local updateHealthUI
+local isUIElementActive
+local changeArmor
 
 function onLoad(save_state)
    if save_state ~= "" and self.getDescription() ~= "" then
@@ -103,25 +114,6 @@ function getStatsCount()
    return count
 end
 
--- Apply a status effect by dropping a token on the standee
--- TODO: modify, test
-function onCollisionEnter(a)
-    --[[
-   local newState = a.collision_object.getName()
-   if a.collision_object.getQuantity() ~= -1 then return end
-   if newState == "Summon Marker" then
-      self.UI.setAttribute("summonIcon", "active", true)
-      a.collision_object.destruct()
-   else
-      if statNames[newState] ~= nil and not immunities[newState:lower()] then
-         statNames[newState] = true
-         a.collision_object.destruct()
-         self.UI.setAttribute(newState, "active", true)
-         updateUIStatPanel()
-      end
-   end]]
-end
-
 function add(self, playerColor, value, id) healthChange(playerColor, "add") end
 function sub(self, playerColor, value, id) healthChange(playerColor, "sub") end
 
@@ -202,10 +194,6 @@ function toggleCustomMonsterUI()
    toggleUIActivity("healthAddPanel")
    toggleUIActivity("healthSubPanel")
 
-   -- Toggle current HP buttons
-   toggleUIActivity("addHP")
-   toggleUIActivity("subHP")
-
    -- Toggle armor number buttons
    toggleUIActivity("addNumber")
    toggleUIActivity("subNumber")
@@ -219,14 +207,10 @@ function isUIElementActive(elementID)
    return (attributeValue == "True") or (attributeValue == "true")
 end
 
--- toggleUIActivity(string:elementID)
--- Toggle "active" attribute of UI element to opposite boolean value
-function toggleUIActivity(elementID) toggleUIActivity(elementID, nil) end
-
 -- toggleUIActivity(string:elementID, boolean:state)
 -- Set "active" attribute of UI element to given boolean value
 function toggleUIActivity(elementID, state)
-   if (nil == state) then state = (true ~= isUIElementActive(elementID)) end
+   if state == nil then state = not isUIElementActive(elementID) end
    self.UI.setAttribute(elementID, "active", state)
    self.UI.setAttribute(elementID, "textColor", "#FFFFFF")
 end

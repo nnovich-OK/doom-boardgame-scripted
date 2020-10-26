@@ -17,6 +17,9 @@ local marines = {}
 allPlayerColors = {"Red", "Green", "Blue", "White"}
 allMarineColors = {"Red", "Green", "Blue"}
 
+-- Local methods declaration
+local refreshObjectUI
+
 function onload()
   -- assets sometimes load later than they are needed by objects
   -- so blank squares are shown instead of images for armor, speed etc

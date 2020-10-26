@@ -1,4 +1,3 @@
-
 mnstStats = {
   Zombie     = {speed=3, armor=2, health=2,
                 attack = {"red", "blue1"},
@@ -54,7 +53,15 @@ mnstStats = {
 }
 
 
-attackingChar = {}
+local attackingChar = {}
+
+-- Local methods declaration
+local isLarge
+local getDistance
+local getMonsterStats
+local saveAttackingCharacter
+local prepareAttackParameters
+
 
 -- return true if figure is 2 or more spaces width in direction of X and Z
 function isLarge(figure)

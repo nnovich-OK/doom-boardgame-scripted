@@ -1,15 +1,15 @@
-fragsScored = 0
-fragLimit = 6
+local fragsScored = 0
+local fragLimit = 6
 
-fragTintColors = {
+local fragTintColors = {
   ["Red died"]="rgba(1, 0.6, 0.6, 1)",
   ["Green died"]="rgba(0.6, 1, 0.6, 1)",
   ["Blue died"]="rgba(0.6 0.6, 1, 1)",
 }
 
-invMode = {Red={}, Green={}, Blue={}, White={}}
+local invMode = {Red={}, Green={}, Blue={}, White={}}
 
-pickableTokens = {
+local pickableTokens = {
   ['Armor']='armor',
 
   ['Shells/Bullets']='shell',
@@ -34,20 +34,20 @@ pickableTokens = {
   ['Health']='health',
 }
 
-sharedItems = {
+local sharedItems = {
   bluekey = true,
   yellowkey = true,
   redkey = true,
 }
 
-itemLimit = {
+local itemLimit = {
   bluekey = 1,
   yellowkey = 1,
   redkey = 1,
   berserk = 3, -- seems like picking the new one just refreshes the duration
 }
 
-countActivationThreshold = {
+local countActivationThreshold = {
   fist = 2,
   chainsaw = 2,
   pistol = 2,
@@ -146,6 +146,12 @@ gunStats = {
   },
 
 }
+
+-- Local methods declaration
+local prepareGunAttack
+local clearInvMode
+local setInvMode
+local adjustItemCount
 
 function onPreprocFinished()
   Global.UI.setAttribute("inventoryPanel" .. "Red", "color", "rgba(0.14, 0, 0, 0.95)")

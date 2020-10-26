@@ -1,4 +1,4 @@
-redRotationValues = {
+local redRotationValues = {
   {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=0 dmg=4 ammo",      rotation={x=0, y=0, z=90}},
   {value="miss",                    rotation={x=0, y=0, z=180}},
@@ -7,7 +7,7 @@ redRotationValues = {
   {value="range=1 dmg=3",           rotation={x=270, y=0, z=0}},
 }
 
-yellowRotationValues = {
+local yellowRotationValues = {
   {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=4 dmg=0 ammo",      rotation={x=0, y=0, z=90}},
   {value="miss",                    rotation={x=0, y=0, z=180}},
@@ -16,7 +16,7 @@ yellowRotationValues = {
   {value="range=2 dmg=2",           rotation={x=270, y=0, z=0}},
 }
 
-greenRotationValues = {
+local greenRotationValues = {
   {value="range=1 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=2 dmg=0",           rotation={x=0, y=0, z=90}},
   {value="range=3 dmg=0",           rotation={x=0, y=0, z=180}},
@@ -24,7 +24,7 @@ greenRotationValues = {
   {value="range=3 dmg=0",           rotation={x=90, y=0, z=0}},
   {value="range=2 dmg=0",           rotation={x=270, y=0, z=0}},
 }
-blueRotationValues = {
+local blueRotationValues = {
   {value="range=1 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=0 dmg=2",           rotation={x=0, y=0, z=90}},
   {value="range=0 dmg=3",           rotation={x=0, y=0, z=180}},
@@ -35,7 +35,7 @@ blueRotationValues = {
 
 
 -- weight for duplicated sides
-redDie = {
+local redDie = {
   "miss",
   {range=0, dmg=4, weight=1},
   {range=1, dmg=3, weight=2},
@@ -43,7 +43,7 @@ redDie = {
   {range=3, dmg=1, weight=1},
 }
 
-yellowDie = {
+local yellowDie = {
   "miss",
   {range=1, dmg=3, weight=1},
   {range=2, dmg=2, weight=1},
@@ -51,14 +51,14 @@ yellowDie = {
   {range=4, dmg=0, weight=1},
 }
 
-greenDie = {
+local greenDie = {
   {range=1, dmg=1, weight=1},
   {range=2, dmg=1, weight=1},
   {range=2, dmg=0, weight=2},
   {range=3, dmg=0, weight=2},
 }
 
-blueDie = {
+local blueDie = {
   {range=0, dmg=3, weight=2},
   {range=0, dmg=2, weight=2},
   {range=1, dmg=2, weight=1},
@@ -67,7 +67,7 @@ blueDie = {
 
 
 -- will also store dieObj with reference to actual object
-diceCollection = {
+local diceCollection = {
   red    = {state = {}, die = redDie, guid = "3e0276", rotVal = redRotationValues},
   yellow = {state = {}, die = yellowDie, guid = "d1aad4", rotVal = yellowRotationValues},
   green1 = {state = {}, die = greenDie, guid = "3e7c9c", rotVal = greenRotationValues},
@@ -77,18 +77,18 @@ diceCollection = {
 }
 
 -- if roll is ongoing, this variable keep color of player, who initiated it
-rollingPlayerColor = nil
+local rollingPlayerColor = nil
 -- will store state and value for all dices of the last roll
-lastRoll = {Red={}, Green={}, Blue={}, White={}}
-reroll = {}
-cumulativeStatsMode = {}
+local lastRoll = {Red={}, Green={}, Blue={}, White={}}
+local reroll = {}
+local cumulativeStatsMode = {}
 
 -- Contols listed below are disabled during dice roll
-freezedSharedUi = {
+local freezedSharedUi = {
   "rollDice",
 }
 
-freezedRollerUi = {
+local freezedRollerUi = {
   "distance-",
   "distance+",
   "armor-",
@@ -101,7 +101,7 @@ freezedRollerUi = {
   "reroll",
 }
 
-paramRange = {
+local paramRange = {
    -- max hit distance is 15 plus accuracy bonus
   distance = { min = 0, max = 15 },
 
@@ -114,10 +114,30 @@ paramRange = {
 }
 
 -- individual parameters of calculator of each player
-prm = {Red={}, Green={}, Blue={}, White={}}
+local prm = {Red={}, Green={}, Blue={}, White={}}
 -- damage prediction for each player
-predictedStats = {Red={}, Green={}, Blue={}, White={}}
+local predictedStats = {Red={}, Green={}, Blue={}, White={}}
 
+
+-- Local methods declaration
+local initParams
+local setDefaultParams
+local setParam
+local displayParam
+local setDice
+local getParamName
+local getParamChange
+local calcIteration
+local showStats
+local setExactStats
+local setCumulativeStats
+local rollWatch
+local addDieValue
+local rollEnd
+local rotationValueTableToString
+local getRotationValueTable
+local updateDiceFaces
+local bringDiceBack
 
 function onload()
   initParams()
@@ -238,7 +258,7 @@ function setDice(player_color, id, active)
 end
 
 
-function toggleDice(player, value, id)
+function onDiceToggled(player, value, id)
   if player.color == rollingPlayerColor then
     -- ignore changes during roll
     -- other inputs are blocked on UI level, but this one is shared across players

@@ -1,4 +1,4 @@
-mnstCount = {
+local mnstCount = {
   Zombie     = 4,
   Trite      = 4,
   Imp        = 4,
@@ -8,6 +8,10 @@ mnstCount = {
   Hellknight = 2,
   Cyberdemon = 1,
 }
+
+-- Local methods declaration
+local getNameAndColor
+local getBagDetails
 
 -- returns non-empty name only for monsters
 function getNameAndColor(fullname)

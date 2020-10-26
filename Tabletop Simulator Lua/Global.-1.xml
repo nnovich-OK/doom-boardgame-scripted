@@ -16,7 +16,7 @@
     class="die"
     preferredHeight="40"
     preferredWidth="40"
-    onClick="6411e1/toggleDice"
+    onClick="6411e1/onDiceToggled"
     visibility="White|Red|Green|Blue"
     />
   <Button class="invItem" onClick="cb7512/onInventoryItemClick"/>
