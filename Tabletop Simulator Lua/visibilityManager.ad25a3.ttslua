@@ -1,32 +1,83 @@
+local interfaceGroups = {
+  inventoryPanelWhite="inventory",
+  inventoryPanelRed="inventory",
+  inventoryPanelGreen="inventory",
+  inventoryPanelBlue="inventory",
+
+}
+
 -- Local methods declaration
 local interfaceRequestCorrect
-local hideOtherInventories
+local hideOtherInterfacesInGroup
 local fixPipes
 local changeVisibility
+local handleSpecialCases
+local isActive
+local isVisible
 
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
 end
 
 
-function hideOtherInventories(req)
-  local fieldName, fieldColor = Global.call("stripXmlFieldColor", req.id)
+function hideOtherInterfacesInGroup(req)
+  local groupToHide = interfaceGroups[req.id]
 
-  if fieldName == "inventoryPanel" then
-    -- remove visibility from all other panels
-    for _,clr in ipairs(Global.getTable("allPlayerColors")) do
-      if clr ~= "White" and clr ~= fieldColor then
-        changeVisibility("inventoryPanel" .. clr, req.color, "rem")
+  if groupToHide then
+    for interface, group in pairs(interfaceGroups) do
+      if interface ~= req.id and group == groupToHide then
+        changeVisibility(interface, req.color, "rem")
       end
     end
   end
 end
 
+function handleSpecialCases(req, mode)
+  local fieldName, fieldColor = Global.call("stripXmlFieldColor", req.id)
+
+  if fieldName == "inventoryPanel" then
+    -- update inventory control buttons visibility
+
+    if req.color == "White" then
+      if mode == "add" or (mode == "tgl" and not isVisible(req.id, req.color)) then
+        -- show panel
+        changeVisibility("inventoryModePanel"..req.color, req.color, "add")
+
+        -- show proper "giveToColorItem" buttons
+        for _, clr in ipairs(Global.getTable("allMarineColors")) do
+          local buttonMode = (clr == fieldColor) and "rem" or "add"
+          changeVisibility("giveTo" .. clr .. "Item" .. req.color, req.color, buttonMode)
+        end
+      else
+        -- hide full panel
+        changeVisibility("inventoryModePanel"..req.color, req.color, "rem")
+      end
+
+    else
+      -- marine players
+      if fieldColor == req.color then
+        changeVisibility("inventoryModePanel"..req.color, req.color, mode)
+      else
+        changeVisibility("inventoryModePanel"..req.color, req.color, "rem")
+      end
+    end
+  end
+end
+
+function isActive(id)
+  return string.lower(Global.UI.getAttribute(id, "active") or "true") == "true"
+end
+
+function isVisible(id, player_color)
+  local vis = Global.UI.getAttribute(id, "visibility") or ""
+  return isActive(id) and string.find(vis, player_color, 1, true)
+end
+
 function showInterface(req)
   if interfaceRequestCorrect(req)
   then
-    hideOtherInventories(req)
-
+    hideOtherInterfacesInGroup(req)
+    handleSpecialCases(req, "add")
     changeVisibility(req.id, req.color, "add")
   end
 end
@@ -34,6 +85,7 @@ end
 function hideInterface(req)
   if interfaceRequestCorrect(req)
   then
+    handleSpecialCases(req, "rem")
     changeVisibility(req.id, req.color, "rem")
   end
 end
@@ -41,7 +93,8 @@ end
 function toggleInterface(req)
   if interfaceRequestCorrect(req)
   then
-    hideOtherInventories(req)
+    hideOtherInterfacesInGroup(req)
+    handleSpecialCases(req, "tgl")
     changeVisibility(req.id, req.color, "tgl")
   end
 end
@@ -50,41 +103,47 @@ end
 -- "|Red||White|Blue|" becomes "Red|White|Blue"
 function fixPipes(str)
   --trim
-  local trimmed = string.gsub(str, "^|*(.-)|*$", "%1")
+  local trimmed = string.gsub(str or "", "^|*(.-)|*$", "%1")
   --remove doulbes
   return (string.gsub(trimmed, "||+", "|"))
 end
 
 -- mode is add/rem/tgl
 function changeVisibility(id, color, mode)
-  local visBase = Global.UI.getAttribute(id, "visibility")
-  local act = Global.UI.getAttribute(id, "active")
+  local visBase = Global.UI.getAttribute(id, "visibility") or ""
+  local textColor = Global.UI.getAttribute(id, "textColor")
 
   local vis = visBase
   for color in string.gmatch(color, "[^|]+") do
-    if not string.find(vis or "", color, 1, true) then
+    if not string.find(vis, color, 1, true) then
       if mode == "add" or mode == "tgl" then
-        vis = (vis or "") .. "|" .. color
+        vis = (vis) .. "|" .. color
       end
     else
       if mode == "rem" or mode == "tgl" then
-        vis = string.gsub(vis or "", color, "")
+        vis = string.gsub(vis, color, "")
       end
     end
   end
 
   vis=fixPipes(vis)
   --log(
-  --  (visBase or "") .. " => " .. (vis or ""),
+  --  (visBase or "") .. " => " .. (vis),
   --  mode .. " visibility of " .. id .. " for " .. color .. ":")
 
   if vis~=visBase then
     Global.UI.setAttribute(id, "visibility", fixPipes(vis))
   end
 
-  if act~="true" and vis and vis ~= "" then
+  local act = isActive(id)
+  if not act and vis and vis ~= "" then
     Global.UI.setAttribute(id, "active", "true")
-  elseif act=="true" and (not vis or vis == "") then
+  elseif act and (not vis or vis == "") then
     Global.UI.setAttribute(id, "active", "false")
+  end
+
+  if textColor then
+    -- changes to visibility clears text color for some reason
+    Global.UI.setAttribute(id, "textColor", textColor)
   end
 end

@@ -54,9 +54,9 @@
 
   <Button
     class="ini"
-    onClick="cb7512/showInventory(Red)"
+    onClick="cb7512/showInventory(Blue)"
     text="Inv&#x25BC;"
-    textColor="red"/>
+    textColor="blue"/>
   <Button
     class="ini"
     onClick="cb7512/showInventory(Green)"
@@ -64,9 +64,9 @@
     textColor="green"/>
   <Button
     class="ini"
-    onClick="cb7512/showInventory(Blue)"
+    onClick="cb7512/showInventory(Red)"
     text="Inv&#x25BC;"
-    textColor="blue"/>
+    textColor="red"/>
 </HorizontalLayout>
 
 <!-- Panel to show current frags -->
@@ -100,14 +100,16 @@
 
 <!-- Inventory control buttons -->
 <VerticalLayout
-  padding="0 0 5 5"
-  spacing="5"
-  rectAlignment="UpperLeft"
-  offsetXY="160 -50"
-  width="300"
-  height="95"
+  id = "inventoryModePanel"
+  active="false"
 
-  preproc="splitColor">
+  padding="0 0 5 5"
+  rectAlignment="UpperLeft"
+  offsetXY="160 -70"
+  width="448"
+  height="45"
+
+  preproc="splitColorKeepVisibility">
   <HorizontalLayout spacing="5">
     <Button
       id="gainItem"
@@ -125,24 +127,8 @@
       id="autopickItem"
       class="ini"
       onClick="cb7512/onAutopickClick"
-      text="Autopick"
+      text="Pick"
       tooltip="Automatically picks ammunition from under your marine figurine"
-      />
-  </HorizontalLayout>
-  <HorizontalLayout spacing="5">
-    <Button
-      id="giveToRedItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Give Red"
-      textColor="red"
-      />
-    <Button
-      id="giveToGreenItem"
-      class="ini"
-      onClick="cb7512/onModeControlClick"
-      text="Give Green"
-      textColor="green"
       />
     <Button
       id="giveToBlueItem"
@@ -150,6 +136,23 @@
       onClick="cb7512/onModeControlClick"
       text="Give Blue"
       textColor="blue"
+      minWidth="75"
+      />
+    <Button
+      id="giveToGreenItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Green"
+      textColor="green"
+      minWidth="75"
+      />
+    <Button
+      id="giveToRedItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Red"
+      textColor="red"
+      minWidth="75"
       />
   </HorizontalLayout>
 </VerticalLayout>
@@ -162,7 +165,7 @@
   active="false"
 
   rectAlignment="UpperLeft"
-  offsetXY="160 -150"
+  offsetXY="160 -120"
   width="448"
   height="240"
 
@@ -173,7 +176,7 @@
   childForceExpandHeight="false"
   spacing="25"
 
-  preproc="splitColor"
+  preproc="splitColorKeepVisibility"
   >
 
   <!-- ALL WEAPONS -->

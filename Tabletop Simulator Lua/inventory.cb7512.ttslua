@@ -158,10 +158,6 @@ function onPreprocFinished()
   Global.UI.setAttribute("inventoryPanel" .. "Green", "color", "rgba(0, 0.1, 0, 0.95)")
   Global.UI.setAttribute("inventoryPanel" .. "Blue", "color", "rgba(0, 0, 0.1, 0.95)")
 
-  Global.UI.setAttribute("inventoryPanel" .. "Red", "visibility", "")
-  Global.UI.setAttribute("inventoryPanel" .. "Green", "visibility", "")
-  Global.UI.setAttribute("inventoryPanel" .. "Blue", "visibility", "")
-
   Global.UI.setAttribute("giveToRedItemRed", "active", "false")
   Global.UI.setAttribute("giveToGreenItemGreen", "active", "false")
   Global.UI.setAttribute("giveToBlueItemBlue", "active", "false")
@@ -285,6 +281,7 @@ function prepareGunAttack(player_color, item)
 end
 
 function showInventory(player, value, id)
+  clearInvMode(player.color)
   Global.call("instances").vis.call("toggleInterface", {id="inventoryPanel"..value, color=player.color})
 end
 

@@ -8,10 +8,36 @@ local performRename
 local deepcopy
 
 
+--TODO delete
+local function debugShowNode(xml, name)
+  walkDepth(xml,
+  function(xml, pos)   return xml
+      and xml[pos]
+      and xml[pos].attributes
+      and xml[pos].attributes.id
+      and string.find(xml[pos].attributes.id, name, 1, true)
+  end,
+  function(xml, pos) log(xml[pos]) end
+  )
+end
+
+
+--[[
+Searches for nodes with preproc attribute, then:
+ - splitColor -> removes node, but inserts four deep copies of it, one for each player.
+ Each copy has the same name as original appended with player color (e.g fieldNameBlue)
+ All node children are also renamed the same way. Node visibility is set to player color.
+ Preproc attribute is cleared.
+ - splitColorKeepVisibility -> same as splitColor, but no changes to visibility
+ - splitNumber<N> (e.g. splitNumber6) -> same as splitColor, but number of copies is N,
+ name appendix is number from 1 to N
+]]
 function preprocess()
   local xml = Global.UI.getXmlTable()
   walkDepth(xml, findSplit, performSplit)
   Global.UI.setXmlTable(xml)
+
+  --debugShowNode(xml, "giveToRedItem")
 
   -- notify anyone interested
   Wait.frames(function()
