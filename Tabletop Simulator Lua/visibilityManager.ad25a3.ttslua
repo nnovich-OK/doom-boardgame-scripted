@@ -13,7 +13,6 @@ local fixPipes
 local changeVisibility
 local handleSpecialCases
 local isActive
-local isVisible
 
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
@@ -39,7 +38,7 @@ function handleSpecialCases(req, mode)
     -- update inventory control buttons visibility
 
     if req.color == "White" then
-      if mode == "add" or (mode == "tgl" and not isVisible(req.id, req.color)) then
+      if mode == "add" or (mode == "tgl" and not isVisible(req)) then
         -- show panel
         changeVisibility("inventoryModePanel"..req.color, req.color, "add")
 
@@ -72,9 +71,9 @@ function isActive(id)
   return string.lower(Global.UI.getAttribute(id, "active") or "true") == "true"
 end
 
-function isVisible(id, player_color)
-  local vis = Global.UI.getAttribute(id, "visibility") or ""
-  return isActive(id) and string.find(vis, player_color, 1, true)
+function isVisible(req)
+  local vis = Global.UI.getAttribute(req.id, "visibility") or ""
+  return isActive(req.id) and string.find(vis, req.color, 1, true)
 end
 
 function showInterface(req)
@@ -153,7 +152,7 @@ function changeVisibility(id, color, mode)
 end
 
 function getActiveInventoryForWhite()
-  if isVisible("inventoryPanel" .. lastActiveInvForWhite, "White") then
+  if isVisible({id = "inventoryPanel" .. lastActiveInvForWhite, color = "White"}) then
     return lastActiveInvForWhite
   else
     log("ERROR no active inventory for white player at this time")

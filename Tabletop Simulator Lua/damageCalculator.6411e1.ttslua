@@ -82,6 +82,7 @@ local rollingPlayerColor = nil
 local lastRoll = {Red={}, Green={}, Blue={}, White={}}
 local reroll = {}
 local cumulativeStatsMode = {}
+local statsUpdateQueued = {}
 
 -- Contols listed below are disabled during dice roll
 local freezedSharedUi = {
@@ -138,6 +139,7 @@ local rotationValueTableToString
 local getRotationValueTable
 local updateDiceFaces
 local bringDiceBack
+local updateStats
 
 function onload()
   initParams()
@@ -205,6 +207,7 @@ end
 function setParam(player_color, name, value)
   prm[player_color][name] = value
   displayParam(player_color, name)
+  updateStats(player_color)
 end
 
 
@@ -255,6 +258,7 @@ function setDice(player_color, id, active)
   diceCollection[id].state[player_color] = active
 
   Global.UI.setAttribute(id.."Shade"..player_color, "active", tostring(not active))
+  updateStats(player_color)
 end
 
 
@@ -305,11 +309,6 @@ function calculate(player, value, id)
   local dice = {}
   for _,v in pairs(diceCollection) do
     if v.state[player.color] then table.insert(dice, v.die) end
-  end
-
-  if dice[1] == nil then
-    broadcastToColor("Choose at least one die", player.color, stringColorToRGB(player.color))
-    return
   end
 
   -- caclulate number of cases for each outcome
@@ -411,6 +410,19 @@ function toggleStatsMode(player, value, id)
   showStats(player.color)
 end
 
+function updateStats(player_color)
+  if Global.call("instances").vis.call("isVisible", {id="stats", color=player_color})
+    and not statsUpdateQueued[player_color]
+  then
+    statsUpdateQueued[player_color] = true
+    Wait.frames(
+      function()
+        calculate(Player[player_color])
+        statsUpdateQueued[player_color] = false
+      end,
+      1)
+  end
+end
 
 function rollWatch(player_color)
   for k,v in pairs(diceCollection) do
