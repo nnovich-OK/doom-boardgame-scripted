@@ -323,6 +323,22 @@ function onModeControlClick(player, value, id)
   else
     local curMode = invMode[player.color].action
     local newMode = Global.call("stripXmlFieldColor", id)
+
+    -- Don't enter give mode in case marines aren't adjacent
+    if string.find(newMode, "giveTo") then
+      local marineColor = (player.color == "White")
+        and Global.call("instances").vis.call("getActiveInventoryForWhite")
+        or player.color
+      local givingMarine = Global.call("getMarine", marineColor)
+      local takingMarine = Global.call("getMarine", Global.call("getColor", newMode))
+      local dist = Global.call("getDistance", {from = givingMarine, to = takingMarine})
+      if dist ~= 1 then
+        broadcastToColor(takingMarine.getName() .. " must be on adjacent space", player.color, player.color)
+        Global.call("instances").click.call("markAsSingleClick", {color = player.color, id = id})
+        return
+      end
+    end
+
     clearInvMode(player.color)
     if curMode ~= newMode then
       setInvMode(player.color, newMode,  false)
@@ -332,8 +348,9 @@ end
 
 function clearInvMode(player_color)
   if invMode[player_color].action then
+    local textColor = Global.call("getColor", invMode[player_color].action) or "White"
     Global.UI.setAttribute(invMode[player_color].action .. player_color, "color", "rgba(0, 0, 0, 0.95)")
-    Global.UI.setAttribute(invMode[player_color].action .. player_color, "textColor", "White")
+    Global.UI.setAttribute(invMode[player_color].action .. player_color, "textColor", textColor)
     invMode[player_color].action = nil
   end
   invMode[player_color].sticky = nil
@@ -342,19 +359,6 @@ end
 function setInvMode(player_color, action, sticky)
   if not action then -- empty action should be set with clear
     return
-  end
-
-  if string.find(action, "giveTo") then
-    local marineColor = (player_color == "White")
-      and Global.call("instances").vis.call("getActiveInventoryForWhite")
-      or player_color
-    local givingMarine = Global.call("getMarine", marineColor)
-    local takingMarine = Global.call("getMarine", Global.call("getColor", action))
-    local dist = Global.call("getDistance", {from = givingMarine, to = takingMarine})
-    if dist ~= 1 then
-      broadcastToColor(takingMarine.getName() .. " must be on adjacent space", player_color, player_color)
-      return
-    end
   end
 
   invMode[player_color].action = action

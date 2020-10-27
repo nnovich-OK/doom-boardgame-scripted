@@ -20,3 +20,11 @@ function isDoubleClick(req)
     0.2
   )
 end
+
+function markAsSingleClick(req)
+  if not req or not req.color or not req.id then
+    log(req, "ERROR bad request to markAsSingleClick:")
+    return false
+  end
+  clicks[req.color][req.id] = false
+end
