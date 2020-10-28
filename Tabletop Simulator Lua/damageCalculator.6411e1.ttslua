@@ -311,8 +311,21 @@ function calculate(player, value, id)
     if v.state[player.color] then table.insert(dice, v.die) end
   end
 
+  local keptDiceSum = {}
+  if reroll[player.color] then
+    for k, v in pairs(diceCollection) do
+      if not v.state[player.color] and lastRoll[player.color][k] then
+        addDieValue(keptDiceSum, lastRoll[player.color][k])
+      end
+    end
+    log(keptDiceSum, "Kept dice sum")
+  end
+
   -- caclulate number of cases for each outcome
-  local state = {range=0, dmg=0, weight=1}
+  local state = {
+    range = keptDiceSum.range or 0,
+    dmg = keptDiceSum.dmg or 0,
+    weight = 1}
   predictedStats[player.color] = {}
   calcIteration(dice, 1, state, prm[player.color], predictedStats[player.color])
 
@@ -323,11 +336,15 @@ function calculate(player, value, id)
   end
 
   -- add ammo consumption statistics
-  -- red and yellow dice has chance of 1/3 to spend ammo each
-  local ammoDices = 0
-  if diceCollection.red.state[player.color] then ammoDices = ammoDices + 1 end
-  if diceCollection.yellow.state[player.color] then ammoDices = ammoDices + 1 end
-  predictedStats[player.color]["ammo"] = (1 - (2/3)^ammoDices) * 100
+  if keptDiceSum.ammo then
+    predictedStats[player.color]["ammo"] = 100
+  else
+    -- red and yellow dice has chance of 1/3 to spend ammo each
+    local ammoDices = 0
+    if diceCollection.red.state[player.color] then ammoDices = ammoDices + 1 end
+    if diceCollection.yellow.state[player.color] then ammoDices = ammoDices + 1 end
+    predictedStats[player.color]["ammo"] = (1 - (2/3)^ammoDices) * 100
+  end
 
   showStats(player.color)
 end
@@ -434,8 +451,8 @@ function rollWatch(player_color)
 end
 
 function addDieValue(sum, value)
-  sum.range = sum.range + (value.range or 0)
-  sum.dmg = sum.dmg + (value.dmg or 0)
+  sum.range = (sum.range or 0) + (value.range or 0)
+  sum.dmg = (sum.dmg or 0) + (value.dmg or 0)
   sum.ammo = sum.ammo or value.ammo
   sum.miss = sum.miss or value.miss
 end
