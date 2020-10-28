@@ -374,15 +374,14 @@ end
 
 
 function onAutopickClick(player, value, id)
-  if player.color == "White" then
-    -- TODO: should active inventory owner be used instead?
-    return
-  end
+  local marineColor = (player.color ~= "White") and player.color
+    or Global.call("instances").vis.call("getActiveInventoryForWhite")
 
-  local marine = Global.call("getMarine", player.color)
+  local marine = Global.call("getMarine", marineColor)
   local hitTable = Physics.cast(
     {origin=marine.getPosition(), direction={0,-1,0}, debug=false, max_distance=0.5})
 
+  local pickWorked = false
   for _, hit in ipairs(hitTable) do
     local item = pickableTokens[hit.hit_object.getName()]
     if hit.hit_object.tag == "Card" and item then
@@ -391,17 +390,25 @@ function onAutopickClick(player, value, id)
       local amount = 1
       if item == "health" then
         amount = 0 -- no item is stored, health is applied immediately
-        picked = marine.call("onHealthPickup", player.color)
+        picked = marine.call("onHealthPickup", marineColor)
       elseif item == "berserk" then
         amount = 3
       end
 
       if picked then
-        adjustItemCount(player.color, item, amount)
+        adjustItemCount(marineColor, item, amount)
         printToAll(marine.getName() .. " picked " .. item, player.color)
         hit.hit_object.destruct()
       end
+
+      pickWorked = pickWorked or picked
     end
+  end
+
+  if not pickWorked then
+    broadcastToColor("No pickable items under " .. marine.getName() .. " figurine",
+      player.color,
+      player.color)
   end
 end
 
