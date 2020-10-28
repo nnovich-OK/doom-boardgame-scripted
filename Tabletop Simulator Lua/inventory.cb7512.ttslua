@@ -186,6 +186,7 @@ local prepareGunAttack
 local clearInvMode
 local setInvMode
 local getItemCount
+local haveItem
 local adjustItemCount
 
 function onPreprocFinished()
@@ -256,6 +257,10 @@ function onInventoryItemClick(player, value, id)
     "stripXmlFieldColor",
     (string.gsub(id, "InvButton", "")))
 
+  if player.color ~= "White" and player.color ~= itemColor then
+    broadcastToColor("This is not your inventory", player.color, player.color)
+    return
+  end
 
   --TODO check check berserk, check availability and not for white
   -- Set attack parameters
@@ -288,15 +293,25 @@ function onInventoryItemClick(player, value, id)
 end
 
 function prepareGunAttack(player_color, item)
-  if player_color ~= "White" then
-    printToColor(player_color.." Marine uses " .. item .. " on... <target via Num1>",
+  local marineColor = (player_color == "White")
+    and Global.call("instances").vis.call("getActiveInventoryForWhite")
+    or player_color
+
+
+  local marine = Global.call("getMarine", marineColor)
+  if haveItem(player_color, "berserk") and item ~= "fist" then
+    broadcastToColor(marine.getName() .. " can't use weapons while berserk, yet proceeding as usual",
       player_color,
-      Color.Grey)
-  else
-    printToColor("Marine uses " .. item,
+      player_color)
+  elseif not haveItem(player_color, item) then
+    broadcastToColor(marine.getName() .. " doesn't possess this weapon, yet proceeding as usual",
       player_color,
-      Color.Grey)
+      player_color)
   end
+
+  printToColor(marine.getName() .." uses " .. item .. " on... <target via Num1>",
+    player_color,
+    Color.Grey)
 
   if gunStats[item].reminder and gunStats[item].reminder ~= "" then
     printToColor("Reminder: " .. gunStats[item].reminder, player_color, Color.Grey)
@@ -308,6 +323,9 @@ function prepareGunAttack(player_color, item)
     bonus = gunStats[item].attackMod or "none",}
 
   Global.call("instances").calc.call("configure", params)
+  if player_color == "White" then
+    Global.call("instances").hotkeys.call("saveAttackingCharacter", {color = player_color, char = marine})
+  end
 end
 
 function showInventory(player, value, id)
@@ -431,6 +449,10 @@ end
 
 function getItemCount(player_color, item)
   return tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
+end
+
+function haveItem(player_color, item)
+  return getItemCount(player_color, item) > 0
 end
 
 -- returns actual change in item count
