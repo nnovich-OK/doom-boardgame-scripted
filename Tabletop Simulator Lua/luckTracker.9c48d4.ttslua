@@ -1,0 +1,65 @@
+local hitLuck = {Red={}, Green={}, Blue={}, White={}}
+local ammoLuck = {Red={}, Green={}, Blue={}, White={}}
+
+--rolled wounds(x), expected wounds(μ), standard deviation(σ), Δ=NUM * σ, probability(P)
+
+-- Local methods declaration
+local splitStats
+local updateLuck
+
+-- color, hit, ammo, stats
+function addRoll(req)
+  if not req.color or not req.hit or not req.stats then
+    log(req, "ERROR bad request to addRoll:")
+    return
+  end
+
+  local hitStats, ammoStats = splitStats(req.stats)
+
+  --log(hitStats, "hitStats:")
+  updateLuck(hitLuck[req.color], hitStats, req.hit)
+  --log(ammoStats, "ammoStats:")
+  updateLuck(ammoLuck[req.color], ammoStats, req.ammo and 1 or 0)
+end
+
+function updateLuck(luck, stats, value)
+  luck.X = (luck.X or 0) + value
+
+  local M = 0
+  for i, v in pairs(stats) do
+    M = M + i*v
+  end
+  luck.M = (luck.M or 0) + M
+
+  local D = 0
+  for i, v in pairs(stats) do
+    D = D + v * (i - M) * (i - M)
+  end
+  luck.D = (luck.D or 0) + D
+  local standardDeviation = math.sqrt(luck.D)
+
+  local k = math.abs(luck.X - luck.M) / standardDeviation
+  local probability = 1 / (k*k)
+  --log({X=value, M=M, D=D}, "Roll characteristics:")
+end
+
+function splitStats(stats)
+  local hitStats = {}
+  local ammoStats = {[0] = 100 - stats["ammo"], [1] = stats["ammo"]}
+
+  for i, v in pairs(stats) do -- copies all hits except 0 and miss
+    if i~=0 and i~="miss" and i~="ammo" then
+      hitStats[i] = v
+    end
+  end
+  hitStats[0] = (stats[0] or 0) + (stats["miss"] or 0)
+
+  for i in pairs(hitStats) do
+    hitStats[i] = hitStats[i] / 100
+  end
+  for i in pairs(ammoStats) do
+    ammoStats[i] = ammoStats[i] / 100
+  end
+
+  return hitStats, ammoStats
+end

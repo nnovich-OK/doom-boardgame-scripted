@@ -71,6 +71,7 @@ function instances()
     vis = getObjectFromGUID("ad25a3"), -- interface visibility manager
     inv = getObjectFromGUID("cb7512"), -- inventory
     click = getObjectFromGUID("300ffb"), -- doubleclickHandler
+    luck = getObjectFromGUID("9c48d4"), -- luckTracker
   }
 end
 

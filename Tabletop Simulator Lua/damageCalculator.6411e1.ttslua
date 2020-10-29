@@ -305,7 +305,7 @@ end
 
 
 
-function calculate(player, value, id)
+function calculate(player, value, id, silent)
   local dice = {}
   for _,v in pairs(diceCollection) do
     if v.state[player.color] then table.insert(dice, v.die) end
@@ -346,7 +346,9 @@ function calculate(player, value, id)
     predictedStats[player.color]["ammo"] = (1 - (2/3)^ammoDices) * 100
   end
 
-  showStats(player.color)
+  if not silent then
+    showStats(player.color)
+  end
 end
 
 -- caclulate number of cases for each outcome
@@ -510,13 +512,14 @@ function rollEnd(player_color)
   broadcastToAll(total, stringColorToRGB(player_color))
 
   -- bonus/armor/distance accounted
+  local hit = 0
   if sum.miss then
     broadcastToAll("MISS on dice", Color.Pink)
   else
     if sum.range + prm[player_color].accuracy < prm[player_color].distance then
       broadcastToAll("MISS: Range + accuracy is too low", Color.Pink)
     else
-      local hit = math.floor((sum.dmg + prm[player_color].deadly) / prm[player_color].armor)
+      hit = math.floor((sum.dmg + prm[player_color].deadly) / prm[player_color].armor)
       if hit == 0 then
         broadcastToAll("HIT: no penetration", Color.Pink)
       else
@@ -531,6 +534,9 @@ function rollEnd(player_color)
   end
 
   updateDiceFaces()
+
+  Global.call("instances").luck.call("addRoll",
+    {color = player_color, hit = hit, ammo = sum.ammo, stats = predictedStats[player_color]})
 
   -- This MUST be called, and also this should be the last thing to execute
   toggleInteraction(player_color, true)
@@ -576,6 +582,13 @@ function rollDice(player, value, id)
     function() return rollEnd(player.color) end,
     function() return rollWatch(player.color) end
   )
+
+  if not Global.call("instances").vis.call("isVisible", {id="stats", color=player.color}) then
+    -- stats are hidden, so they are likely out of date
+    -- we need accurate prediction to store expected dmg and its variability
+    -- roll start is the best time since calculation lag won't be noticeable
+    calculate(player, nil, nil, true)
+  end
 end
 
 function rotationValueTableToString(value)
