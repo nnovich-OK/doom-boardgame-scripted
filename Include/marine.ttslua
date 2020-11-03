@@ -1,0 +1,253 @@
+require("instances")
+require("utils")
+
+local statNames = {
+  Aim = false,
+  Dodge = false,
+  Guard = false,
+  Heal = false,
+}
+
+local health = {
+   value = 10,
+   max = 10
+}
+
+local armor = 2
+
+local statsPanelStatWidth = 265
+
+-- Local methods declaration
+local checkLoaded
+local createBtns
+local checkStats
+local updateUIStatPanel
+local getStatsCount
+local healthChange
+local updateHealthUI
+local isUIElementActive
+local changeArmor
+
+function onLoad(save_state)
+   if save_state ~= "" and self.getDescription() ~= "" then
+      saved_data = JSON.decode(save_state)
+
+      -- Status conditions
+      if saved_data.statNames then
+         for i, j in pairs(saved_data.statNames) do
+            statNames[i] = saved_data.statNames[i]
+         end
+      end
+
+      -- Armor
+      if saved_data.armor then
+         armor = saved_data.armor
+
+          Wait.condition(
+            function () self.UI.setAttribute("armor", "text", armor) end,
+            checkLoaded)
+      end
+
+      -- Health
+      if saved_data.health then
+         health = saved_data.health
+         Wait.condition(updateHealthUI, checkLoaded)
+      end
+    end
+  Wait.condition(updateHealthUI, checkLoaded)
+  Wait.condition(checkStats, checkLoaded)
+  createBtns()
+end
+
+function checkLoaded()
+   if not self.loading_custom and not self.spawning then
+      return true
+   end
+   return false
+end
+
+function onSave()
+   local save_state = JSON.encode({health = health, armor = armor, statNames = statNames})
+   -- local save_state = ""
+   self.script_state = save_state
+end
+
+function createBtns()
+  local buttonParameter = {
+    click_function = "add",
+    function_owner = self,
+    position = {0.3, 0.02, -0.2},
+    rotation= {0, 90, 0},
+    label = "+",
+    width = 250,
+    height = 250,
+    font_size = 300,
+    color = {0,0,0,0.1},
+    font_color = {1,1,1,7}}
+  self.createButton(buttonParameter)
+  buttonParameter.position = {0.3, 0.02, 0.2}
+  buttonParameter.click_function = "sub"
+  buttonParameter.label = "-"
+  self.createButton(buttonParameter)
+end
+
+-- Check current status effects
+function checkStats()
+   for i, j in pairs(statNames) do
+      if j == true then
+         self.UI.setAttribute(i, "active", true)
+      end
+   end
+   updateUIStatPanel()
+end
+
+-- This interface is updated often enough to have multiple calls
+function updateUIStatPanel()
+   Wait.frames(function() self.UI.setAttribute("statePanel", "width", getStatsCount() * statsPanelStatWidth) end, 1)
+end
+
+-- Count the number of status effects on the monster
+function getStatsCount()
+   local count = 0
+   for i, j in pairs(statNames) do
+      if self.UI.getAttribute(i, "active") == "True" then
+         count = count + 1
+      end
+   end
+   return count
+end
+
+function add(self, playerColor, value, id) healthChange(playerColor, "add") end
+function sub(self, playerColor, value, id) healthChange(playerColor, "sub") end
+
+-- Do the appropriate healing / damaging
+function hits(player, change)
+  healthChange(player.color, change)
+end
+
+--TODO: rework all these health adjustments
+function onHealthPickup(player_color)
+  if (health.value == health.max) then
+    return false
+  end
+
+  for i = 1, 3 do
+    healthChange(player_color, "add")
+  end
+
+  return true
+end
+
+function healthChange(playerColor, change)
+  local oldHP = health.value
+  local tabInfo = getNotebookTabs()
+  local tab = ""
+
+  if change == "add" then
+    health.value = health.value + 1
+  elseif change == "addMax" then
+    health.value = health.value + 1
+    health.max = health.max + 1
+  elseif change == "sub" then
+    health.value = health.value - 1
+  elseif change == "subMax" then
+    health.value = health.value - 1
+    if health.max > 0 then health.max = health.max - 1 end
+  end
+
+  -- Boundary-check health values
+  if health.value > health.max then health.value = health.max end
+  if health.value < 0 then health.value = 0 end
+  updateHealthUI()
+
+  if change == "add" then
+     if oldHP ~= health.value then
+        printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (+1)", stringColorToRGB(playerColor))
+     end
+  elseif change == "sub" then
+     if oldHP ~= health.value then
+        printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (-1)", stringColorToRGB(playerColor))
+     end
+  end
+end
+
+-- Sets health in the UI
+function updateHealthUI()
+
+   -- Activate defeat interface
+   if health.value < 1 then
+      self.UI.setAttribute("defeatPanel", "active", true)
+      self.UI.setAttribute("healthbar", "active", false)
+      self.UI.setAttribute("editButton", "active", false)
+   else
+      self.UI.setAttribute("defeatPanel", "active", false)
+      self.UI.setAttribute("healthbar", "active", true)
+      self.UI.setAttribute("editButton", "active", true)
+   end
+
+   self.UI.setAttribute("progressBar", "percentage", health.value / health.max * 100)
+   self.UI.setAttribute("healthbar", "text", health.value .. "/" .. health.max)
+   self.setDescription(health.value .. "/" .. health.max)
+   self.UI.setAttribute("panel", "position", "0 0 -" .. self.getBounds().size.y / self.getScale().y * 110) --ART: there was additional correction
+end
+
+-- Toggle the customize monster interface (elite, max health, number)
+function toggleCustomMonsterUI()
+   -- Toggle max health modifier panel
+   toggleUIActivity("healthAddPanel")
+   toggleUIActivity("healthSubPanel")
+
+   -- Toggle armor number buttons
+   toggleUIActivity("addNumber")
+   toggleUIActivity("subNumber")
+end
+
+-- isUIElementActive(string:elementID)
+-- Returns boolean:True if element attribute "active" matches "True" or "true"
+-- Returns boolean:False for all other circumstances
+function isUIElementActive(elementID)
+   local attributeValue = self.UI.getAttribute(elementID, "active")
+   return (attributeValue == "True") or (attributeValue == "true")
+end
+
+-- toggleUIActivity(string:elementID, boolean:state)
+-- Set "active" attribute of UI element to given boolean value
+function toggleUIActivity(elementID, state)
+   if state == nil then state = not isUIElementActive(elementID) end
+   self.UI.setAttribute(elementID, "active", state)
+   self.UI.setAttribute(elementID, "textColor", "#FFFFFF")
+end
+
+
+-- For other miscellaneous button clicks
+function onClick(player, value, id)
+   if statNames[id] ~= nil then
+      self.UI.setAttribute(id, "active", false)
+      statNames[id] = false
+      updateUIStatPanel()
+   end
+end
+
+-- Change armor value
+function addNumber() changeArmor(1) end
+function subNumber() changeArmor(-1) end
+function changeArmor(delta)
+  armor = tonumber(self.UI.getAttribute("armor", "text")) + delta
+  if armor > 10 then armor = 10 end
+  if armor < 1 then armor = 1 end
+  self.UI.setAttribute("armor", "text", armor)
+end
+
+-- Summon marker, move figure away, add frag to the moster player, restore hp and armor
+function defeatClick(player, value, id)
+  health.value = health.max
+  updateHealthUI()
+
+  armor = 2
+  self.UI.setAttribute("armor", "text", armor)
+
+  self.flip()
+
+  local color = utils.getColor(self.getName())
+  instances.inv.call("addFrag", color .. " died")
+end
