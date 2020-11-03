@@ -1,3 +1,6 @@
+require("instances")
+require("constants")
+
 -- Local methods declaration
 local walkDepth
 local findSplit
@@ -42,7 +45,7 @@ function preprocess()
   -- notify anyone interested
   Wait.frames(function()
       for _,v in ipairs({"inv"}) do
-        Global.call("instances")[v].call("onPreprocFinished")
+        instances[v].call("onPreprocFinished")
       end
     end, 1)
 end
@@ -81,7 +84,7 @@ end
 
 function getSplitAppendixes(preprocString)
   if string.find(preprocString, "splitColor") then
-    return Global.getTable("allPlayerColors")
+    return constants.allPlayerColors
   elseif string.find(preprocString, "splitNumber") then
     local num = tonumber(string.match(preprocString, "%d+"), 10)
     local group = {}

@@ -1,0 +1,25 @@
+instances = {}
+
+local guidList = {
+    calc = "6411e1", -- damage calculator
+    hotkeys = "0c9765", -- hotkey handler
+    preproc = "e8056f", -- xml preprocessor
+    creator = "4abf42", -- monster creator
+    vis = "ad25a3", -- interface visibility manager
+    inv = "cb7512", -- inventory
+    click = "300ffb", -- doubleclickHandler
+    luck = "9c48d4", -- luckTracker
+}
+
+setmetatable(instances, {__index = function(t, k)
+  if guidList[k] then
+    local obj = getObjectFromGUID(guidList[k])
+    assert(obj, "instances: can't get " .. k .. " from GUID " .. guidList[k])
+    t[k] = obj
+    return obj
+  end
+  error("instances: no preset GUID for " .. k)
+end
+})
+
+return instances

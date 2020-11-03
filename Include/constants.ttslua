@@ -1,0 +1,22 @@
+constants = {}
+local package = constants
+
+local _ENV = package
+
+allPlayerColors = {"Red", "Green", "Blue", "White"}
+allMarineColors = {"Red", "Green", "Blue"}
+
+
+-- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place
+mnstList = {
+  "Zombie",
+  "Trite",
+  "Imp",
+  "Demon",
+  "Mancubus",
+  "Archvile",
+  "Hellknight",
+  "Cyberdemon",
+}
+
+return package

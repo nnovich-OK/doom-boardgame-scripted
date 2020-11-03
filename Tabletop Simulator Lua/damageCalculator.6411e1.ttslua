@@ -1,3 +1,7 @@
+require("instances")
+require("constants")
+require("utils")
+
 local redRotationValues = {
   {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=0 dmg=4 ammo",      rotation={x=0, y=0, z=90}},
@@ -150,7 +154,7 @@ end
 
 
 function initParams()
-  for _,color in ipairs(Global.getTable("allPlayerColors")) do
+  for _,color in ipairs(constants.allPlayerColors) do
     setDefaultParams(color)
   end
 
@@ -159,7 +163,7 @@ function initParams()
   for k,v in pairs(diceCollection) do
     v.dieObj = getObjectFromGUID(v.guid)
     if v.dieObj == nil then
-      print("Can't find dice " .. k)
+      error("Can't find dice " .. k)
     else
       v.dieObj.setLock(false)
       v.dieObj.highlightOff()
@@ -395,7 +399,7 @@ function showStats(player_color)
     setCumulativeStats(player_color)
   end
 
-  Global.call("instances").vis.call("showInterface", {id="stats", color=player_color})
+  instances.vis.call("showInterface", {id="stats", color=player_color})
 end
 
 
@@ -430,7 +434,7 @@ function toggleStatsMode(player, value, id)
 end
 
 function updateStats(player_color)
-  if Global.call("instances").vis.call("isVisible", {id="stats", color=player_color})
+  if instances.vis.call("isVisible", {id="stats", color=player_color})
     and not statsUpdateQueued[player_color]
   then
     statsUpdateQueued[player_color] = true
@@ -535,7 +539,7 @@ function rollEnd(player_color)
 
   updateDiceFaces()
 
-  Global.call("instances").luck.call("addRoll",
+  instances.luck.call("addRoll",
     {color = player_color, hit = hit, ammo = sum.ammo, stats = predictedStats[player_color]})
 
   -- This MUST be called, and also this should be the last thing to execute
@@ -583,7 +587,7 @@ function rollDice(player, value, id)
     function() return rollWatch(player.color) end
   )
 
-  if not Global.call("instances").vis.call("isVisible", {id="stats", color=player.color}) then
+  if not instances.vis.call("isVisible", {id="stats", color=player.color}) then
     -- stats are hidden, so they are likely out of date
     -- we need accurate prediction to store expected dmg and its variability
     -- roll start is the best time since calculation lag won't be noticeable
@@ -670,13 +674,13 @@ function rerollToggle(player, value, id)
   if reroll[player.color] then
     for k in pairs(diceCollection) do
       if not lastRoll[player.color][k] then
-        Global.call("instances").vis.call("hideInterface", {id=k, color=player.color})
+        instances.vis.call("hideInterface", {id=k, color=player.color})
         setDice(player.color, k, false)
       end
     end
   else
     for k in pairs(diceCollection) do
-      Global.call("instances").vis.call("showInterface", {id=k, color=player.color})
+      instances.vis.call("showInterface", {id=k, color=player.color})
     end
   end
 end
@@ -720,13 +724,13 @@ function configure(params)
     end
   end
 
-  Global.call("instances").vis.call("showInterface", {id="calculator", color=params.color})
+  instances.vis.call("showInterface", {id="calculator", color=params.color})
 end
 
 function toggleCalc(player, value, id)
-  Global.call("instances").vis.call("toggleInterface", {id="calculator", color=player.color})
+  instances.vis.call("toggleInterface", {id="calculator", color=player.color})
 end
 
 function closeStats(player, value, id)
-  Global.call("instances").vis.call("hideInterface", {id="stats", color=player.color})
+  instances.vis.call("hideInterface", {id="stats", color=player.color})
 end

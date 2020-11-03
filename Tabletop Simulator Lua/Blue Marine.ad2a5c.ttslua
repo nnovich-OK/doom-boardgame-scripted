@@ -1,3 +1,6 @@
+require("instances")
+require("utils")
+
 local statNames = {
   Aim = false,
   Dodge = false,
@@ -245,6 +248,6 @@ function defeatClick(player, value, id)
 
   self.flip()
 
-  local color = Global.call("getColor", self.getName())
-  Global.call("instances").inv.call("addFrag", color .. " died")
+  local color = utils.getColor(self.getName())
+  instances.inv.call("addFrag", color .. " died")
 end

@@ -1,3 +1,6 @@
+require("instances")
+require("utils")
+
 mnstStats = {
   Zombie     = {speed=3, armor=2, health=2,
                 attack = {"red", "blue1"},
@@ -87,7 +90,7 @@ function saveAttackingCharacterHovered(player_color)
   end
 
   local candidate = Player[player_color].getHoverObject()
-  if not candidate or not Global.call("isCharacter", candidate) then
+  if not candidate or not utils.isCharacter(candidate) then
     broadcastToColor(
     "Hotkey is intended to mark figurine as attacker. " ..
     "Please hover your pointer over attacking character first.",
@@ -117,7 +120,7 @@ function prepareAttackParameters(player_color)
         stringColorToRGB(player_color))
       return
     else
-      attackingChar[player_color] = Global.call("getMarine", player_color)
+      attackingChar[player_color] = utils.getMarine(player_color)
       if not attackingChar[player_color] then
         broadcastToColor("Can't find your marine figure",
           player_color,
@@ -128,7 +131,7 @@ function prepareAttackParameters(player_color)
   end
 
   local target = Player[player_color].getHoverObject()
-  if not target or not Global.call("isCharacter", target) then
+  if not target or not utils.isCharacter(target) then
     broadcastToColor(
       "Hotkey is intended to mark figurine as a target." ..
       "Please hover your pointer over targeted character first.",
@@ -149,7 +152,7 @@ function prepareAttackParameters(player_color)
   -- ATTACKER PARAMETERS: dice, accuracy and deadly bonuses
   --                      set for monster attacks only
   local params = {color=player_color}
-  if Global.call("isMonster", attackingChar[player_color]) then
+  if utils.isMonster(attackingChar[player_color]) then
     local stats = getMonsterStats(attackingChar[player_color].getName()) --guaranteed to exist
     params["dice"] = stats.attack
     params["bonus"] = stats.attackMod or "none"
@@ -163,13 +166,13 @@ function prepareAttackParameters(player_color)
 
   -- TARGET PARAMETERS: distance and armor
   local armor = 1
-  if Global.call("isMonster", target) then
+  if utils.isMonster(target) then
     armor = getMonsterStats(target.getName()).armor
   else
     armor = tonumber(target.UI.getAttribute("armor", "text"))
   end
 
-  local dist = Global.call("getDistance", {from=attackingChar[player_color], to=target})
+  local dist = utils.getDistance(attackingChar[player_color], target)
   if dist >= 15 then dist = 15 end
   if isMelee then
     dist = 0
@@ -182,5 +185,5 @@ function prepareAttackParameters(player_color)
   attackingChar[player_color] = nil
   target.highlightOn(stringColorToRGB(player_color), 5)
 
-  Global.call("instances").calc.call("configure", params)
+  instances.calc.call("configure", params)
 end

@@ -1,3 +1,7 @@
+require("constants")
+require("instances")
+require("utils")
+
 local fragsScored = 0
 local fragLimit = 6
 
@@ -200,12 +204,12 @@ function onPreprocFinished()
 end
 
 function showFrags(player, value, id)
-  Global.call("instances").vis.call(
+  instances.vis.call(
     "toggleInterface", {id="fragsPanel", color=player.color})
 end
 
 function updateFrag(player, value, id)
-  if Global.call("instances").click.call("isDoubleClick",
+  if instances.click.call("isDoubleClick",
     {color = player.color, id = id})
   then
     if player.color ~= "White" then
@@ -246,16 +250,14 @@ function addFrag(source)
   Global.UI.setAttribute("frag" .. fragsScored, "tooltip", "Double click to remove")
   broadcastToAll("New frag (" .. source .. ")! Total: " .. fragsScored, Color.Orange)
 
-  Global.call("instances").vis.call(
+  instances.vis.call(
     "showInterface",
     {id="fragsPanel", color="White|Red|Green|Blue"})
 
 end
 
 function onInventoryItemClick(player, value, id)
-  local item, itemColor = Global.call(
-    "stripXmlFieldColor",
-    (string.gsub(id, "InvButton", "")))
+  local item, itemColor = utils.stripXmlFieldColor(string.gsub(id, "InvButton", ""))
 
   if player.color ~= "White" and player.color ~= itemColor then
     broadcastToColor("This is not your inventory", player.color, player.color)
@@ -269,7 +271,7 @@ function onInventoryItemClick(player, value, id)
 
   elseif invMode[player.color].action == "gainItem" then
     if obtainableItems[item] then
-      printToAll(Global.call("getActorLabel", itemColor) .. " gained " .. item, player.color)
+      printToAll(utils.getActorLabel(itemColor) .. " gained " .. item, player.color)
       adjustItemCount(itemColor, item, 1)
     else
       broadcastToColor("Can't gain " .. item, player.color, player.color)
@@ -277,14 +279,14 @@ function onInventoryItemClick(player, value, id)
 
   elseif invMode[player.color].action == "loseItem" then
     if obtainableItems[item] then
-      printToAll(Global.call("getActorLabel", itemColor) .. " lost " .. item, player.color)
+      printToAll(utils.getActorLabel(itemColor) .. " lost " .. item, player.color)
       adjustItemCount(itemColor, item, -1)
     else
       broadcastToColor("Can't lose " .. item, player.color, player.color)
     end
 
   elseif string.find(invMode[player.color].action or "", "giveTo") then
-    transferItem(player.color, itemColor, Global.call("getColor", invMode[player.color].action), item)
+    transferItem(player.color, itemColor, utils.getColor(invMode[player.color].action), item)
   end
 
   if not invMode[player.color].sticky then
@@ -294,11 +296,10 @@ end
 
 function prepareGunAttack(player_color, item)
   local marineColor = (player_color == "White")
-    and Global.call("instances").vis.call("getActiveInventoryForWhite")
+    and instances.vis.call("getActiveInventoryForWhite")
     or player_color
 
-
-  local marine = Global.call("getMarine", marineColor)
+  local marine = utils.getMarine(marineColor)
   if haveItem(player_color, "berserk") and item ~= "fist" then
     broadcastToColor(marine.getName() .. " can't use weapons while berserk, yet proceeding as usual",
       player_color,
@@ -322,37 +323,37 @@ function prepareGunAttack(player_color, item)
     dice  = gunStats[item].attack,
     bonus = gunStats[item].attackMod or "none",}
 
-  Global.call("instances").calc.call("configure", params)
+  instances.calc.call("configure", params)
   if player_color == "White" then
-    Global.call("instances").hotkeys.call("saveAttackingCharacter", {color = player_color, char = marine})
+    instances.hotkeys.call("saveAttackingCharacter", {color = player_color, char = marine})
   end
 end
 
 function showInventory(player, value, id)
   clearInvMode(player.color)
-  Global.call("instances").vis.call("toggleInterface", {id="inventoryPanel"..value, color=player.color})
+  instances.vis.call("toggleInterface", {id="inventoryPanel"..value, color=player.color})
 end
 
 function onModeControlClick(player, value, id)
-  if Global.call("instances").click.call("isDoubleClick",
+  if instances.click.call("isDoubleClick",
     {color = player.color, id = id})
   then
     setInvMode(player.color, lastInvMode[player.color].action,  true)
   else
     local curMode = invMode[player.color].action
-    local newMode = Global.call("stripXmlFieldColor", id)
+    local newMode = utils.stripXmlFieldColor(id)
 
     -- Don't enter give mode in case marines aren't adjacent
     if string.find(newMode, "giveTo") then
       local marineColor = (player.color == "White")
-        and Global.call("instances").vis.call("getActiveInventoryForWhite")
+        and instances.vis.call("getActiveInventoryForWhite")
         or player.color
-      local givingMarine = Global.call("getMarine", marineColor)
-      local takingMarine = Global.call("getMarine", Global.call("getColor", newMode))
-      local dist = Global.call("getDistance", {from = givingMarine, to = takingMarine})
+      local givingMarine = utils.getMarine(marineColor)
+      local takingMarine = utils.getMarine(utils.getColor(newMode))
+      local dist = utils.getDistance(givingMarine, takingMarine)
       if dist ~= 1 then
         broadcastToColor(takingMarine.getName() .. " must be on adjacent space", player.color, player.color)
-        Global.call("instances").click.call("markAsSingleClick", {color = player.color, id = id})
+        instances.click.call("markAsSingleClick", {color = player.color, id = id})
         return
       end
     end
@@ -366,7 +367,7 @@ end
 
 function clearInvMode(player_color)
   if invMode[player_color].action then
-    local textColor = Global.call("getColor", invMode[player_color].action) or "White"
+    local textColor = utils.getColor(invMode[player_color].action) or "White"
     Global.UI.setAttribute(invMode[player_color].action .. player_color, "color", "rgba(0, 0, 0, 0.95)")
     Global.UI.setAttribute(invMode[player_color].action .. player_color, "textColor", textColor)
     invMode[player_color].action = nil
@@ -393,9 +394,9 @@ end
 
 function onAutopickClick(player, value, id)
   local marineColor = (player.color ~= "White") and player.color
-    or Global.call("instances").vis.call("getActiveInventoryForWhite")
+    or instances.vis.call("getActiveInventoryForWhite")
 
-  local marine = Global.call("getMarine", marineColor)
+  local marine = utils.getMarine(marineColor)
   local hitTable = Physics.cast(
     {origin=marine.getPosition(), direction={0,-1,0}, debug=false, max_distance=0.5})
 
@@ -439,7 +440,7 @@ function transferItem(player_color, givingColor, takingColor, item)
 
   if adjustItemCount(givingColor, item, -1) == -1 then
     adjustItemCount(takingColor, item, 1)
-    broadcastToAll(Global.call("getActorLabel", givingColor) .. " transfered " .. item .. " to " .. Global.call("getActorLabel", takingColor), player_color)
+    broadcastToAll(utils.getActorLabel(givingColor) .. " transfered " .. item .. " to " .. utils.getActorLabel(takingColor), player_color)
   else
     broadcastToColor("Can't transfer " .. item .. " since none is owned",
       player_color,
@@ -474,7 +475,7 @@ function adjustItemCount(player_color, item, diff)
 
   local changedItemColors = {player_color}
   if sharedItems[item] then
-    changedItemColors = Global.getTable("allMarineColors")
+    changedItemColors = constants.allMarineColors
   end
 
   if itemLimit[item] and count > itemLimit[item] then

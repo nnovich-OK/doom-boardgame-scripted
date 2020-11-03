@@ -56,7 +56,7 @@ function onObjectLeaveContainer(container, object)
   end
 
   if details.count == 0 then
-    print("No figures left of ".. details.color .. " " .. details.name)
+    broadcastToAll("No figures left of ".. details.color .. " " .. details.name, Color.Oragne)
     object.setName("")
     object.destruct()
     return

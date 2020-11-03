@@ -1,3 +1,6 @@
+require("constants")
+require("utils")
+
 local lastActiveInvForWhite = nil -- stores color only
 
 local interfaceGroups = {
@@ -32,7 +35,7 @@ function hideOtherInterfacesInGroup(req)
 end
 
 function handleSpecialCases(req, mode)
-  local fieldName, fieldColor = Global.call("stripXmlFieldColor", req.id)
+  local fieldName, fieldColor = utils.stripXmlFieldColor(req.id)
 
   if fieldName == "inventoryPanel" then
     -- update inventory control buttons visibility
@@ -43,7 +46,7 @@ function handleSpecialCases(req, mode)
         changeVisibility("inventoryModePanel"..req.color, req.color, "add")
 
         -- show proper "giveToColorItem" buttons
-        for _, clr in ipairs(Global.getTable("allMarineColors")) do
+        for _, clr in ipairs(constants.allMarineColors) do
           local buttonMode = "add"
           if clr == fieldColor then
             buttonMode = "rem"

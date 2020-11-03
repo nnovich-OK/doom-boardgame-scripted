@@ -1,0 +1,132 @@
+utils = {}
+local package = utils
+
+-- PACKAGE IMPORT
+setmetatable(utils, {__index = _G})
+local constants = require "constants"
+
+-- PACKAGE BODY
+local _ENV = package
+
+-- Variables
+local marines = {}
+
+-- Local methods declaration
+local isLarge
+
+function getMarine(color)
+  if #marines == 0 then
+    for _,obj in ipairs(getAllObjects()) do
+      if isMarine(obj) then
+        local objColor = getColor(obj.getName())
+        marines[objColor] = obj.getGUID()
+      end
+    end
+  end
+  return getObjectFromGUID(marines[color])
+end
+
+
+function setTableDefaultValue(table, value)
+  local key = {}
+  local mt = getmetatable(table) or {}
+  mt.__index = function(t) return t[key] end
+  table[key] = value
+  setmetatable(table, mt)
+end
+
+function isSingleFigurine(obj)
+  return obj.tag == "Figurine" and obj.getQuantity() == -1
+end
+
+function isMonster(obj)
+  if not isSingleFigurine(obj) then
+    return false
+  end
+
+  local name = obj.getName()
+  for i,v in ipairs(constants.mnstList) do
+    if (string.find(name, v, 1, true)) then
+      return true
+    end
+  end
+
+  return false
+end
+
+function isMarine(obj)
+  if not isSingleFigurine(obj) then
+    return false
+  end
+
+  return (string.find(obj.getName(), "Marine", 1, true) ~= nil)
+end
+
+function isCharacter(obj)
+  return isMonster(obj) or isMarine(obj)
+end
+
+-- recursion is internal parameter, shouldn't be used from outside
+function getColor(str, recursion)
+  for _, clr in ipairs(constants.allPlayerColors) do
+    if string.find(str, clr, 1, true) then
+      -- ensure it's the only color present in str
+      if not recursion and getColor(string.gsub(str, clr, "", 1), true) then
+        log(str, "ERROR getColor is used on string with two colors")
+        return nil
+      else
+        return clr
+      end
+    end
+  end
+
+  return nil
+end
+
+function getActorLabel(color)
+  return Player[color].steam_name or getMarine(color).getName()
+end
+
+-- should be applied to strings like "myXmlFieldRed" to remove "Red"
+function stripXmlFieldColor(str)
+  for _, clr in ipairs(constants.allPlayerColors) do
+    if string.find(str, clr.."$") then
+      return string.gsub(str, clr.."$", ""), clr
+    end
+  end
+  return str
+end
+
+
+-- return true if figure is 2 or more spaces width in direction of X and Z
+function isLarge(figure)
+  local bounds = figure.getBounds()
+  return {
+    x = (bounds.size.x > 1.5),
+    z = (bounds.size.z > 1.5)
+  }
+end
+
+function getDistance(first, second)
+  local roundingDelta = {x = 0.5, z = 0.5}
+  for _, figure in ipairs({first, second}) do
+    local isLargeFigure = isLarge(figure)
+    if isLargeFigure.x then
+      roundingDelta.x = roundingDelta.x - 0.5
+    end
+
+    if isLargeFigure.z then
+      roundingDelta.z = roundingDelta.z - 0.5
+    end
+  end
+
+  local firstPos = first.getPosition()
+  local secondPos = second.getPosition()
+
+  local dx = math.floor(math.abs(secondPos.x - firstPos.x) + roundingDelta.x)
+  local dz = math.floor(math.abs(secondPos.z - firstPos.z) + roundingDelta.z)
+
+  return math.max(dx, dz)
+end
+
+return package

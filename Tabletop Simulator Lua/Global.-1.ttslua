@@ -1,25 +1,8 @@
-#include Console/console++
-
--- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place
-mnstList = {
-  "Zombie",
-  "Trite",
-  "Imp",
-  "Demon",
-  "Mancubus",
-  "Archvile",
-  "Hellknight",
-  "Cyberdemon",
-}
-
-local marines = {}
-
-allPlayerColors = {"Red", "Green", "Blue", "White"}
-allMarineColors = {"Red", "Green", "Blue"}
+--#include Console/console++
+require("instances")
 
 -- Local methods declaration
 local refreshObjectUI
-local isLarge
 
 function onload()
   -- assets sometimes load later than they are needed by objects
@@ -27,17 +10,7 @@ function onload()
   -- workaround - refresh XML to redraw interfaces
   refreshObjectUI()
 
-  instances().preproc.call("preprocess")
-
-  for _,obj in ipairs(getAllObjects()) do
-    if obj.getName() == "Red Marine" then
-      marines.red = obj.getGUID()
-    elseif obj.getName() == "Green Marine" then
-      marines.green = obj.getGUID()
-    elseif obj.getName() == "Blue Marine" then
-       marines.blue = obj.getGUID()
-    end
-  end
+  instances.preproc.call("preprocess")
 end
 
 function onPlayerConnect(player)
@@ -62,116 +35,4 @@ function refreshObjectUI()
     5)
 end
 
-function instances()
-  return {
-    calc = getObjectFromGUID("6411e1"), -- damage calculator
-    hotkeys = getObjectFromGUID("0c9765"), -- hotkey handler
-    preproc = getObjectFromGUID("e8056f"), -- xml preprocessor
-    creator = getObjectFromGUID("4abf42"), -- monster creator
-    vis = getObjectFromGUID("ad25a3"), -- interface visibility manager
-    inv = getObjectFromGUID("cb7512"), -- inventory
-    click = getObjectFromGUID("300ffb"), -- doubleclickHandler
-    luck = getObjectFromGUID("9c48d4"), -- luckTracker
-  }
-end
 
-
-function isSingleFigurine(obj)
-  return obj.tag == "Figurine" and obj.getQuantity() == -1
-end
-
-function isMonster(obj)
-  if not isSingleFigurine(obj) then
-    return false
-  end
-
-  local name = obj.getName()
-  for i,v in ipairs(mnstList) do
-    if (string.find(name, v, 1, true)) then
-      return true
-    end
-  end
-
-  return false
-end
-
-function isMarine(obj)
-  if not isSingleFigurine(obj) then
-    return false
-  end
-
-  return (string.find(obj.getName(), "Marine", 1, true) ~= nil)
-end
-
-function isCharacter(obj)
-  return isMonster(obj) or isMarine(obj)
-end
-
--- recursion is internal parameter, shouldn't be used from outside
-function getColor(str, recursion)
-  for _, clr in ipairs(allPlayerColors) do
-    if string.find(str, clr, 1, true) then
-      -- ensure it's the only color present in str
-      if not recursion and getColor(string.gsub(str, clr, "", 1), true) then
-        log(str, "ERROR getColor is used on string with two colors")
-        return nil
-      else
-        return clr
-      end
-    end
-  end
-
-  return nil
-end
-
-function getActorLabel(color)
-  return Player[color].steam_name or getMarine(color).getName()
-end
-
--- should be applied to strings like "myXmlFieldRed" to remove "Red"
-function stripXmlFieldColor(str)
-  for _, clr in ipairs(allPlayerColors) do
-    if string.find(str, clr.."$") then
-      return string.gsub(str, clr.."$", ""), clr
-    end
-  end
-  return str
-end
-
-function getMarine(color)
-  return getObjectFromGUID(marines[string.lower(color)])
-end
-
-
--- return true if figure is 2 or more spaces width in direction of X and Z
-function isLarge(figure)
-  local bounds = figure.getBounds()
-  return {
-    x = (bounds.size.x > 1.5),
-    z = (bounds.size.z > 1.5)
-  }
-end
-
-function getDistance(req)
-  local first = req.from
-  local second = req.to
-  local roundingDelta = {x = 0.5, z = 0.5}
-  for _, figure in ipairs({first, second}) do
-    local isLargeFigure = isLarge(figure)
-    if isLargeFigure.x then
-      roundingDelta.x = roundingDelta.x - 0.5
-    end
-
-    if isLargeFigure.z then
-      roundingDelta.z = roundingDelta.z - 0.5
-    end
-  end
-
-  local firstPos = first.getPosition()
-  local secondPos = second.getPosition()
-
-  local dx = math.floor(math.abs(secondPos.x - firstPos.x) + roundingDelta.x)
-  local dz = math.floor(math.abs(secondPos.z - firstPos.z) + roundingDelta.z)
-
-  return math.max(dx, dz)
-end
