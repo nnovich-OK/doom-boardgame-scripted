@@ -1,0 +1,35 @@
+<Defaults>
+   <Button fontSize="80" fontStyle="Bold" textColor="#FFFFFF" color="#00000000"/>
+   <Text fontSize="80" fontStyle="Bold" color="#FFFFFF" outline="#000000"/>
+</Defaults>
+
+<Panel id="panel" position="0 0 -240" rotation="0 90 270" scale="0.2 0.2" active="false">
+   <Panel color="#000000" height="100" width="600">
+      <ProgressBar id="progressBar" height="90" width="590" showPercentageText="false" color="#000000" percentage="100" fillImageColor="#710000">
+      <!-- Defeat monster at 0 hp -->
+      <Panel id="defeatPanel" height="100" width="600" offsetXY="0 0" active="false">
+         <Button onClick="defeatClick" text="Defeat"/>
+      </Panel>
+      <!-- Health Bar -->
+      <HorizontalLayout>
+         <Panel id="health" width="300">
+            <Text id="healthbar" width="600"></Text>
+         </Panel>
+      </HorizontalLayout>
+   </ProgressBar>
+   </Panel>
+
+
+   <Panel id="armorPanel" height="200" width="150" offsetXY="-390 0">
+      <Image image="shield" color="yellow" offsetXY="0 -8" height="250" width="250">
+        <Text id="armor" height="150" width="150" offsetXY="0 8" text="2"></Text>
+      </Image>
+   </Panel>
+
+   <Panel id="speedPanel" height="200" width="150" offsetXY="410 -20">
+      <Image image="3arrow" color="Blue" height="200" width="200" offsetXY="0 10">
+        <Text id="speed" height="200" width="200" offsetXY="0 8" text="3"></Text>
+      </Image>
+   </Panel>
+
+</Panel>
