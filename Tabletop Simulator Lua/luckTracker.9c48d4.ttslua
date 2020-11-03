@@ -1,11 +1,40 @@
+require("constants")
+require("instances")
+require("utils")
+
 local hitLuck = {Red={}, Green={}, Blue={}, White={}}
 local ammoLuck = {Red={}, Green={}, Blue={}, White={}}
 
+local legendString = [[
+n - number of rolles
+x - summ of rolled values
+μ - expected sum
+σ - standard deviation
+k - number of deviations in difference between expected and actual
+P - max probability of having at least current difference
+]]
+
+local playerLuckString = [[
+n = %d
+x = %d
+μ = %.2f
+σ = %.2f
+k = |x - μ| / σ = %.2f
+P = 1/k^2 = %d%%
+]]
 --rolled wounds(x), expected wounds(μ), standard deviation(σ), Δ=NUM * σ, probability(P)
 
 -- Local methods declaration
 local splitStats
 local updateLuck
+
+function onPreprocFinished()
+  -- set all default values to 0 for luck tables
+  for _, color in ipairs(constants.allPlayerColors) do
+    utils.setTableDefaultValue(hitLuck[color], 0)
+    utils.setTableDefaultValue(ammoLuck[color], 0)
+  end
+end
 
 -- color, hit, ammo, stats
 function addRoll(req)
@@ -23,19 +52,20 @@ function addRoll(req)
 end
 
 function updateLuck(luck, stats, value)
-  luck.X = (luck.X or 0) + value
+  luck.N = luck.N + 1
+  luck.X = luck.X + value
 
   local M = 0
   for i, v in pairs(stats) do
     M = M + i*v
   end
-  luck.M = (luck.M or 0) + M
+  luck.M = luck.M + M
 
   local D = 0
   for i, v in pairs(stats) do
     D = D + v * (i - M) * (i - M)
   end
-  luck.D = (luck.D or 0) + D
+  luck.D = luck.D + D
   local standardDeviation = math.sqrt(luck.D)
 
   local k = math.abs(luck.X - luck.M) / standardDeviation
@@ -62,4 +92,9 @@ function splitStats(stats)
   end
 
   return hitStats, ammoStats
+end
+
+function onLuckClick(player, value, id)
+  instances.vis.call("toggleInterface",
+    {color = player.color, id = "luckTracker"})
 end

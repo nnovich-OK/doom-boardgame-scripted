@@ -447,27 +447,98 @@
   </HorizontalLayout>
 </VerticalLayout>
 
-
-
-<!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
-<Button id="toggleCalc"
-  class="global"
-  onClick="6411e1/toggleCalc"
-  width="125"
-  height="50"
-  text="DMG Calc &#x25BC;"
-  rectAlignment="UpperRight"
-  offsetXY="0 -100">
-</Button>
-
-<VerticalLayout id="calculator"
+<!-- LUCK TRACKER -->
+<VerticalLayout id="luckTracker"
   padding="0 0 0 0"
   spacing="15"
   rectAlignment="UpperRight"
-  offsetXY="0 -160"
+  offsetXY="-3 -200"
   height="800"
-  width="160"
-  color="clear"
+  width="600"
+  color="rgba(0, 0, 0, 0.95)"
+  active="false"
+  >
+  <Panel preferredHeight="250">
+    <Text id="luckHeader"
+      preferredHeight="40"
+      text="DAMAGE"
+      fontSize="32"/>
+    <Text id="luckLegend"
+      preferredHeight="120"
+      fontSize="24"/>
+  </Panel>
+
+  <TableLayout
+    preferredHeight = "500"
+    cellSpacing="15">
+    <Row>
+      <Cell>
+        <Text class="luckPlayerHeader" textColor="red" text="RED" />
+        <Text class="luckPlayerBody" id="luckPlayerRed"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerHeader" textColor="green" text="GREEN" />
+        <Text class="luckPlayerBody" id="luckPlayerGreen"/>
+      </Cell>
+    </Row>
+    <Row>
+      <Cell>
+        <Text class="luckPlayerHeader" textColor="blue" text="BLUE" />
+        <Text class="luckPlayerBody" id="luckPlayerBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerHeader" textColor="white" text="WHITE" />
+        <Text class="luckPlayerBody" id="luckPlayerWhite"/>
+      </Cell>
+    </Row>
+  </TableLayout>
+
+  <Panel
+    preferredHeight="40"
+    flexibleHeight="0"
+    maxHeight="50"
+    childForceExpandWidth="false">
+    <Button>
+      Mode
+    </Button>
+  </Panel>
+
+</VerticalLayout>
+
+<!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
+<HorizontalLayout
+  height="40"
+  width="240"
+  rectAlignment="UpperRight"
+  offsetXY="0 -160"
+  padding="5 3 5 5"
+
+  spacing="5"
+  color="pink"
+  >
+  <Button id="luckShow"
+    class="global"
+    onClick="9c48d4/onLuckClick"
+    text="Luck &#x25BC;"
+    >
+  </Button>
+  <Button id="toggleCalc"
+    class="global"
+    onClick="6411e1/toggleCalc"
+    text="DMG Calc &#x25BC;"
+    minWidth="70"
+    >
+  </Button>
+</HorizontalLayout>
+
+<VerticalLayout id="calculator"
+  padding="0 3 0 0"
+  spacing="15"
+  rectAlignment="UpperRight"
+  offsetXY="0 -200"
+  height="800"
+  width="163"
+  color="orange"
   childForceExpandHeight="false"
   active="false"
   >
@@ -537,7 +608,7 @@
     <HorizontalLayout
       childForceExpandWidth="false"
       childForceExpandHeight="false"
-      padding="35 35 0 0"
+      padding="32 30 0 0"
       spacing="5">
       <Toggle
         id="reroll"
@@ -642,7 +713,7 @@
   id="stats"
   padding="10 10 10 10"
   rectAlignment="UpperRight"
-  offsetXY="-180 -160"
+  offsetXY="-180 -200"
   height="800"
   width="600"
   color="rgba(0, 0, 0, 0.95)"
