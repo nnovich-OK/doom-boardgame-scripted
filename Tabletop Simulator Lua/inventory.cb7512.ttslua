@@ -82,8 +82,18 @@ local itemLimit = {
   bluekey = 1,
   yellowkey = 1,
   redkey = 1,
-  berserk = 3, -- seems like picking the new one just refreshes the duration
+
+  berserk = 3, -- number of tokens might be larger (6?), but this digit is about duration
+               -- picking the new berserk should refresh the duration, so 3 is max
+  cancel = 3,
+  adrenalin = 6, -- not sure, but this should be a good guess
+
+  armor = 10,
+  shell = 15,
+  rocket = 15,
+  cell = 15,
 }
+utils.setTableDefaultValue(itemLimit, 3) -- all weaopons have 3 copies total
 
 local countActivationThreshold = {
   fist = 2,
@@ -191,6 +201,7 @@ local clearInvMode
 local setInvMode
 local getItemCount
 local haveItem
+local fullWithItem
 local adjustItemCount
 
 function onPreprocFinished()
@@ -271,16 +282,22 @@ function onInventoryItemClick(player, value, id)
 
   elseif invMode[player.color].action == "gainItem" then
     if obtainableItems[item] then
-      printToAll(utils.getActorLabel(itemColor) .. " gained " .. item, player.color)
-      adjustItemCount(itemColor, item, 1)
+      if adjustItemCount(itemColor, item, 1) == 1 then
+        printToAll(utils.getActorLabel(itemColor) .. " gained " .. item, player.color)
+      else
+        broadcastToColor("Can't have more", player.color, player.color)
+      end
     else
       broadcastToColor("Can't gain " .. item, player.color, player.color)
     end
 
   elseif invMode[player.color].action == "loseItem" then
     if obtainableItems[item] then
-      printToAll(utils.getActorLabel(itemColor) .. " lost " .. item, player.color)
-      adjustItemCount(itemColor, item, -1)
+      if adjustItemCount(itemColor, item, -1) == -1 then
+        printToAll(utils.getActorLabel(itemColor) .. " lost " .. item, player.color)
+      else
+        broadcastToColor("Can't lose what is already missing", player.color, player.color)
+      end
     else
       broadcastToColor("Can't lose " .. item, player.color, player.color)
     end
@@ -434,17 +451,27 @@ end
 -- all colors can be different: white player forcing blue marine to share with red one
 function transferItem(player_color, givingColor, takingColor, item)
   if not transferableItems[item] then
-    broadcastToColor("Can't transfer " .. item, player_color, player_color)
+    if item ~= "fist" then
+      broadcastToColor("Can't transfer " .. item, player_color, player_color)
+    else
+      broadcastToColor("Is it attempt at fistfight or fisting?", player_color, text_color)
+    end
     return
   end
 
-  if adjustItemCount(givingColor, item, -1) == -1 then
-    adjustItemCount(takingColor, item, 1)
-    broadcastToAll(utils.getActorLabel(givingColor) .. " transfered " .. item .. " to " .. utils.getActorLabel(takingColor), player_color)
-  else
+  if not haveItem(givingColor, item) then
     broadcastToColor("Can't transfer " .. item .. " since none is owned",
       player_color,
       player_color)
+  elseif fullWithItem(takingColor, item) then
+    broadcastToColor("Can't transfer " .. item .. " since recipient is already full",
+    player_color,
+    player_color)
+  else
+    adjustItemCount(givingColor, item, -1)
+    adjustItemCount(takingColor, item, 1)
+    broadcastToAll(utils.getActorLabel(givingColor) .. " transfered " .. item ..
+      " to " .. utils.getActorLabel(takingColor), player_color)
   end
 end
 
@@ -454,6 +481,10 @@ end
 
 function haveItem(player_color, item)
   return getItemCount(player_color, item) > 0
+end
+
+function fullWithItem(player_color, item)
+  return getItemCount(player_color, item) >= itemLimit[item]
 end
 
 -- returns actual change in item count
@@ -478,7 +509,7 @@ function adjustItemCount(player_color, item, diff)
     changedItemColors = constants.allMarineColors
   end
 
-  if itemLimit[item] and count > itemLimit[item] then
+  if count > itemLimit[item] then
     count = itemLimit[item]
   end
 
