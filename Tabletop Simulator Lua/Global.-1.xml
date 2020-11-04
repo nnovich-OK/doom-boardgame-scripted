@@ -29,9 +29,16 @@
     fontSize="28"
     outline="black"
     color="white"/>
+  <Text class="luckPlayerHead" fontSize="20" fontStyle="Bold"/>
+  <Text class="luckPlayerBody" fontSize="18" alignment="MiddleCenter"/>
+  <Text class="luckAnnotation" fontSize="18" alignment="MiddleLeft"/>
+  <Text class="luckTypeHeader" fontSize="30" alignment="MiddleLeft"/>
   <Cell class="tgl" childForceExpandWidth="false" childForceExpandHeight="false"/>
   <Row class="tgl" preferredHeight="50"/>
   <Row class="inventory" preferredHeight="50"/>
+  <Row class="luck" preferredHeight="40" />
+  <Row class="luckIndent" preferredHeight="25" />
+  <Row class="luckTypeHeader" preferredHeight="60" />
   <Image preserveAspect="true"/>
   <Image class="invItem" color="rgba(0.4, 0.4, 0.4, 1)" preserveAspect="true" />
 </Defaults>
@@ -449,60 +456,279 @@
 
 <!-- LUCK TRACKER -->
 <VerticalLayout id="luckTracker"
-  padding="0 0 0 0"
-  spacing="15"
-  rectAlignment="UpperRight"
   offsetXY="-3 -200"
-  height="800"
-  width="600"
+  height="810"
+  width="650"
+  rectAlignment="UpperRight"
+
+  childAlignment="MiddleCenter"
+  padding="12 12 12 12"
   color="rgba(0, 0, 0, 0.95)"
   active="false"
   >
-  <Panel preferredHeight="250">
-    <Text id="luckHeader"
-      preferredHeight="40"
-      text="DAMAGE"
-      fontSize="32"/>
-    <Text id="luckLegend"
-      preferredHeight="120"
-      fontSize="24"/>
-  </Panel>
-
   <TableLayout
-    preferredHeight = "500"
-    cellSpacing="15">
-    <Row>
+    preferredHeight = "650"
+    columnWidths="360"
+    cellPadding="5 5 0 0">
+
+    <Row class="luck">
+      <Cell/>
+
       <Cell>
-        <Text class="luckPlayerHeader" textColor="red" text="RED" />
-        <Text class="luckPlayerBody" id="luckPlayerRed"/>
+        <Text class="luckPlayerHead" text="WHT" color="White"/>
       </Cell>
       <Cell>
-        <Text class="luckPlayerHeader" textColor="green" text="GREEN" />
-        <Text class="luckPlayerBody" id="luckPlayerGreen"/>
+        <Text class="luckPlayerHead" text="BLUE" color="Blue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerHead" text="GRN" color="Green"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerHead" text="RED" color="Red"/>
       </Cell>
     </Row>
-    <Row>
+    <Row class="luck">
       <Cell>
-        <Text class="luckPlayerHeader" textColor="blue" text="BLUE" />
-        <Text class="luckPlayerBody" id="luckPlayerBlue"/>
+        <Text class="luckAnnotation" text=" Number of rolls" />
       </Cell>
       <Cell>
-        <Text class="luckPlayerHeader" textColor="white" text="WHITE" />
-        <Text class="luckPlayerBody" id="luckPlayerWhite"/>
+        <Text class="luckPlayerBody" id="luckNWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckNBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckNGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckNRed"/>
+      </Cell>
+    </Row>
+
+    <Row class="luckIndent"/>
+
+    <Row class="luckTypeHeader">
+      <Text class="luckTypeHeader" text="WOUNDS"/>
+    </Row>
+
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Expected wounds" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedWoundsWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedWoundsBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedWoundsGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedWoundsRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Rolled wounds" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledWoundsWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledWoundsBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledWoundsGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledWoundsRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Wounds per roll" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollWoundsWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollWoundsBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollWoundsGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollWoundsRed"/>
+      </Cell>
+    </Row>
+
+    <Row class="luckIndent" />
+
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Standard deviation for wounds" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationWoundsWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationWoundsBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationWoundsGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationWoundsRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Difference with expected divided by deviation" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKWoundsWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKWoundsBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKWoundsGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKWoundsRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Max probability of at least such difference" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityWoundsWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityWoundsBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityWoundsGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityWoundsRed"/>
+      </Cell>
+    </Row>
+
+    <Row class="luckIndent"/>
+
+    <Row class="luckTypeHeader">
+      <Text class="luckTypeHeader" text="AMMO"/>
+    </Row>
+
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Expected ammo" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedAmmoWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedAmmoBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedAmmoGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckExpectedAmmoRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Rolled ammo" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledAmmoWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledAmmoBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledAmmoGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckRolledAmmoRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Ammo per roll" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollAmmoWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollAmmoBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollAmmoGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckPerRollAmmoRed"/>
+      </Cell>
+    </Row>
+
+    <Row class="luckIndent" />
+
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Standard deviation for ammo" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationAmmoWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationAmmoBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationAmmoGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckDeviationAmmoRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Difference with expected divided by deviation" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKAmmoWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKAmmoBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKAmmoGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckKAmmoRed"/>
+      </Cell>
+    </Row>
+    <Row class="luck">
+      <Cell>
+        <Text class="luckAnnotation" text="Max probability of at least such difference" />
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityAmmoWhite"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityAmmoBlue"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityAmmoGreen"/>
+      </Cell>
+      <Cell>
+        <Text class="luckPlayerBody" id="luckProbabilityAmmoRed"/>
       </Cell>
     </Row>
   </TableLayout>
-
-  <Panel
-    preferredHeight="40"
-    flexibleHeight="0"
-    maxHeight="50"
-    childForceExpandWidth="false">
-    <Button>
-      Mode
-    </Button>
-  </Panel>
-
 </VerticalLayout>
 
 <!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
@@ -514,7 +740,7 @@
   padding="5 3 5 5"
 
   spacing="5"
-  color="pink"
+  color="clear"
   >
   <Button id="luckShow"
     class="global"
@@ -538,7 +764,7 @@
   offsetXY="0 -200"
   height="800"
   width="163"
-  color="orange"
+  color="clear"
   childForceExpandHeight="false"
   active="false"
   >

@@ -27,12 +27,15 @@ P = 1/k^2 = %d%%
 -- Local methods declaration
 local splitStats
 local updateLuck
+local displayLuck
 
 function onPreprocFinished()
   -- set all default values to 0 for luck tables
   for _, color in ipairs(constants.allPlayerColors) do
     utils.setTableDefaultValue(hitLuck[color], 0)
     utils.setTableDefaultValue(ammoLuck[color], 0)
+    hitLuck[color].type = "Wounds"..color
+    ammoLuck[color].type = "Ammo"..color
   end
 end
 
@@ -66,11 +69,35 @@ function updateLuck(luck, stats, value)
     D = D + v * (i - M) * (i - M)
   end
   luck.D = luck.D + D
+
+  displayLuck(luck)
+  --log({X=value, M=M, D=D}, "Roll characteristics:")
+end
+
+function displayLuck(luck)
   local standardDeviation = math.sqrt(luck.D)
 
-  local k = math.abs(luck.X - luck.M) / standardDeviation
-  local probability = 1 / (k*k)
-  --log({X=value, M=M, D=D}, "Roll characteristics:")
+  local k = (luck.X - luck.M) / standardDeviation
+  local probability = 100
+  if k == k then -- checking against NaN
+    probability = math.min(1, 1/(k*k)) * 100
+  end
+
+  Global.UI.setAttribute("luckExpected" .. luck.type, "text", string.format("%.2f", luck.M))
+  Global.UI.setAttribute("luckRolled" .. luck.type, "text", luck.X)
+  Global.UI.setAttribute("luckPerRoll" .. luck.type, "text", string.format("%.2f", luck.X/luck.N))
+
+  Global.UI.setAttribute("luckDeviation" .. luck.type, "text", string.format("%.2f", standardDeviation))
+  Global.UI.setAttribute("luckK" .. luck.type, "text", string.format("%.2f", k))
+  Global.UI.setAttribute("luckProbability" .. luck.type, "text", string.format("%.2f", probability))
+  local formattedStr = string.format(playerLuckString,
+    luck.N, luck.X, luck.M,
+    standardDeviation, k, probability)
+
+  -- number of rolls is shared value, but it should be updated only once
+  if string.find(luck.type, "Wounds") then
+    Global.UI.setAttribute("luckN" .. utils.getColor(luck.type), "text", luck.N)
+  end
 end
 
 function splitStats(stats)
