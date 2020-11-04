@@ -191,7 +191,6 @@ function setDefaultParams(player_color, section)
     setParam(player_color, "armor", paramRange.armor.min)
     setParam(player_color, "distance", paramRange.distance.min)
   end
-
   if string.find(section, "bonus", 1, true) then
     setParam(player_color, "accuracy", paramRange.accuracy.min)
     setParam(player_color, "deadly", paramRange.deadly.min)
@@ -389,8 +388,8 @@ end
 
 function showStats(player_color)
   --common stats
-  Global.UI.setAttribute("ammoPb" .. player_color, "percentage", predictedStats[player_color]["ammo"] or 0)
-  Global.UI.setAttribute("missPb" .. player_color, "percentage", predictedStats[player_color]["miss"] or 0)
+  Global.UI.setAttribute("pbAmmo" .. player_color, "percentage", predictedStats[player_color]["ammo"] or 0)
+  Global.UI.setAttribute("pbMiss" .. player_color, "percentage", predictedStats[player_color]["miss"] or 0)
 
   --specific stats
   if not cumulativeStatsMode[player_color] then
@@ -406,11 +405,11 @@ end
 function setExactStats(player_color)
   for i = 0,15 do
     Global.UI.setAttribute(
-      tostring(i) .. "t" .. player_color,
+      "t" .. tostring(i) .. player_color,
       "text",
       tostring(i) .. "dmg")
     Global.UI.setAttribute(
-      tostring(i) .. "Pb" .. player_color,
+      "pb" .. tostring(i) .. player_color,
       "percentage",
       predictedStats[player_color][i] or 0)
   end
@@ -423,8 +422,8 @@ function setCumulativeStats(player_color)
   -- TODO: redefine all magic numbers through named variables
   for i=25,0,-1 do
     sum = sum + (predictedStats[player_color][i] or 0)
-    Global.UI.setAttribute(tostring(i) .. "Pb" .. player_color, "percentage", sum)
-    Global.UI.setAttribute(tostring(i) .. "t" .. player_color, "text", "≥" .. tostring(i) .. "dmg")
+    Global.UI.setAttribute("pb" .. tostring(i) .. player_color, "percentage", sum)
+    Global.UI.setAttribute("t" .. tostring(i) .. player_color, "text", "≥" .. tostring(i) .. "dmg")
   end
 end
 

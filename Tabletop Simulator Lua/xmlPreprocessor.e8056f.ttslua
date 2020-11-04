@@ -34,6 +34,7 @@ Searches for nodes with preproc attribute, then:
  - splitColorKeepVisibility -> same as splitColor, but no changes to visibility
  - splitNumber<N> (e.g. splitNumber6) -> same as splitColor, but number of copies is N,
  name appendix is number from 1 to N
+  - splitNumber0<N> (e.g. splitNumber06) -> same as above, but appendix is from 0 to N
 ]]
 function preprocess()
   local xml = Global.UI.getXmlTable()
@@ -88,6 +89,10 @@ function getSplitAppendixes(preprocString)
   elseif string.find(preprocString, "splitNumber") then
     local num = tonumber(string.match(preprocString, "%d+"), 10)
     local group = {}
+    if string.find(preprocString, "splitNumber0") then
+      -- start from zero
+      table.insert(group, 0)
+    end
     for i = 1, num do
       table.insert(group, i)
     end

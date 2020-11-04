@@ -734,7 +734,7 @@
 <!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
 <HorizontalLayout
   height="40"
-  width="240"
+  width="280"
   rectAlignment="UpperRight"
   offsetXY="0 -160"
   padding="5 3 5 5"
@@ -745,14 +745,13 @@
   <Button id="luckShow"
     class="global"
     onClick="9c48d4/onLuckClick"
-    text="Luck &#x25BC;"
+    text="Statistics &#x25BC;"
     >
   </Button>
   <Button id="toggleCalc"
     class="global"
     onClick="6411e1/toggleCalc"
     text="DMG Calc &#x25BC;"
-    minWidth="70"
     >
   </Button>
 </HorizontalLayout>
@@ -960,78 +959,18 @@
 
     <Row>
         <Cell><Text>Ammo</Text></Cell>
-        <Cell><ProgressBar id="ammoPb"></ProgressBar></Cell>
+        <Cell><ProgressBar id="pbAmmo"></ProgressBar></Cell>
     </Row>
 
     <Row preferredHeight="16"> </Row>
 
     <Row>
         <Cell><Text>Miss</Text></Cell>
-        <Cell><ProgressBar id="missPb"></ProgressBar></Cell>
+        <Cell><ProgressBar id="pbMiss"></ProgressBar></Cell>
     </Row>
-    <Row>
-        <Cell><Text id="0t">0dmg</Text></Cell>
-        <Cell><ProgressBar id="0Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="1t">1dmg</Text></Cell>
-        <Cell><ProgressBar id="1Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="2t">2dmg</Text></Cell>
-        <Cell><ProgressBar id="2Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="3t">3dmg</Text></Cell>
-        <Cell><ProgressBar id="3Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="4t">4dmg</Text></Cell>
-        <Cell><ProgressBar id="4Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="5t">5dmg</Text></Cell>
-        <Cell><ProgressBar id="5Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="6t">6dmg</Text></Cell>
-        <Cell><ProgressBar id="6Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="7t">7dmg</Text></Cell>
-        <Cell><ProgressBar id="7Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="8t">8dmg</Text></Cell>
-        <Cell><ProgressBar id="8Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="9t">9dmg</Text></Cell>
-        <Cell><ProgressBar id="9Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="10t">10dmg</Text></Cell>
-        <Cell><ProgressBar id="10Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="11t">11dmg</Text></Cell>
-        <Cell><ProgressBar id="11Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="12t">12dmg</Text></Cell>
-        <Cell><ProgressBar id="12Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="13t">13dmg</Text></Cell>
-        <Cell><ProgressBar id="13Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="14t">14dmg</Text></Cell>
-        <Cell><ProgressBar id="14Pb"></ProgressBar></Cell>
-    </Row>
-    <Row>
-        <Cell><Text id="15t">15dmg</Text></Cell>
-        <Cell><ProgressBar id="15Pb"></ProgressBar></Cell>
+    <Row preproc="splitNumber015">
+        <Cell><Text id="t"></Text></Cell>
+        <Cell><ProgressBar id="pb"></ProgressBar></Cell>
     </Row>
   </TableLayout>
 
