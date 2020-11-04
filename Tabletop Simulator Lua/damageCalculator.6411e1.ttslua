@@ -88,6 +88,7 @@ local reroll = {}
 local lastWeaponType = {Red={}, Green={}, Blue={}, White={}}
 local cumulativeStatsMode = {}
 local statsUpdateQueued = {}
+local syncMode = {}
 
 -- Contols listed below are disabled during dice roll
 local freezedSharedUi = {
@@ -105,6 +106,7 @@ local freezedRollerUi = {
   "deadly+",
   "clearPrm",
   "reroll",
+  "syncWithActive"
 }
 
 local paramRange = {
@@ -145,6 +147,10 @@ local getRotationValueTable
 local updateDiceFaces
 local bringDiceBack
 local updateStats
+local isActivePlayer
+local toggleSyncMode
+local updateSynchronization
+local setReroll
 
 function onload()
   initParams()
@@ -184,8 +190,7 @@ function setDefaultParams(player_color, section)
       setDice(player_color, k, false)
     end
 
-    Global.UI.setAttribute("reroll"..player_color, "isOn", "false")
-    rerollToggle(Player[player_color], "False", "reroll")
+    setReroll(player_color, false)
   end
 
   if string.find(section, "target", 1, true) then
@@ -208,10 +213,14 @@ function clearCalc(player, value, id)
 end
 
 
-function setParam(player_color, name, value)
+function setParam(player_color, name, value, fromActivePlayer)
   prm[player_color][name] = value
   displayParam(player_color, name)
   updateStats(player_color)
+
+  if not fromActivePlayer then
+    updateSynchronization(player_color, setParam, {name, value, true})
+  end
 end
 
 
@@ -258,11 +267,15 @@ function displayParam(player_color, name)
   end
 end
 
-function setDice(player_color, id, active)
+function setDice(player_color, id, active, fromActivePlayer)
   diceCollection[id].state[player_color] = active
 
   Global.UI.setAttribute(id.."Shade"..player_color, "active", tostring(not active))
   updateStats(player_color)
+
+  if not fromActivePlayer then
+    updateSynchronization(player_color, setDice, {id, active, true})
+  end
 end
 
 
@@ -495,6 +508,13 @@ function rollEnd(player_color)
 
   if not reroll[player_color] then
     lastRoll[player_color] = currentRoll
+    if isActivePlayer(player_color) then
+      for _,clr in ipairs(constants.allPlayerColors) do
+        if syncMode[clr] then
+          lastRoll[clr] = lastRoll[player_color]
+        end
+      end
+    end
   end
 
   -- raw sum report
@@ -547,6 +567,11 @@ function rollEnd(player_color)
 end
 
 function rollDice(player, value, id)
+  -- can't keep syncing during roll, otherwise params might be changed by active player midroll
+  if syncMode[player.color] then
+    toggleSyncMode(player.color)
+  end
+
   local rollHappened = false
   for _,v in pairs(diceCollection) do
     if v.state[player.color] then
@@ -626,6 +651,7 @@ function toggleInteraction(player_color, active)
     Global.UI.setAttribute(iface..player_color, "interactable", active)
   end
   Global.UI.setAttribute("clearPrm"..player_color, "textColor", "white")
+  Global.UI.setAttribute("syncWithActive"..player_color, "textColor", "white")
 
   for _, iface in ipairs(freezedSharedUi) do
     Global.UI.setAttribute(iface, "interactable", active)
@@ -666,23 +692,34 @@ function bringDiceBack()
 end
 
 
+function onRerollClick(player, value, id)
+  setReroll(player.color, (string.lower(value) == "true"))
+end
 
-function rerollToggle(player, value, id)
-  reroll[player.color] = (value == "True")
-  --log(id .. player.color .. "=" .. tostring(reroll[player.color]))
+function setReroll(player_color, value, fromActivePlayer)
+  reroll[player_color] = value
+  --log(id .. player_color .. "=" .. tostring(reroll[player_color]))
 
-  if reroll[player.color] then
+  if reroll[player_color] then
     for k in pairs(diceCollection) do
-      if not lastRoll[player.color][k] then
-        instances.vis.call("hideInterface", {id=k, color=player.color})
-        setDice(player.color, k, false)
+      if not lastRoll[player_color][k] then
+        instances.vis.call("hideInterface", {id=k, color=player_color})
+        setDice(player_color, k, false, fromActivePlayer)
+      else
+        instances.vis.call("showInterface", {id=k, color=player_color})
       end
     end
   else
     for k in pairs(diceCollection) do
-      instances.vis.call("showInterface", {id=k, color=player.color})
+      instances.vis.call("showInterface", {id=k, color=player_color})
     end
   end
+
+  if not fromActivePlayer then
+    updateSynchronization(player_color, setReroll, {value, true})
+  end
+
+  Global.UI.setAttribute("reroll"..player_color, "isOn", value and "True" or "False")
 end
 
 function configure(params)
@@ -764,3 +801,68 @@ end
 function closeStats(player, value, id)
   instances.vis.call("hideInterface", {id="stats", color=player.color})
 end
+
+function onSyncClick(player, value, id)
+  local turnColor = Turns.turn_color
+  turnColor = "Green" --TODO: remove
+  if isActivePlayer(player.color) then
+    broadcastToColor("You are the active player", player.color, player.color)
+    return
+  elseif not Turns.enable and false then --TODO: remove
+    broadcastToColor("No active player since turns are disabled", player.color, player.color)
+    return
+  end
+
+  toggleSyncMode(player.color)
+  if not syncMode[player.color] then
+    return
+  end
+
+  for k,v in pairs(prm[turnColor]) do
+    setParam(player.color, k, v, true)
+  end
+
+  for k,v in pairs(diceCollection) do
+    setDice(player.color, k, v.state[turnColor], true)
+  end
+
+  lastRoll[player.color] = lastRoll[turnColor]
+  setReroll(player.color, reroll[turnColor], true)
+end
+
+function toggleSyncMode(color)
+  syncMode[color] = not syncMode[color]
+  if syncMode[color] then
+    Global.UI.setAttribute("syncWithActive"..color, "color", "Orange")
+  else
+    Global.UI.setAttribute("syncWithActive"..color, "color", "rgba(0, 0, 0, 0.95)")
+    Global.UI.setAttribute("syncWithActive"..color, "textColor", "White")
+  end
+end
+
+function isActivePlayer(color)
+  return color == "Green"
+  --return color == Turns.turn_color
+end
+
+function updateSynchronization(player_color, modifyFunc, params)
+  if isActivePlayer(player_color) then
+    for _, clr in ipairs(constants.allPlayerColors) do
+      if syncMode[clr] then
+        modifyFunc(clr, unpack(params))
+      end
+    end
+  elseif syncMode[player_color] then
+    toggleSyncMode(player_color)
+  end
+end
+
+function onPlayerTurnEnd(player_color_end, player_color_next)
+  -- disable all syncing
+  for _,clr in ipairs(constants.allPlayerColors) do
+    if syncMode[clr] then
+      toggleSyncMode(clr)
+    end
+  end
+end
+

@@ -841,7 +841,7 @@
         preferredWidth="20"
         flexibleWidth="0"
         rectAlignment="MiddleCenter"
-        onValueChanged="6411e1/rerollToggle"
+        onValueChanged="6411e1/onRerollClick"
         preproc="splitColor"/>
       <Text flexibleWidth="0" rectAlignment="MiddleCenter">Reroll</Text>
     </HorizontalLayout>
@@ -931,6 +931,14 @@
     preferredHeight="50"
     preproc="splitColor">
     Clear
+  </Button>
+
+  <Button id="syncWithActive"
+    class="ini"
+    onClick="6411e1/onSyncClick"
+    preferredHeight="50"
+    preproc="splitColor">
+    Sync with active player
   </Button>
 </VerticalLayout>
 
