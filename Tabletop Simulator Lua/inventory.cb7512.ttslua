@@ -335,10 +335,13 @@ function prepareGunAttack(player_color, item)
     printToColor("Reminder: " .. gunStats[item].reminder, player_color, Color.Grey)
   end
 
+  local weaponType = (item == "fist" or item == "chainsaw") and "melee" or "range"
+
   local params = {
     color = player_color,
     dice  = gunStats[item].attack,
-    bonus = gunStats[item].attackMod or "none",}
+    bonus = gunStats[item].attackMod or "none",
+    meta = {weaponType = weaponType}}
 
   instances.calc.call("configure", params)
   if player_color == "White" then

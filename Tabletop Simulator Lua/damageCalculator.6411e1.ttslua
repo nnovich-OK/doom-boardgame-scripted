@@ -85,6 +85,7 @@ local rollingPlayerColor = nil
 -- will store state and value for all dices of the last roll
 local lastRoll = {Red={}, Green={}, Blue={}, White={}}
 local reroll = {}
+local lastWeaponType = {Red={}, Green={}, Blue={}, White={}}
 local cumulativeStatsMode = {}
 local statsUpdateQueued = {}
 
@@ -712,6 +713,22 @@ function configure(params)
     for k,v in pairs(params.target) do
       setParam(params.color, k, v)
     end
+
+    -- euristics to guess whether we are setting parameters for marine with melee weapon
+    -- in such case, forcer distance to 0 instead
+    -- if only target is present, previously melee weapon used, only red dice present, distance is one
+    if not params.dice and not params.bonus
+      and lastWeaponType[params.color] == "melee"
+      and params.target.distance == 1
+      and diceCollection.red.state[params.color]
+      and not diceCollection.yellow.state[params.color]
+      and not diceCollection.blue1.state[params.color]
+      and not diceCollection.blue2.state[params.color]
+      and not diceCollection.green1.state[params.color]
+      and not diceCollection.green2.state[params.color]
+    then
+      setParam(params.color, "distance", 0)
+    end
   end
 
   if params.bonus then
@@ -719,6 +736,20 @@ function configure(params)
     if params.bonus ~= "none" then
       for k,v in pairs(params.bonus) do
         setParam(params.color, k, v)
+      end
+    end
+  end
+
+  if params.meta then
+    if params.meta.weaponType then
+      lastWeaponType[params.color] = params.meta.weaponType
+      if not params.target then
+        -- no distance is provided (yet), but for now update it to represent weapon type
+        if params.meta.weaponType == "melee" and prm[params.color].distance ~= 0 then
+          setParam(params.color, "distance", 0)
+        elseif params.meta.weaponType == "range" and prm[params.color].distance == 0 then
+          setParam(params.color, "distance", 1)
+        end
       end
     end
   end
