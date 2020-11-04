@@ -3,6 +3,16 @@ require("utils")
 
 local lastActiveInvForWhite = nil -- stores color only
 
+-- these two tables store all changes to visibility and activity
+-- before they are applied to xml in one go
+local visibilityCached = {}
+setmetatable(visibilityCached, { __index = function(t, id)
+  return Global.UI.getAttribute(id, "visibility") end})
+
+local activityCached = {}
+setmetatable(activityCached, { __index = function(t, id)
+  return Global.UI.getAttribute(id, "active") end})
+
 local interfaceGroups = {
   inventoryPanelRed="inventory",
   inventoryPanelGreen="inventory",
@@ -18,92 +28,143 @@ local fixPipes
 local changeVisibility
 local handleSpecialCases
 local isActive
+local cachedShow
+local cachedHide
+local commitVisibility
 
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
 end
 
 
-function hideOtherInterfacesInGroup(req)
-  local groupToHide = interfaceGroups[req.id]
+function hideOtherInterfacesInGroup(id, color)
+  local groupToHide = interfaceGroups[id]
 
   if groupToHide then
     for interface, group in pairs(interfaceGroups) do
-      if interface ~= req.id and group == groupToHide then
-        changeVisibility(interface, req.color, "rem")
+      if interface ~= id and group == groupToHide then
+        cachedHide(interface, color)
       end
     end
   end
 end
 
-function handleSpecialCases(req, mode)
-  local fieldName, fieldColor = utils.stripXmlFieldColor(req.id)
+-- handle with care. Ciruclar interface dependencies will result in infinite recursion
+function handleSpecialCases(id, color, mode)
+  local fieldName, fieldColor = utils.stripXmlFieldColor(id)
 
   if fieldName == "inventoryPanel" then
     -- update inventory control buttons visibility
 
-    if req.color == "White" then
-      if mode == "add" or (mode == "tgl" and not isVisible(req)) then
+    if color == "White" then
+      if mode == "add" then
         -- show panel
-        changeVisibility("inventoryModePanel"..req.color, req.color, "add")
+        cachedShow("inventoryModePanel"..color, color)
 
         -- show proper "giveToColorItem" buttons
         for _, clr in ipairs(constants.allMarineColors) do
-          local buttonMode = "add"
           if clr == fieldColor then
-            buttonMode = "rem"
             lastActiveInvForWhite = clr
+            cachedHide("giveTo"..clr.."Item"..color, color)
+          else
+            cachedShow("giveTo"..clr.."Item"..color, color)
           end
-          changeVisibility("giveTo" .. clr .. "Item" .. req.color, req.color, buttonMode)
         end
       else
         -- hide full panel
-        changeVisibility("inventoryModePanel"..req.color, req.color, "rem")
+        cachedHide("inventoryModePanel"..color, color)
       end
 
     else
       -- marine players
-      if fieldColor == req.color then
-        changeVisibility("inventoryModePanel"..req.color, req.color, mode)
+      if fieldColor == color and mode == "add" then
+        cachedShow("inventoryModePanel"..color, color)
       else
-        changeVisibility("inventoryModePanel"..req.color, req.color, "rem")
+        cachedHide("inventoryModePanel"..color, color)
       end
     end
+  elseif fieldName == "calculator" and mode == "rem" then
+    -- hide stats when hiding calculator
+    cachedHide("stats", color, "rem")
   end
 end
 
 function isActive(id)
-  return string.lower(Global.UI.getAttribute(id, "active") or "true") == "true"
+  return string.lower(activityCached[id] or "true") == "true"
 end
 
 function isVisible(req)
-  local vis = Global.UI.getAttribute(req.id, "visibility") or ""
-  return isActive(req.id) and string.find(vis, req.color, 1, true)
+  local vis = visibilityCached[req.id] or ""
+  return isActive(req.id) and (vis == "" or string.find(vis, req.color, 1, true))
 end
 
 function showInterface(req)
-  if interfaceRequestCorrect(req)
-  then
-    hideOtherInterfacesInGroup(req)
-    handleSpecialCases(req, "add")
-    changeVisibility(req.id, req.color, "add")
+  assert(interfaceRequestCorrect(req), "showInterface: wrong request")
+  for color in string.gmatch(req.color, "[^|]+") do
+    cachedShow(req.id, color)
   end
+
+  commitVisibility()
 end
 
 function hideInterface(req)
-  if interfaceRequestCorrect(req)
-  then
-    handleSpecialCases(req, "rem")
-    changeVisibility(req.id, req.color, "rem")
+  assert(interfaceRequestCorrect(req), "hideInterface: wrong request")
+  for color in string.gmatch(req.color, "[^|]+") do
+    cachedHide(req.id, color)
   end
+
+  commitVisibility()
 end
 
 function toggleInterface(req)
-  if interfaceRequestCorrect(req)
-  then
-    hideOtherInterfacesInGroup(req)
-    handleSpecialCases(req, "tgl")
-    changeVisibility(req.id, req.color, "tgl")
+  assert(interfaceRequestCorrect(req), "toggleInterface: wrong request")
+  for color in string.gmatch(req.color, "[^|]+") do
+    if isVisible({id=req.id, color=color}) then
+      cachedHide(req.id, color)
+    else
+      cachedShow(req.id, color)
+    end
+  end
+
+  commitVisibility()
+end
+
+function cachedShow(id, color)
+  if isVisible({id = id, color = color}) then
+    return
+  end
+
+  hideOtherInterfacesInGroup(id, color)
+  handleSpecialCases(id, color, "add")
+  changeVisibility(id, color, "add")
+end
+
+function cachedHide(id, color)
+  if not isVisible({id = id, color = color}) then
+    return
+  end
+
+  handleSpecialCases(id, color, "rem")
+  changeVisibility(id, color, "rem")
+end
+
+function commitVisibility()
+  local textColors = {}
+  for id, vis in pairs(visibilityCached) do
+    textColors[id] = Global.UI.getAttribute(id, "textColor")
+    Global.UI.setAttribute(id, "visibility", vis)
+  end
+
+  for id, act in pairs(activityCached) do
+    if not textColors[id] then
+      textColors[id] = Global.UI.getAttribute(id, "textColor")
+    end
+    Global.UI.setAttribute(id, "active", act)
+  end
+
+  for id, clr in pairs(textColors) do
+    -- changes to visibility clears text color for some reason
+    Global.UI.setAttribute(id, "textColor", clr)
   end
 end
 
@@ -118,19 +179,16 @@ end
 
 -- mode is add/rem/tgl
 function changeVisibility(id, color, mode)
-  local visBase = Global.UI.getAttribute(id, "visibility") or ""
-  local textColor = Global.UI.getAttribute(id, "textColor")
+  local visBase = visibilityCached[id] or ""
 
   local vis = visBase
-  for color in string.gmatch(color, "[^|]+") do
-    if not string.find(vis, color, 1, true) then
-      if mode == "add" or mode == "tgl" then
-        vis = (vis) .. "|" .. color
-      end
-    else
-      if mode == "rem" or mode == "tgl" then
-        vis = string.gsub(vis, color, "")
-      end
+  if not string.find(vis, color, 1, true) then
+    if mode == "add" then
+      vis = (vis) .. "|" .. color
+    end
+  else
+    if mode == "rem" then
+      vis = string.gsub(vis, color, "")
     end
   end
 
@@ -140,21 +198,17 @@ function changeVisibility(id, color, mode)
   --  mode .. " visibility of " .. id .. " for " .. color .. ":")
 
   if vis~=visBase then
-    Global.UI.setAttribute(id, "visibility", fixPipes(vis))
+    visibilityCached[id] = fixPipes(vis)
   end
 
   local act = isActive(id)
   if not act and vis and vis ~= "" then
-    Global.UI.setAttribute(id, "active", "true")
+    activityCached[id] = "true"
   elseif act and (not vis or vis == "") then
-    Global.UI.setAttribute(id, "active", "false")
-  end
-
-  if textColor then
-    -- changes to visibility clears text color for some reason
-    Global.UI.setAttribute(id, "textColor", textColor)
+    activityCached[id] = "false"
   end
 end
+
 
 function getActiveInventoryForWhite()
   if isVisible({id = "inventoryPanel" .. lastActiveInvForWhite, color = "White"}) then
