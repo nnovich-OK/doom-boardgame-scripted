@@ -5,6 +5,7 @@ require("utils")
 local saveState = {}
 local fragsScored = 0
 local fragLimit = 6
+local marineOrder = {}
 
 local fragTintColors = {
   ["Red died"]="rgba(1, 0.6, 0.6, 1)",
@@ -103,6 +104,13 @@ local sharedItems = {
   redkey = true,
 }
 
+local orderItems = {
+  aim = true,
+  dodge = true,
+  guard = true,
+  heal = true,
+}
+
 local itemLimit = {
   bluekey = 1,
   yellowkey = 1,
@@ -135,6 +143,11 @@ local countActivationThreshold = {
   bluekey = 2,
   yellowkey = 2,
   redkey = 2,
+
+  aim = 2,
+  dodge = 2,
+  guard = 2,
+  heal = 2,
 }
 
 gunStats = {
@@ -229,6 +242,7 @@ local setItemCount
 local adjustItemCount
 local haveItem
 local fullWithItem
+local activateMarineOrder
 
 function onPreprocFinished()
   Global.UI.setAttribute("inventoryPanel" .. "Red", "color", "rgba(0.14, 0, 0, 0.95)")
@@ -343,6 +357,9 @@ function onInventoryItemClick(player, value, id)
   -- Set attack parameters
   if not invMode[player.color].action and gunStats[item] then
     prepareGunAttack(player.color, item)
+
+  elseif not invMode[player.color].action and orderItems[item] then
+    activateMarineOrder(player.color, item)
 
   elseif invMode[player.color].action == "gainItem" then
     if obtainableItems[item] then
@@ -610,7 +627,7 @@ end
 function onPlayerTurnEnd(player_color_end, player_color_next)
  -- when enabling turn system, first event contains neither nil nor "",
  -- but still doesn't have any valid number
-  if player_color_end and string.find(player_color_end, "%a") then
+  if player_color_end and string.find(player_color_end, "%a") and player_color_end ~= "White" then
     adjustItemCount(player_color_end, "berserk", -1)
   end
 end
@@ -629,4 +646,28 @@ end
 
 function onMarineArmorSet(req)
   setItemCount(req.color, "armor", req.armor)
+end
+
+function activateMarineOrder(player_color, newOrder)
+  local marineColor = (player_color == "White")
+    and instances.vis.call("getActiveInventoryForWhite")
+    or player_color
+
+  if not newOrder and not marineOrder[marineColor] then
+    broadcastToColor("How on earth do you try to remove empty order?", player_color, player_color)
+
+  elseif newOrder and marineOrder[marineColor] and newOrder ~= marineOrder[marineColor] then
+    broadcastToColor("Marine can't have more than one order", player_color, player_color)
+
+  elseif not newOrder or newOrder == marineOrder[marineColor] then
+    setItemCount(marineColor, marineOrder[marineColor], 0)
+    marineOrder[marineColor] = nil
+    utils.getMarine(marineColor).call("onOrderChange", marineOrder[marineColor])
+
+  elseif not marineOrder[marineColor] then
+    marineOrder[marineColor] = newOrder
+    setItemCount(marineColor, marineOrder[marineColor], 1)
+    utils.getMarine(marineColor).call("onOrderChange", marineOrder[marineColor])
+  end
+
 end
