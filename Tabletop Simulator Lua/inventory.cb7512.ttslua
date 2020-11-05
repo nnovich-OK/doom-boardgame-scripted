@@ -39,6 +39,30 @@ local pickableTokens = {
   ['Health']='health',
 }
 
+local saveStateItems = {
+  armor=true,
+  shell=true,
+  rocket=true,
+  cell=true,
+  chainsaw=true,
+  machinegun=true,
+  shotgun=true,
+  chaingun=true,
+  launcher=true,
+  plasma=true,
+  bfg=true,
+  berserk=true,
+  adrenalin=true,
+  cancel=true,
+  aim=true,
+  guard=true,
+  dodge=true,
+  heal=true,
+  bluekey=true,
+  yellowkey=true,
+  redkey=true,
+}
+
 local obtainableItems = {
   armor=true,
   shell=true,
@@ -200,9 +224,10 @@ local prepareGunAttack
 local clearInvMode
 local setInvMode
 local getItemCount
+local setItemCount
+local adjustItemCount
 local haveItem
 local fullWithItem
-local adjustItemCount
 
 function onPreprocFinished()
   Global.UI.setAttribute("inventoryPanel" .. "Red", "color", "rgba(0.14, 0, 0, 0.95)")
@@ -212,6 +237,34 @@ function onPreprocFinished()
   Global.UI.setAttribute("giveToRedItemRed", "active", "false")
   Global.UI.setAttribute("giveToGreenItemGreen", "active", "false")
   Global.UI.setAttribute("giveToBlueItemBlue", "active", "false")
+end
+
+function onLoad(saveStr)
+  if saveStr ~= "" then
+    save = JSON.decode(saveStr)
+
+    if save.inventory then
+      Wait.frames(
+        function()
+          for clr, inv in pairs(save.inventory) do
+            for item, count in pairs(inv) do
+              setItemCount(clr, item, count)
+            end
+          end
+        end,
+        1)
+    end
+  end
+end
+
+function onSave()
+  local inventory = {Red = {}, Green = {}, Blue = {}}
+  for item in pairs(saveStateItems) do
+    for _,clr in ipairs(constants.allMarineColors) do
+      inventory[clr][item] = getItemCount(clr, item)
+    end
+  end
+  self.script_state = JSON.encode({inventory=inventory})
 end
 
 function showFrags(player, value, id)
@@ -490,6 +543,10 @@ function fullWithItem(player_color, item)
   return getItemCount(player_color, item) >= itemLimit[item]
 end
 
+function setItemCount(color, item, amount)
+  adjustItemCount(color, item, amount - getItemCount(color, item))
+end
+
 -- returns actual change in item count
 function adjustItemCount(player_color, item, diff)
   if diff == 0 then
@@ -551,15 +608,14 @@ function onMarineDeath(color)
   addFrag(color.." died")
 
   --restore armor
-  local currentArmor = getItemCount(color, "armor")
-  adjustItemCount(color, "armor", 2-currentArmor)
+  setItemCount(color, "armor", 2)
 
   -- clear berserk and all orders
   for _, item in ipairs({"berserk", "aim", "guard", "dodge", "heal"}) do
-    adjustItemCount(color, item, -itemLimit[item])
+    setItemCount(color, item, 0)
   end
 end
 
 function onMarineArmorSet(req)
-  adjustItemCount(req.color, "armor", req.armor - getItemCount(req.color, "armor"))
+  setItemCount(req.color, "armor", req.armor)
 end
