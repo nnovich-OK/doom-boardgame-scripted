@@ -84,6 +84,8 @@ local diceCollection = {
 local rollingPlayerColor = nil
 -- will store state and value for all dices of the last roll
 local lastRoll = {Red={}, Green={}, Blue={}, White={}}
+local lastRollBackup = {Red={}, Green={}, Blue={}, White={}}
+local lastRollNeedRestore = {}
 local reroll = {}
 local lastWeaponType = {Red={}, Green={}, Blue={}, White={}}
 local cumulativeStatsMode = {}
@@ -717,6 +719,10 @@ function setReroll(player_color, value, fromActivePlayer)
     for k in pairs(diceCollection) do
       instances.vis.call("showInterface", {id=k, color=player_color})
     end
+    if lastRollNeedRestore[player_color] then
+      lastRollNeedRestore[player_color] = false
+      lastRoll[player_color] = lastRollBackup[player_color]
+    end
   end
 
   if not fromActivePlayer then
@@ -830,6 +836,7 @@ function onSyncClick(player, value, id)
     setDice(player.color, k, v.state[turnColor], true)
   end
 
+  lastRollBackup[player.color] = lastRoll[player.color]
   lastRoll[player.color] = lastRoll[turnColor]
   setReroll(player.color, reroll[turnColor], true)
 end
@@ -841,6 +848,14 @@ function toggleSyncMode(color)
   else
     Global.UI.setAttribute("syncWithActive"..color, "color", "rgba(0, 0, 0, 0.95)")
     Global.UI.setAttribute("syncWithActive"..color, "textColor", "White")
+
+    -- if sync is disabled and we aren't in reroll mode, restore last roll
+    -- otherwise restoration will be done when exiting reroll mode
+    if not reroll[color] then
+      lastRoll[color] = lastRollBackup[color]
+    else
+      lastRollNeedRestore[color] = true
+    end
   end
 end
 
