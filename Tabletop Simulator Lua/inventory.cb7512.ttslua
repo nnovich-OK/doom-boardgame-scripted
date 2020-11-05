@@ -2,6 +2,7 @@ require("constants")
 require("instances")
 require("utils")
 
+local saveState = {}
 local fragsScored = 0
 local fragLimit = 6
 
@@ -237,25 +238,30 @@ function onPreprocFinished()
   Global.UI.setAttribute("giveToRedItemRed", "active", "false")
   Global.UI.setAttribute("giveToGreenItemGreen", "active", "false")
   Global.UI.setAttribute("giveToBlueItemBlue", "active", "false")
+
+  if saveState.inventory then
+    for clr, inv in pairs(saveState.inventory) do
+      for item, count in pairs(inv) do
+        setItemCount(clr, item, count)
+      end
+    end
+  end
+
+  if saveState.frags then
+    fragsScored = saveState.frags.scored
+    for name, tint in pairs(saveState.frags.tint) do
+      Global.UI.setAttribute(name, "color", tint)
+      Global.UI.setAttribute(string.gsub(name, "Image", ""), "tooltip", "Double click to remove")
+    end
+  end
 end
 
 function onLoad(saveStr)
   if saveStr ~= "" then
-    save = JSON.decode(saveStr)
-
-    if save.inventory then
-      Wait.frames(
-        function()
-          for clr, inv in pairs(save.inventory) do
-            for item, count in pairs(inv) do
-              setItemCount(clr, item, count)
-            end
-          end
-        end,
-        1)
-    end
+    saveState = JSON.decode(saveStr)
   end
 end
+
 
 function onSave()
   local inventory = {Red = {}, Green = {}, Blue = {}}
@@ -264,7 +270,12 @@ function onSave()
       inventory[clr][item] = getItemCount(clr, item)
     end
   end
-  self.script_state = JSON.encode({inventory=inventory})
+  local frags = {scored=fragsScored, tint={}}
+  for i = 1, fragsScored do
+    local fieldName = "fragImage" .. i
+    frags.tint[fieldName] = Global.UI.getAttribute(fieldName, "color")
+  end
+  self.script_state = JSON.encode({inventory=inventory, frags=frags})
 end
 
 function showFrags(player, value, id)
