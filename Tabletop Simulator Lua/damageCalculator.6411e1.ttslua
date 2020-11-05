@@ -339,12 +339,16 @@ function calculate(player, value, id, silent)
   end
 
   -- caclulate number of cases for each outcome
-  local state = {
-    range = keptDiceSum.range or 0,
+  predictedStats[player.color] = {}
+  if not keptDiceSum.miss then
+    local state = { range = keptDiceSum.range or 0,
     dmg = keptDiceSum.dmg or 0,
     weight = 1}
-  predictedStats[player.color] = {}
-  calcIteration(dice, 1, state, prm[player.color], predictedStats[player.color])
+    calcIteration(dice, 1, state, prm[player.color], predictedStats[player.color])
+  else
+    -- otherwise ALL outcomes are misses
+    predictedStats[player.color].miss = 6^#dice
+  end
 
   -- convert to percentage
   local totalCases = 6^#dice
