@@ -29,31 +29,32 @@ local isUIElementActive
 local changeArmor
 
 function onLoad(save_state)
-   if save_state ~= "" and self.getDescription() ~= "" then
-      saved_data = JSON.decode(save_state)
+  if save_state ~= "" and self.getDescription() ~= "" then
+    saved_data = JSON.decode(save_state)
 
-      -- Status conditions
-      if saved_data.statNames then
-         for i, j in pairs(saved_data.statNames) do
-            statNames[i] = saved_data.statNames[i]
-         end
-      end
-
-      -- Armor
-      if saved_data.armor then
-         armor = saved_data.armor
-
-          Wait.condition(
-            function () self.UI.setAttribute("armor", "text", armor) end,
-            checkLoaded)
-      end
-
-      -- Health
-      if saved_data.health then
-         health = saved_data.health
-         Wait.condition(updateHealthUI, checkLoaded)
+    -- Status conditions
+    if saved_data.statNames then
+      for i, j in pairs(saved_data.statNames) do
+        statNames[i] = saved_data.statNames[i]
       end
     end
+
+    -- Armor
+    if saved_data.armor then
+      armor = saved_data.armor
+
+      Wait.condition(
+      function () self.UI.setAttribute("armor", "text", armor) end,
+      checkLoaded)
+    end
+
+    -- Health
+    if saved_data.health then
+      health = saved_data.health
+      Wait.condition(updateHealthUI, checkLoaded)
+    end
+  end
+  
   Wait.condition(updateHealthUI, checkLoaded)
   Wait.condition(checkStats, checkLoaded)
   createBtns()
@@ -198,8 +199,8 @@ function toggleCustomMonsterUI()
    toggleUIActivity("healthSubPanel")
 
    -- Toggle armor number buttons
-   toggleUIActivity("addNumber")
-   toggleUIActivity("subNumber")
+   toggleUIActivity("addArmor")
+   toggleUIActivity("subArmor")
 end
 
 -- isUIElementActive(string:elementID)
@@ -229,25 +230,27 @@ function onClick(player, value, id)
 end
 
 -- Change armor value
-function addNumber() changeArmor(1) end
-function subNumber() changeArmor(-1) end
+function addArmor() changeArmor(1) end
+function subArmor() changeArmor(-1) end
 function changeArmor(delta)
   armor = tonumber(self.UI.getAttribute("armor", "text")) + delta
   if armor > 10 then armor = 10 end
   if armor < 1 then armor = 1 end
   self.UI.setAttribute("armor", "text", armor)
+  instances.inv.call("onMarineArmorSet", {color=utils.getColor(self.getName()), armor=armor})
 end
 
--- Summon marker, move figure away, add frag to the moster player, restore hp and armor
+-- Summon marker, move figure away,  restore hp, notify inventory to do the rest
 function defeatClick(player, value, id)
   health.value = health.max
   updateHealthUI()
 
-  armor = 2
-  self.UI.setAttribute("armor", "text", armor)
-
   self.flip()
 
   local color = utils.getColor(self.getName())
-  instances.inv.call("addFrag", color .. " died")
+  instances.inv.call("onMarineDeath", color)
+end
+
+function onArmorSet(armorValue)
+  self.UI.setAttribute("armor", "text", armorValue)
 end

@@ -530,16 +530,36 @@ function adjustItemCount(player_color, item, diff)
     else
       Global.UI.setAttribute(item.."InvImage"..clr, "color", "rgba(0.4, 0.4, 0.4, 1)")
     end
+
+    if item == "armor" then
+      utils.getMarine(clr).call("onArmorSet", count)
+    end
   end
 
   return count - originalCount
 end
 
 function onPlayerTurnEnd(player_color_end, player_color_next)
- -- TODO: test
  -- when enabling turn system, first event contains neither nil nor "",
  -- but still doesn't have any valid number
   if player_color_end and string.find(player_color_end, "%a") then
     adjustItemCount(player_color_end, "berserk", -1)
   end
+end
+
+function onMarineDeath(color)
+  addFrag(color.." died")
+
+  --restore armor
+  local currentArmor = getItemCount(color, "armor")
+  adjustItemCount(color, "armor", 2-currentArmor)
+
+  -- clear berserk and all orders
+  for _, item in ipairs({"berserk", "aim", "guard", "dodge", "heal"}) do
+    adjustItemCount(color, item, -itemLimit[item])
+  end
+end
+
+function onMarineArmorSet(req)
+  adjustItemCount(req.color, "armor", req.armor - getItemCount(req.color, "armor"))
 end
