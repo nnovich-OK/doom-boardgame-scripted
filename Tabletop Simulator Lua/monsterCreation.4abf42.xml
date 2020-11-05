@@ -1,11 +1,11 @@
 <Defaults>
-   <Button fontSize="80" fontStyle="Bold" textColor="#FFFFFF" color="#00000000"/>
-   <Text fontSize="80" fontStyle="Bold" color="#FFFFFF" outline="#000000"/>
+   <Button fontSize="80" fontStyle="Bold" textColor="White" color="Clear"/>
+   <Text fontSize="80" fontStyle="Bold" color="White" outline="Black"/>
 </Defaults>
 
 <Panel id="panel" position="0 0 -240" rotation="0 90 270" scale="0.2 0.2" active="false">
-   <Panel color="#000000" height="100" width="600">
-      <ProgressBar id="progressBar" height="90" width="590" showPercentageText="false" color="#000000" percentage="100" fillImageColor="#710000">
+   <Panel color="Black" height="100" width="600">
+      <ProgressBar id="progressBar" height="90" width="590" showPercentageText="false" color="Black" percentage="100" fillImageColor="#710000">
       <!-- Defeat monster at 0 hp -->
       <Panel id="defeatPanel" height="100" width="600" offsetXY="0 0" active="false">
          <Button onClick="defeatClick" text="Defeat"/>
