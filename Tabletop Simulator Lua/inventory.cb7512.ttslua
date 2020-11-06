@@ -653,6 +653,15 @@ function onPlayerTurnStart(turnColor, prevTurnColor)
   end
 end
 
+function onMarineWounded(color)
+  if marineOrder[color] == "aim" or marineOrder[color] == "guard" then
+    broadcastToAll("Wound removed " .. marineOrder[color] .. " from "
+      .. utils.getMarine(color).getName(),
+      Color.Orange)
+    activateMarineOrder(color, nil)
+  end
+end
+
 function onMarineDeath(color)
   addFrag(color.." died")
 

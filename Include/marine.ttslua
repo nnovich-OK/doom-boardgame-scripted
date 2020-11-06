@@ -121,6 +121,7 @@ function healthChange(playerColor, change)
   elseif change == "sub" then
      if oldHP ~= health.value then
         printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (-1)", stringColorToRGB(playerColor))
+        instances.inv.call("onMarineWounded", utils.getColor(self.getName()))
      end
   end
 end
