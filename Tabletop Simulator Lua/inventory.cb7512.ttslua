@@ -680,7 +680,9 @@ function onMarineDeath(color)
   --restore armor, clear berserk and all orders
   setItemCount(color, "armor", 2)
   setItemCount(color, "berserk", 0)
-  activateMarineOrder(color, nil)
+  if marineOrder[color] then
+    activateMarineOrder(color, nil)
+  end
   printToAll("On death cleared berserk, order, extra armor", Color.Orange)
 end
 

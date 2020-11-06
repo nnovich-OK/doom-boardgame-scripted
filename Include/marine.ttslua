@@ -6,6 +6,12 @@ local health = {
    max = 10
 }
 
+local initialLocation = {
+  Red = {pos = {32.50, 1.01, -29.50}, rot = {0.00, 90.00, 0.00}},
+  Green = {pos = {46.50, 1.01, -7.50}, rot = {0.00, 0.00, 0.00}},
+  Blue = {pos = {39.50, 1.01, 29.50}, rot = {0.00, 270.00, 0.00}},
+}
+
 local armor = 2
 
 -- Local methods declaration
@@ -190,9 +196,10 @@ function defeatClick(player, value, id)
   health.value = health.max
   updateHealthUI()
 
-  self.flip()
-
   local color = utils.getColor(self.getName())
+  self.setPositionSmooth(initialLocation[color].pos, false, false)
+  self.setRotationSmooth(initialLocation[color].rot, false, false)
+
   instances.inv.call("onMarineDeath", color)
 end
 
