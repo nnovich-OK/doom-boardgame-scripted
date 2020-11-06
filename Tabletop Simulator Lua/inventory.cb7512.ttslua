@@ -400,12 +400,16 @@ function prepareGunAttack(player_color, item)
     or player_color
 
   local marine = utils.getMarine(marineColor)
-  if haveItem(player_color, "berserk") and item ~= "fist" then
+  if haveItem(marineColor, "berserk") and item ~= "fist" then
     broadcastToColor(marine.getName() .. " can't use weapons while berserk, yet proceeding as usual",
       player_color,
       player_color)
-  elseif not haveItem(player_color, item) then
+  elseif not haveItem(marineColor, item) then
     broadcastToColor(marine.getName() .. " doesn't possess this weapon, yet proceeding as usual",
+      player_color,
+      player_color)
+  elseif gunStats[item].ammo ~= "" and not haveItem(marineColor, gunStats[item].ammo) then
+    broadcastToColor(marine.getName() .. " doesn't have ammo, yet proceeding as usual",
       player_color,
       player_color)
   end
@@ -562,6 +566,10 @@ function transferItem(player_color, givingColor, takingColor, item)
 end
 
 function getItemCount(player_color, item)
+  if player_color == "White" then
+    print("WTF! getItemCount for White, " .. item)
+    return
+  end
   return tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
 end
 
@@ -579,6 +587,10 @@ end
 
 -- returns actual change in item count
 function adjustItemCount(player_color, item, diff)
+  if player_color == "White" then
+    print("WTF! adjustItemCount for White, " .. item .. ", " .. diff)
+    return
+  end
   if diff == 0 then
      return 0
   end
