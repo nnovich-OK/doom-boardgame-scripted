@@ -147,7 +147,7 @@
         </Cell>
         <Cell>
           <Button id="fistInvButton" class="invItem">
-            <Image id="fistInvImage" class="invItem" image="chainsaw" color="White">
+            <Image id="fistInvImage" class="invItem" image="fist" color="White">
               <Text id="fistInvText" class="invItem" text="1"/>
             </Image>
           </Button>
@@ -171,7 +171,7 @@
       </Cell>
       <Cell>
         <Button id="pistolInvButton" class="invItem">
-          <Image id="pistolInvImage" class="invItem" image="shotgun" color="White">
+          <Image id="pistolInvImage" class="invItem" image="pistol" color="White">
             <Text id="pistolInvText" class="invItem" text="1"/>
           </Image>
         </Button>
@@ -209,7 +209,7 @@
       </Cell>
       <Cell>
         <Button id="grenadeInvButton" class="invItem">
-          <Image id="grenadeInvImage" class="invItem" image="launcher" color="White">
+          <Image id="grenadeInvImage" class="invItem" image="grenade" color="White">
             <Text id="grenadeInvText" class="invItem" text="1"/>
           </Image>
         </Button>
