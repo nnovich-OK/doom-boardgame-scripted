@@ -1,8 +1,16 @@
+local doubleClickDelay = 0.2
 local clicks = {Red={}, Green={}, Blue={}, White={}}
 
+local allClickTimers = {}
 
--- returns true if previous single click on htis button by this player
--- was not long ago, false otherwise
+
+-- Usage: call on each click. Function returns false for each click except when
+-- new click follows previous one shortly and previous one returned false.
+-- So even for correct double click function returns false for the fist click,
+-- then true for the second. Useful when action1 should be done in any case,
+-- but action2 should additionally be performed on doubleClick detection.
+-- E.g. immediately react on click with no delay, but do extra stuff when it's
+-- detected as part of double click
 function isDoubleClick(req)
   --log(req, "isDoubleClick request:")
   if not req or not req.color or not req.id then
@@ -17,14 +25,27 @@ function isDoubleClick(req)
 
   Wait.time(
     function() clicks[req.color][req.id] = false end,
-    0.2
+    doubleClickDelay
   )
 end
 
-function markAsSingleClick(req)
-  if not req or not req.color or not req.id then
-    log(req, "ERROR bad request to markAsSingleClick:")
-    return false
+
+-- Usage: call on each click. It doesn't do anything until detecting click type,
+-- then invokes callback for either signle click or double click depending on detected type
+function handleClickByType(req)
+  if allClickTimers[req.color..req.id] and Timer.destroy(req.color..req.id) then
+    allClickTimers[req.color..req.id] = nil
+    req.owner.call(
+      req.double,
+      req.parametersDouble)
+  else
+    Timer.create({
+      identifier     = req.color..req.id,
+      function_owner = req.owner,
+      function_name  = req.single,
+      parameters     = req.parametersSingle,
+      delay          = doubleClickDelay,
+    })
+    allClickTimers[req.color..req.id] = true
   end
-  clicks[req.color][req.id] = false
 end

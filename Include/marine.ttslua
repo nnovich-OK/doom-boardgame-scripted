@@ -118,7 +118,7 @@ function hits(player, change)
   healthChange(player.color, change)
 end
 
---TODO: rework all these health adjustments
+
 function onHealthPickup(player_color)
   if (health.value == health.max) then
     return false
@@ -183,15 +183,37 @@ function updateHealthUI()
    self.UI.setAttribute("panel", "position", "0 0 -" .. self.getBounds().size.y / self.getScale().y * 110)
 end
 
--- Toggle the customize monster interface (elite, max health, number)
-function toggleCustomMonsterUI()
+function singleCustomizationClick(params)
+  if not isUIElementActive("healthAddPanel") then
+    broadcastToColor("Use doubleclick on healthbar to adjust max hp and armor",
+      params.color, params.color)
+  else
+    -- turning of with single click is ok
+    toggleCustomizationUI()
+  end
+end
+
+function toggleCustomizationUI()
    -- Toggle max health modifier panel
    toggleUIActivity("healthAddPanel")
    toggleUIActivity("healthSubPanel")
 
-   -- Toggle armor number buttons
+   -- Toggle armor value buttons
    toggleUIActivity("addArmor")
    toggleUIActivity("subArmor")
+end
+
+-- Toggle the customization interface (armor, max health)
+function onCustomizationUiClick(player, value, id)
+  local marineColor = utils.getColor(self.getName())
+  instances.click.call("handleClickByType",
+    {color = player.color,
+    id = id..marineColor,
+    owner = self,
+    single = "singleCustomizationClick",
+    parametersSingle = {color=player.color},
+    double = "toggleCustomizationUI",
+  })
 end
 
 -- isUIElementActive(string:elementID)
@@ -230,7 +252,7 @@ function defeatClick(player, value, id)
   local color = utils.getColor(self.getName())
   local deathTokenPos = self.getPosition()
   -- without this correction, token is spawned slightly in air
-  deathTokenPos.y = deathTokenPos.y - 0.03 
+  deathTokenPos.y = deathTokenPos.y - 0.03
   self.setPositionSmooth(initialLocation[color].pos, false, false)
   self.setRotationSmooth(initialLocation[color].rot, false, false)
 

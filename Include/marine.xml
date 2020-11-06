@@ -22,7 +22,7 @@
             <Button id="addMax" onClick="hits(addMax)" text="►"></Button>
          </Panel>
       </HorizontalLayout>
-      <Button id="editButton" onClick="toggleCustomMonsterUI" width="300"></Button>
+      <Button id="editButton" onClick="onCustomizationUiClick" width="300"></Button>
    </ProgressBar>
    </Panel>
 
