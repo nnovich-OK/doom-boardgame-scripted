@@ -109,7 +109,10 @@ end
 
 function getDistance(first, second)
   local roundingDelta = {x = 0.5, z = 0.5}
-  for _, figure in ipairs({first, second}) do
+
+  local position = {first.getPosition(), second.getPosition()}
+
+  for i, figure in ipairs({first, second}) do
     local isLargeFigure = isLarge(figure)
     if isLargeFigure.x then
       roundingDelta.x = roundingDelta.x - 0.5
@@ -118,13 +121,19 @@ function getDistance(first, second)
     if isLargeFigure.z then
       roundingDelta.z = roundingDelta.z - 0.5
     end
+
+    if isLargeFigure.x ~= isLargeFigure.z then
+      -- special handling for demon, since its position doesn't corresponsd to geometric center
+      -- current position is center of head cell
+      -- correct, so we use geometric center instead
+      local angle = figure.getRotation().y * math.pi / 180
+      position[i].x = position[i].x + 0.5 * math.cos(angle)
+      position[i].z = position[i].z - 0.5 * math.sin(angle)
+    end
   end
 
-  local firstPos = first.getPosition()
-  local secondPos = second.getPosition()
-
-  local dx = math.floor(math.abs(secondPos.x - firstPos.x) + roundingDelta.x)
-  local dz = math.floor(math.abs(secondPos.z - firstPos.z) + roundingDelta.z)
+  local dx = math.floor(math.abs(position[2].x - position[1].x) + roundingDelta.x)
+  local dz = math.floor(math.abs(position[2].z - position[1].z) + roundingDelta.z)
 
   return math.max(dx, dz)
 end
