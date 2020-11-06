@@ -56,10 +56,6 @@ local saveStateItems = {
   berserk=true,
   adrenalin=true,
   cancel=true,
-  aim=true,
-  guard=true,
-  dodge=true,
-  heal=true,
   bluekey=true,
   yellowkey=true,
   redkey=true,
@@ -268,6 +264,12 @@ function onPreprocFinished()
       Global.UI.setAttribute(string.gsub(name, "Image", ""), "tooltip", "Double click to remove")
     end
   end
+
+  if saveState.order then
+    for clr, order in pairs(saveState.order) do
+      activateMarineOrder(clr, order)
+    end
+  end
 end
 
 function onLoad(saveStr)
@@ -289,7 +291,7 @@ function onSave()
     local fieldName = "fragImage" .. i
     frags.tint[fieldName] = Global.UI.getAttribute(fieldName, "color")
   end
-  self.script_state = JSON.encode({inventory=inventory, frags=frags})
+  self.script_state = JSON.encode({inventory=inventory, frags=frags, order=marineOrder})
 end
 
 function showFrags(player, value, id)
@@ -624,24 +626,41 @@ function adjustItemCount(player_color, item, diff)
   return count - originalCount
 end
 
-function onPlayerTurnEnd(player_color_end, player_color_next)
+function onPlayerTurnEnd(turnColor, nextTurnColor)
  -- when enabling turn system, first event contains neither nil nor "",
- -- but still doesn't have any valid number
-  if player_color_end and string.find(player_color_end, "%a") and player_color_end ~= "White" then
-    adjustItemCount(player_color_end, "berserk", -1)
+ -- but still doesn't have any valid color
+  if turnColor and string.find(turnColor, "%a") and turnColor ~= "White" then
+    if adjustItemCount(turnColor, "berserk", -1) == -1 then
+      printToAll("Turn end: decreased berserk for " .. utils.getMarine(turnColor).getName(),
+        Color.Orange)
+    end
+  end
+end
+
+function onPlayerTurnStart(turnColor, prevTurnColor)
+ -- when enabling turn system, first event contains neither nil nor "",
+ -- but still doesn't have any valid color
+  if turnColor and string.find(turnColor, "%a") and turnColor ~= "White" then
+    if marineOrder[turnColor] == "guard"
+      or marineOrder[turnColor] == "dodge"
+      or marineOrder[turnColor] == "heal"
+    then
+      printToAll("Turn start: removed " .. marineOrder[turnColor] .. " from "
+        .. utils.getMarine(turnColor).getName(),
+        Color.Orange)
+      activateMarineOrder(turnColor, nil)
+    end
   end
 end
 
 function onMarineDeath(color)
   addFrag(color.." died")
 
-  --restore armor
+  --restore armor, clear berserk and all orders
   setItemCount(color, "armor", 2)
-
-  -- clear berserk and all orders
-  for _, item in ipairs({"berserk", "aim", "guard", "dodge", "heal"}) do
-    setItemCount(color, item, 0)
-  end
+  setItemCount(color, "berserk", 0)
+  activateMarineOrder(color, nil)
+  printToAll("On death cleared berserk, order, extra armor", Color.Orange)
 end
 
 function onMarineArmorSet(req)
