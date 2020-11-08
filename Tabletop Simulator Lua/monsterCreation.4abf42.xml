@@ -32,4 +32,7 @@
       </Image>
    </Panel>
 
+   <Button id="turnStatusButton" active="false" height="230" width="230" offsetXY="0 230">
+     <Image id="turnStatusImage" preserveAspect="true" color="Orange"></Image>
+   </Button>
 </Panel>

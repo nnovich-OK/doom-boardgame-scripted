@@ -158,3 +158,19 @@ end
 function defeatClick(player, value, id)
   self.destruct()
 end
+
+function onActivationChange(active)
+  if active then
+    self.UI.setAttribute("turnStatusButton", "active", "true")
+    self.UI.setAttribute("turnStatusImage", "image", "monsterActive")
+  else
+    self.UI.setAttribute("turnStatusButton", "active", "true")
+    self.UI.setAttribute("turnStatusImage", "image", "monsterDone")
+  end
+end
+
+function onPlayerTurnEnd(turnColor, nextTurnColor)
+  if turnColor == "White" then
+    self.UI.setAttribute("turnStatusButton", "active", "false")
+  end
+end

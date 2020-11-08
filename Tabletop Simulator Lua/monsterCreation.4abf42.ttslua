@@ -1,3 +1,8 @@
+require("utils")
+
+local attackingCandidate = nil
+local activeMonster = nil
+
 local mnstCount = {
   Zombie     = 4,
   Trite      = 4,
@@ -94,6 +99,45 @@ function onObjectDestroy(obj)
   end
 end
 
+function onAttackerSet(req)
+  if Turns.enable
+    and Turns.turn_color == "White"
+    and req.color == "White"
+    and req.attacker
+    and utils.isMonster(req.attacker)
+  then
+    attackingCandidate = req.attacker
+  end
+end
+
+function onRollStart(color)
+  if Turns.enable
+    and Turns.turn_color == "White"
+    and color == "White"
+    and attackingCandidate
+  then
+    setActiveMonster(attackingCandidate)
+    attackingCandidate = nil
+  end
+end
+
+function onPlayerTurnEnd(turnColor, nextTurnColor)
+  if turnColor == "White" then
+    activeMonster = nil
+    attackingCandidate = nil
+  end
+end
+
+function setActiveMonster(monster)
+  if monster ~= activeMonster then
+    if activeMonster then
+      activeMonster.call("onActivationChange", false)
+    end
+    activeMonster = monster
+    print(activeMonster.getName())
+    activeMonster.call("onActivationChange", true)
+  end
+end
 
 mnstScript = [[
 #include monster

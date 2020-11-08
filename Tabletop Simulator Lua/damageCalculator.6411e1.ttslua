@@ -624,6 +624,9 @@ function rollDice(player, value, id)
     -- roll start is the best time since calculation lag won't be noticeable
     calculate(player, nil, nil, true)
   end
+
+  -- notify all interested in event
+  instances.creator.call("onRollStart", player.color)
 end
 
 function rotationValueTableToString(value)
@@ -814,11 +817,10 @@ end
 
 function onSyncClick(player, value, id)
   local turnColor = Turns.turn_color
-  turnColor = "Green" --TODO: remove
   if isActivePlayer(player.color) then
     broadcastToColor("You are the active player", player.color, player.color)
     return
-  elseif not Turns.enable and false then --TODO: remove
+  elseif not Turns.enable then
     broadcastToColor("No active player since turns are disabled", player.color, player.color)
     return
   end
@@ -860,8 +862,7 @@ function toggleSyncMode(color)
 end
 
 function isActivePlayer(color)
-  return color == "Green"
-  --return color == Turns.turn_color
+  return color == Turns.turn_color
 end
 
 function updateSynchronization(player_color, modifyFunc, params)

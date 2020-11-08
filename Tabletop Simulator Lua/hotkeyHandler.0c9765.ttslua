@@ -108,6 +108,7 @@ end
 function saveAttackingCharacter(req)
   attackingChar[req.color] = req.char
   attackingChar[req.color].highlightOn(stringColorToRGB(req.color), 3600)
+  instances.creator.call("onAttackerSet", {color = req.color, attacker=req.char})
 end
 
 function prepareAttackParameters(player_color)

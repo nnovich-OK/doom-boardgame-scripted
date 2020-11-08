@@ -188,7 +188,7 @@ function singleCustomizationClick(params)
     broadcastToColor("Use doubleclick on healthbar to adjust max hp and armor",
       params.color, params.color)
   else
-    -- turning of with single click is ok
+    -- turning of with single click is also ok
     toggleCustomizationUI()
   end
 end
