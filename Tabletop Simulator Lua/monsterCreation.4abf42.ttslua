@@ -1,3 +1,4 @@
+require("instances")
 require("utils")
 
 local attackingCandidate = nil
@@ -71,14 +72,14 @@ function onObjectLeaveContainer(container, object)
   container.setName(details.color .. " " .. details.name .. " x" .. (details.count-1))
   object.setName(details.color .. " " .. details.name)
 
-  object.UI.setXml(self.UI.getXml())
+  object.UI.setXml(instances.monster.UI.getXml())
   Wait.frames(
     function()
       object.UI.setAttribute("panel", "active", "true")
     end,
     1)
 
-  object.setLuaScript(mnstScript)
+  object.setLuaScript(instances.monster.getLuaScript())
 end
 
 function onObjectDestroy(obj)
@@ -136,8 +137,9 @@ function setActiveMonster(monster)
       activeMonster.call("onActivationChange", false)
     end
     activeMonster = monster
-    print(activeMonster.getName())
-    activeMonster.call("onActivationChange", true)
+    if not activeMonster.call("onActivationChange", true) then
+      activeMonster = nil
+    end
   end
 end
 
@@ -174,6 +176,8 @@ function onObjectDrop(player_color, obj)
   end
 end
 
-mnstScript = [[
-#include monster
-]]
+function onManualClearActive(monster)
+  if monster == activeMonster then
+    activeMonster = nil
+  end
+end

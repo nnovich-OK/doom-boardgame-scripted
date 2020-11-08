@@ -205,10 +205,9 @@ end
 
 -- Toggle the customization interface (armor, max health)
 function onCustomizationUiClick(player, value, id)
-  local marineColor = utils.getColor(self.getName())
   instances.click.call("handleClickByType",
     {color = player.color,
-    id = id..marineColor,
+    id = id..self.getGUID(),
     owner = self,
     single = "singleCustomizationClick",
     parametersSingle = {color=player.color},

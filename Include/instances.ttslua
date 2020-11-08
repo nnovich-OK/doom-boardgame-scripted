@@ -9,6 +9,7 @@ local guidList = {
     inv = "cb7512", -- inventory
     click = "300ffb", -- doubleclickHandler
     luck = "9c48d4", -- luckTracker
+    monster = "48b7e7" -- monsterTemplate
 }
 
 setmetatable(instances, {__index = function(t, k)

@@ -1,3 +1,9 @@
+require("instances")
+
+if string.find(self.getName(), "Template") then
+  return
+end
+
 mnstStats = {
   Zombie     = {speed=3, armor=2, health=2},
   Trite      = {speed=5, armor=1, health=1},
@@ -28,6 +34,7 @@ local getIdentity
 local checkLoaded
 local createBtns
 local updateHealthUI
+local getActiveStatus
 
 function getIdentity(name)
   identity.fullname = name
@@ -43,7 +50,6 @@ function getIdentity(name)
       identity.color = k
     end
   end
-
 end
 
 function onLoad(save_state)
@@ -161,16 +167,58 @@ end
 
 function onActivationChange(active)
   if active then
-    self.UI.setAttribute("turnStatusButton", "active", "true")
-    self.UI.setAttribute("turnStatusImage", "image", "monsterActive")
+    if getActiveStatus() == "done" then
+      broadcastToAll(self.getName() .. " has already acted this turn", Color.Orange)
+      return false
+    else
+      self.UI.setAttribute("turnStatusButton", "active", "true")
+      self.UI.setAttribute("turnStatusImage", "image", "monsterActive")
+      return true
+    end
   else
     self.UI.setAttribute("turnStatusButton", "active", "true")
     self.UI.setAttribute("turnStatusImage", "image", "monsterDone")
+    return true
   end
 end
 
 function onPlayerTurnEnd(turnColor, nextTurnColor)
   if turnColor == "White" then
-    self.UI.setAttribute("turnStatusButton", "active", "false")
+    deactivateTurnStatus()
+  end
+end
+
+function onTurnStatusClick(player, value, id)
+  instances.click.call("handleClickByType",
+    {color = player.color,
+    id = id..self.getGUID(),
+    owner = self,
+    single = "askForDoubleClick",
+    parametersSingle = {color=player.color},
+    double = "deactivateTurnStatus",
+    parametersDouble = {manual=true}
+  })
+end
+
+function askForDoubleClick(params)
+  broadcastToColor("Doubleclick on status icon to remove",
+    params.color, params.color)
+end
+
+function deactivateTurnStatus(params)
+  self.UI.setAttribute("turnStatusButton", "active", "false")
+  if params and params.manual
+  then
+    instances.creator.call("onManualClearActive", self)
+  end
+end
+
+function getActiveStatus()
+  if string.lower(self.UI.getAttribute("turnStatusButton", "active")) == "false" then
+    return "ready"
+  elseif self.UI.getAttribute("turnStatusImage", "image") == "monsterActive" then
+    return "active"
+  else
+    return "done"
   end
 end
