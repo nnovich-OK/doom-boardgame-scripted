@@ -138,4 +138,20 @@ function getDistance(first, second)
   return math.max(dx, dz)
 end
 
+function isAboveMap(obj)
+  local hitTable = Physics.cast(
+    {origin=obj.getPosition(), direction={0,-1,0}, debug=false, max_distance=10}) --TODO: remove debug
+
+  for _, hit in ipairs(hitTable) do
+    if hit.hit_object.tag == "Generic"
+      and string.find(hit.hit_object.getName(), "Map")
+    then
+      return true
+    end
+  end
+
+  return false
+
+end
+
 return package

@@ -2,6 +2,7 @@ require("utils")
 
 local attackingCandidate = nil
 local activeMonster = nil
+local monsterPickPosition = nil
 
 local mnstCount = {
   Zombie     = 4,
@@ -125,6 +126,7 @@ function onPlayerTurnEnd(turnColor, nextTurnColor)
   if turnColor == "White" then
     activeMonster = nil
     attackingCandidate = nil
+    monsterPickPosition = nil
   end
 end
 
@@ -136,6 +138,39 @@ function setActiveMonster(monster)
     activeMonster = monster
     print(activeMonster.getName())
     activeMonster.call("onActivationChange", true)
+  end
+end
+
+function onObjectPickUp(player_color, obj)
+  if player_color == "White"
+  then
+    if Turns.enable
+      and Turns.turn_color == "White"
+      and utils.isMonster(obj)
+      and utils.isAboveMap(obj)
+    then
+      monsterPickPosition = obj.getPosition()
+    else
+      monsterPickPosition = nil
+    end
+  end
+end
+
+function onObjectDrop(player_color, obj)
+  if Turns.enable
+    and Turns.turn_color == "White"
+    and player_color == "White"
+    and utils.isMonster(obj)
+    and utils.isAboveMap(obj)
+    and monsterPickPosition
+  then
+    local pos = obj.getPosition()
+    if math.abs(monsterPickPosition.x - pos.x) > 0.5
+      or math.abs(monsterPickPosition.z - pos.z) > 0.5
+    then
+      setActiveMonster(obj)
+    end
+    monsterPickPosition = nil
   end
 end
 
