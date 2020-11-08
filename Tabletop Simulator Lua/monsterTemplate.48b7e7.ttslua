@@ -34,7 +34,6 @@ local getIdentity
 local checkLoaded
 local createBtns
 local updateHealthUI
-local getActiveStatus
 
 function getIdentity(name)
   identity.fullname = name

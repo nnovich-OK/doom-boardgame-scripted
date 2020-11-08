@@ -57,20 +57,25 @@ mnstStats = {
 
 
 local attackingChar = {}
+local monsterActivationIndex = 0
 
 -- Local methods declaration
 local getMonsterStats
 local saveAttackingCharacterHovered
 local prepareAttackParameters
+local findMonsterToActivate
 
 
 function onScriptingButtonDown(index,  player_color)
   if index == 10 then
     saveAttackingCharacterHovered(player_color)
-  end
 
-  if index == 1 then
+  elseif index == 1 then
     prepareAttackParameters(player_color)
+
+  elseif index == 7 then
+    findMonsterToActivate(player_color)
+
   end
 end
 
@@ -187,4 +192,26 @@ function prepareAttackParameters(player_color)
   target.highlightOn(stringColorToRGB(player_color), 5)
 
   instances.calc.call("configure", params)
+end
+
+function findMonsterToActivate(player_color)
+  if player_color ~= "White" then
+    return
+  end
+
+  local allReadyMonsters = {}
+
+  for _, obj in ipairs(getAllObjects()) do
+    if utils.isMonster(obj) and obj.call("getActiveStatus") == "ready" then
+      table.insert(allReadyMonsters, obj)
+    end
+  end
+
+  if #allReadyMonsters == 0 then
+    broadcastToColor("All monsters have already acted", player_color, player_color)
+  else
+    monsterActivationIndex = monsterActivationIndex % #allReadyMonsters
+    monsterActivationIndex = monsterActivationIndex + 1
+    Player[player_color].pingTable(allReadyMonsters[monsterActivationIndex].getPosition())
+  end
 end
