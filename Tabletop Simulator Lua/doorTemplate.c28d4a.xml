@@ -1,0 +1,24 @@
+<Defaults>
+</Defaults>
+
+<Button id="open1"
+  onClick="onOpenClick"
+  position="-1 0 -50"
+  rotation="0 90 270"
+  width="300"
+  height="350"
+  scale="0.2 0.2"
+  color="clear"
+  active="false">
+</Button>
+
+<Button id="open2"
+  onClick="onOpenClick"
+  position="1 0 -50"
+  rotation="0 270 270"
+  width="300"
+  height="350"
+  scale="0.2 0.2"
+  color="clear"
+  active="false">
+</Button>

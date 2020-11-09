@@ -1,0 +1,59 @@
+require("instances")
+
+if string.find(self.getName(), "Template") then
+  return
+end
+
+-- Local methods declaration
+
+
+function onLoad(save_state)
+  saved_data = JSON.decode(save_state)
+
+  -- XML
+  if saved_data and saved_data.xml then
+    self.UI.setXml(saved_data.xml)
+  else
+    self.UI.setXml(instances.door.UI.getXml())
+  end
+
+  Wait.frames(
+    function()
+      self.UI.setAttribute("open1", "active", "true")
+      self.UI.setAttribute("open2", "active", "true")
+    end,
+    1)
+end
+
+function onSave()
+   local save_state = JSON.encode({xml = self.UI.getXml()})
+   -- local save_state = ""
+   self.script_state = save_state
+end
+
+
+function onOpenClick(player, value, id)
+  instances.click.call("handleClickByType",
+    {color = player.color,
+    id = id..self.getGUID(),
+    owner = self,
+    single = "askForDoubleClick",
+    parametersSingle = {color=player.color},
+    double = "toggleOpen",
+    parametersDouble = {color=player.color},
+  })
+end
+
+function askForDoubleClick(params)
+  broadcastToColor("Doubleclick on door to open/close",
+    params.color, params.color)
+end
+
+function toggleOpen(params)
+  local state = self.getStateId()
+  if state == 1 then
+    self.setState(2)
+  elseif state == 2 then
+    self.setState(1)
+  end
+end

@@ -31,7 +31,6 @@ health = {
 
 -- Local methods declaration
 local getIdentity
-local checkLoaded
 local createBtns
 local updateHealthUI
 
@@ -57,34 +56,30 @@ function onLoad(save_state)
   health.max = mnstStats[identity.name].health
   health.value = health.max
 
-   if save_state ~= "" and self.getDescription() ~= "" then
-      saved_data = JSON.decode(save_state)
+  saved_data = JSON.decode(save_state)
 
-      -- XML
-      if saved_data.xml then
-         self.UI.setXml(saved_data.xml)
-      end
+  -- XML
+  if saved_data and saved_data.xml then
+    self.UI.setXml(saved_data.xml)
+  else
+    self.UI.setXml(instances.monster.UI.getXml())
+  end
 
-      -- Health
-      if saved_data.health then
-         health = saved_data.health
-      end
-    end
-  Wait.condition(updateHealthUI, checkLoaded)
-  Wait.condition(function()
-     self.UI.setAttribute("armor", "text", mnstStats[identity.name].armor)
-     self.UI.setAttribute("speed", "text", mnstStats[identity.name].speed)
-   end,
-   checkLoaded)
+  -- Health
+  if saved_data and saved_data.health then
+    health = saved_data.health
+  end
+
+  Wait.frames(
+    function()
+      self.UI.setAttribute("panel", "active", "true")
+      updateHealthUI()
+      self.UI.setAttribute("armor", "text", mnstStats[identity.name].armor)
+      self.UI.setAttribute("speed", "text", mnstStats[identity.name].speed)
+    end,
+    1)
 
   createBtns()
-end
-
-function checkLoaded()
-   if not self.loading_custom and not self.spawning then
-      return true
-   end
-   return false
 end
 
 function onSave()

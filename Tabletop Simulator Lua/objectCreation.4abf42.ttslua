@@ -1,9 +1,12 @@
 require("instances")
 require("utils")
+require("constants")
 
 local attackingCandidate = nil
 local activeMonster = nil
 local monsterPickPosition = nil
+
+local allBags = {}
 
 local mnstCount = {
   Zombie     = 4,
@@ -17,88 +20,94 @@ local mnstCount = {
 }
 
 -- Local methods declaration
-local getNameAndColor
-local getBagDetails
+local isMonsterBag
+local getBagContentName
+local getBagContentCount
 
--- returns non-empty name only for monsters
-function getNameAndColor(fullname)
-  local name = ""
-  local color = ""
+function isMonsterBag(obj)
+  if obj.getQuantity() == -1 or obj.tag ~= "Infinite" then
+    return false
+  end
 
-  for k in pairs(mnstCount) do
-    if string.find(fullname, k, 1, true) then
-      name = k
-      break
+  for _,monster in ipairs(constants.mnstList) do
+    if string.find(obj.getName(), monster) then
+      return true, monster
     end
   end
 
-  for _, v in ipairs({"Red", "Green", "Blue"}) do
-    if string.find(fullname, v, 1, true) then
-      color = v
-      break
-    end
-  end
-
-  return name, color
+  return false
 end
 
-function getBagDetails(fullname)
-  local details = {}
-
-  details.name, details.color = getNameAndColor(fullname)
-
-  for k in string.gmatch(fullname, "x(%d+)") do
-    details.count = tonumber(k)
-    break
+function getBagContentName(obj)
+  if not isMonsterBag(obj) then
+    return obj.getName()
   end
 
-  return details
+  return (string.gsub(obj.getName(), " x%d+", ""))
+end
+
+function getBagContentCount(obj)
+  if not isMonsterBag(obj) then
+    return obj.getQuantity()
+  end
+
+  return tonumber(string.match(obj.getName(), "x(%d+)"), 10)
+end
+
+function onLoad()
+  for _, obj in ipairs(getAllObjects()) do
+    if obj.getQuantity() ~= -1 and obj.tag ~= "Deck" then
+      allBags[getBagContentName(obj)] = obj
+    end
+  end
 end
 
 
 function onObjectLeaveContainer(container, object)
-  local details = getBagDetails(container.getName())
-  if details.name == "" then
-    return
+  -- only renaming is done here. Script/xml assignment and bag counter update is done in onObjectSpawn
+  if isMonsterBag(container) and object.getName() == "" then
+    object.setName(getBagContentName(container))
   end
+end
 
-  if details.count == 0 then
-    broadcastToAll("No figures left of ".. details.color .. " " .. details.name, Color.Oragne)
-    object.setName("")
-    object.destruct()
-    return
+function onObjectSpawn(object)
+  if utils.isDoor(object) then
+    object.setLuaScript(instances.door.getLuaScript())
+
+  elseif utils.isMonster(object) then
+    local count = getBagContentCount(allBags[object.getName()])
+
+    if count == 0 then
+      broadcastToAll("No figures left of ".. object.getName(), Color.Oragne)
+      -- make sure name is cleared before destruct, so onObjectDestroy doesn't change counter
+      object.setName("")
+      object.destruct()
+      return
+    end
+
+    count = count - 1
+    allBags[object.getName()].setName(object.getName() .. " x" .. count)
+
+    object.setLuaScript(instances.monster.getLuaScript())
   end
-
-  container.setName(details.color .. " " .. details.name .. " x" .. (details.count-1))
-  object.setName(details.color .. " " .. details.name)
-
-  object.UI.setXml(instances.monster.UI.getXml())
-  Wait.frames(
-    function()
-      object.UI.setAttribute("panel", "active", "true")
-    end,
-    1)
-
-  object.setLuaScript(instances.monster.getLuaScript())
 end
 
 function onObjectDestroy(obj)
-  local name, color = getNameAndColor(obj.getName())
-  if name == "" then return end
+  if not utils.isMonster(obj) then
+    return
+  end
 
-  -- find related bagw
-  for _,bag in ipairs(getAllObjects()) do
-    if bag.getQuantity() ~= -1 then
-      local bagDetails = getBagDetails(bag.getName())
-      if bagDetails.name == name and bagDetails.color == color then
-        bagDetails.count = bagDetails.count+1
-        if bagDetails.count > mnstCount[name] then
-          bagDetails.count = mnstCount[name]
-        end
-        bag.setName(bagDetails.color .. " " .. bagDetails.name .. " x" .. bagDetails.count)
-      end
+  local count = getBagContentCount(allBags[obj.getName()])
+  count = count + 1
+
+  for mnst, max in pairs(mnstCount) do
+    if string.find(obj.getName(), mnst) then
+      count = math.min(count, max)
+      break
     end
   end
+
+  allBags[obj.getName()].setName(obj.getName() .. " x" .. count)
 end
 
 function onAttackerSet(req)

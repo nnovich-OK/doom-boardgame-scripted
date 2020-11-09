@@ -54,23 +54,11 @@ local isUIElementActive
 local changeArmor
 
 function onLoad(save_state)
-  if save_state ~= "" and self.getDescription() ~= "" then
-    saved_data = JSON.decode(save_state)
+  saved_data = JSON.decode(save_state)
 
-    -- Armor
-    if saved_data.armor then
-      armor = saved_data.armor
-
-      Wait.condition(
-      function () self.UI.setAttribute("armor", "text", armor) end,
-      checkLoaded)
-    end
-
-    -- Health
-    if saved_data.health then
-      health = saved_data.health
-      Wait.condition(updateHealthUI, checkLoaded)
-    end
+  -- Health
+  if saved_data and saved_data.health then
+    health = saved_data.health
   end
 
   Wait.condition(updateHealthUI, checkLoaded)
@@ -78,15 +66,11 @@ function onLoad(save_state)
 end
 
 function checkLoaded()
-   if not self.loading_custom and not self.spawning then
-      return true
-   end
-   return false
+  return not self.loading_custom and not self.spawning
 end
 
 function onSave()
-   local save_state = JSON.encode({health = health, armor = armor})
-   -- local save_state = ""
+   local save_state = JSON.encode({health = health})
    self.script_state = save_state
 end
 

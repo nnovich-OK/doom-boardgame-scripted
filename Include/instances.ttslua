@@ -4,12 +4,13 @@ local guidList = {
     calc = "6411e1", -- damage calculator
     hotkeys = "0c9765", -- hotkey handler
     preproc = "e8056f", -- xml preprocessor
-    creator = "4abf42", -- monster creator
+    creator = "4abf42", -- object creator
     vis = "ad25a3", -- interface visibility manager
     inv = "cb7512", -- inventory
     click = "300ffb", -- doubleclickHandler
     luck = "9c48d4", -- luckTracker
-    monster = "48b7e7" -- monsterTemplate
+    monster = "48b7e7", -- monsterTemplate
+    door = "c28d4a", -- doorTemplate
 }
 
 setmetatable(instances, {__index = function(t, k)

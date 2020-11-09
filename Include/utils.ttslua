@@ -36,7 +36,8 @@ function setTableDefaultValue(table, value)
 end
 
 function isSingleFigurine(obj)
-  return obj.tag == "Figurine" and obj.getQuantity() == -1
+  -- Tag should be Figurine, but TTS apparently might set tag to Generic on first frame
+  return (obj.tag == "Figurine" or obj.tag == "Generic") and obj.getQuantity() == -1
 end
 
 function isMonster(obj)
@@ -64,6 +65,10 @@ end
 
 function isCharacter(obj)
   return isMonster(obj) or isMarine(obj)
+end
+
+function isDoor(obj)
+  return obj.tag == "Generic" and string.find(obj.getName(), "Door")
 end
 
 -- recursion is internal parameter, shouldn't be used from outside
