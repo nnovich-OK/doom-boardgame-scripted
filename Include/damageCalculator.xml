@@ -1,5 +1,6 @@
 <Defaults>
   <Button class="adjust"
+    color="#828282"
     textColor="rgb(1, 1, 1)"
     fontSize="24"
     fontStyle="Bold"
@@ -201,21 +202,21 @@
   </VerticalLayout>
 
   <Button id="calculate"
-    class="ini"
+    class="whiteOnBlack"
     onClick="6411e1/calculate"
     preferredHeight="50">
     Predict
   </Button>
 
   <Button id="rollDice"
-    class="ini"
+    class="whiteOnBlack"
     onClick="6411e1/rollDice"
     preferredHeight="50">
     Roll
   </Button>
 
   <Button id="clearPrm"
-    class="ini"
+    class="whiteOnBlack"
     onClick="6411e1/clearCalc"
     preferredHeight="50"
     preproc="splitColor">
@@ -223,7 +224,7 @@
   </Button>
 
   <Button id="syncWithActive"
-    class="ini"
+    class="whiteOnBlack"
     onClick="6411e1/onSyncClick"
     preferredHeight="50"
     preproc="splitColor">

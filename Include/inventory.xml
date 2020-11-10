@@ -23,22 +23,22 @@
   visibility="White|Red|Green|Blue"
   >
   <Button
-    class="ini"
+    class="whiteOnBlack"
     onClick="cb7512/showFrags"
     text="Frags&#x25BC;" />
 
   <Button
-    class="ini"
+    class="whiteOnBlack"
     onClick="cb7512/showInventory(Blue)"
     text="Inv&#x25BC;"
     textColor="blue"/>
   <Button
-    class="ini"
+    class="whiteOnBlack"
     onClick="cb7512/showInventory(Green)"
     text="Inv&#x25BC;"
     textColor="green"/>
   <Button
-    class="ini"
+    class="whiteOnBlack"
     onClick="cb7512/showInventory(Red)"
     text="Inv&#x25BC;"
     textColor="red"/>
@@ -60,7 +60,7 @@
   >
   <Button
     id="frag"
-    class="ini"
+    class="whiteOnBlack"
     onClick="cb7512/updateFrag"
     preproc="splitNumber6"
     tooltip="Double click to add"
@@ -90,26 +90,26 @@
   <HorizontalLayout spacing="5">
     <Button
       id="gainItem"
-      class="ini"
+      class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Gain"
       />
     <Button
       id="loseItem"
-      class="ini"
+      class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Lose"
       />
     <Button
       id="autopickItem"
-      class="ini"
+      class="whiteOnBlack"
       onClick="cb7512/onAutopickClick"
       text="Pick"
       tooltip="Automatically picks ammunition from under your marine figurine"
       />
     <Button
       id="giveToBlueItem"
-      class="ini"
+      class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Give Blue"
       textColor="blue"
@@ -117,7 +117,7 @@
       />
     <Button
       id="giveToGreenItem"
-      class="ini"
+      class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Give Green"
       textColor="green"
@@ -125,7 +125,7 @@
       />
     <Button
       id="giveToRedItem"
-      class="ini"
+      class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Give Red"
       textColor="red"
