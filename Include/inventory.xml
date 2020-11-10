@@ -1,0 +1,425 @@
+<Defaults>
+  <Button class="invItem" onClick="cb7512/onInventoryItemClick"/>
+  <Text
+    class="invItem"
+    active="false"
+    text="0"
+    fontSize="28"
+    outline="black"
+    color="white"/>
+  <Row class="inventory" preferredHeight="50"/>
+  <Image class="invItem" color="rgba(0.4, 0.4, 0.4, 1)" preserveAspect="true" />
+</Defaults>
+
+<!-- Global inventory and frag buttons-->
+<HorizontalLayout
+  padding="0 0 0 0"
+  spacing="10"
+  rectAlignment="UpperLeft"
+  offsetXY="80 -25"
+  height="40"
+  width="300"
+  color="clear"
+  visibility="White|Red|Green|Blue"
+  >
+  <Button
+    class="ini"
+    onClick="cb7512/showFrags"
+    text="Frags&#x25BC;" />
+
+  <Button
+    class="ini"
+    onClick="cb7512/showInventory(Blue)"
+    text="Inv&#x25BC;"
+    textColor="blue"/>
+  <Button
+    class="ini"
+    onClick="cb7512/showInventory(Green)"
+    text="Inv&#x25BC;"
+    textColor="green"/>
+  <Button
+    class="ini"
+    onClick="cb7512/showInventory(Red)"
+    text="Inv&#x25BC;"
+    textColor="red"/>
+</HorizontalLayout>
+
+
+<!-- Panel to show current frags -->
+<VerticalLayout
+  id="fragsPanel"
+  active="false"
+
+  rectAlignment="UpperLeft"
+  offsetXY="88 -70"
+  width="50"
+  height="280"
+
+  padding="8 8 4 4"
+  color="rgba(0, 0, 0, 0.95)"
+  >
+  <Button
+    id="frag"
+    class="ini"
+    onClick="cb7512/updateFrag"
+    preproc="splitNumber6"
+    tooltip="Double click to add"
+    >
+    <Image
+      id="fragImage"
+      image="frag"
+      color="rgba(0.4, 0.4, 0.4, 1)"
+      preserveAspect="true"
+      />
+  </Button>
+</VerticalLayout>
+
+
+<!-- Inventory control buttons -->
+<VerticalLayout
+  id = "inventoryModePanel"
+  active="false"
+
+  padding="0 0 5 5"
+  rectAlignment="UpperLeft"
+  offsetXY="160 -310"
+  width="448"
+  height="45"
+
+  preproc="splitColorKeepVisibility">
+  <HorizontalLayout spacing="5">
+    <Button
+      id="gainItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Gain"
+      />
+    <Button
+      id="loseItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Lose"
+      />
+    <Button
+      id="autopickItem"
+      class="ini"
+      onClick="cb7512/onAutopickClick"
+      text="Pick"
+      tooltip="Automatically picks ammunition from under your marine figurine"
+      />
+    <Button
+      id="giveToBlueItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Blue"
+      textColor="blue"
+      minWidth="75"
+      />
+    <Button
+      id="giveToGreenItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Green"
+      textColor="green"
+      minWidth="75"
+      />
+    <Button
+      id="giveToRedItem"
+      class="ini"
+      onClick="cb7512/onModeControlClick"
+      text="Give Red"
+      textColor="red"
+      minWidth="75"
+      />
+  </HorizontalLayout>
+</VerticalLayout>
+
+
+<!-- Inventory itself -->
+<Panel
+  id="inventoryPanel"
+  active="false"
+
+  rectAlignment="UpperLeft"
+  offsetXY="160 -70"
+  width="448"
+  height="240"
+
+  padding="8 8 8 8"
+
+  childAlignment="UpperLeft"
+  childForceExpandWidth="false"
+  childForceExpandHeight="false"
+  spacing="25"
+
+  preproc="splitColorKeepVisibility"
+  >
+
+  <!-- ALL WEAPONS -->
+  <TableLayout
+    id="weaponsTable"
+
+    columnWidths="50 50 50 50 50"
+    preferredWidth="282"
+
+    cellSpacing="8"
+    cellBackgroundColor="clear"
+
+    >
+    <!-- MELEE WEAPONS -->
+    <Row class="inventory">
+        <Cell>
+          <Button id="armorInvButton" class="invItem">
+            <Image id="armorInvImage" class="invItem" image="armor" color="White">
+              <Text id="armorInvText" class="invItem" active="true" text="2"/>
+            </Image>
+          </Button>
+        </Cell>
+        <Cell>
+          <Button id="fistInvButton" class="invItem">
+            <Image id="fistInvImage" class="invItem" image="fist" color="White">
+              <Text id="fistInvText" class="invItem" text="1"/>
+            </Image>
+          </Button>
+        </Cell>
+        <Cell>
+          <Button id="chainsawInvButton" class="invItem">
+            <Image id="chainsawInvImage" class="invItem" image="chainsaw">
+              <Text id="chainsawInvText" class="invItem"/>
+            </Image>
+          </Button>
+        </Cell>
+    </Row>
+    <!-- BULLET WEAPONS -->
+    <Row class="inventory">
+      <Cell>
+        <Button id="shellInvButton" class="invItem">
+          <Image id="shellInvImage" class="invItem" image="shell">
+            <Text id="shellInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="pistolInvButton" class="invItem">
+          <Image id="pistolInvImage" class="invItem" image="pistol" color="White">
+            <Text id="pistolInvText" class="invItem" text="1"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="machinegunInvButton" class="invItem">
+          <Image id="machinegunInvImage" class="invItem" image="machinegun">
+            <Text id="machinegunInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="shotgunInvButton" class="invItem">
+          <Image id="shotgunInvImage" class="invItem" image="shotgun">
+            <Text id="shotgunInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="chaingunInvButton" class="invItem">
+          <Image id="chaingunInvImage" class="invItem" image="chaingun">
+            <Text id="chaingunInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+    </Row>
+    <!-- EXPLOSIVE WEAPONS -->
+    <Row class="inventory">
+      <Cell>
+        <Button id="rocketInvButton" class="invItem">
+          <Image id="rocketInvImage" class="invItem" image="rocket">
+            <Text id="rocketInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="grenadeInvButton" class="invItem">
+          <Image id="grenadeInvImage" class="invItem" image="grenade" color="White">
+            <Text id="grenadeInvText" class="invItem" text="1"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="launcherInvButton" class="invItem">
+          <Image id="launcherInvImage" class="invItem" image="launcher">
+            <Text id="launcherInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+    </Row>
+    <!-- ENERGY WEAPONS -->
+    <Row class="inventory">
+      <Cell>
+        <Button id="cellInvButton" class="invItem">
+          <Image id="cellInvImage" class="invItem" image="cell">
+            <Text id="cellInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="plasmaInvButton" class="invItem">
+          <Image id="plasmaInvImage" class="invItem" image="plasma">
+            <Text id="plasmaInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+      <Cell>
+        <Button id="bfgInvButton" class="invItem">
+          <Image id="bfgInvImage" class="invItem" image="bfg">
+            <Text id="bfgInvText" class="invItem"/>
+          </Image>
+        </Button>
+      </Cell>
+    </Row>
+
+    <!-- BERSERK, ADRENALIN, CANCEL -->
+    <TableLayout
+      id="miscTable"
+      rectAlignment="MiddleLeft"
+      offsetXY = "203 0"
+
+      columnWidths="50"
+      preferredWidth="50"
+
+      cellSpacing="8"
+      cellBackgroundColor="clear"
+      >
+      <Row class="inventory">
+          <Cell>
+            <Button id="berserkInvButton" class="invItem">
+              <Image id="berserkInvImage" class="invItem" image="berserk">
+                <Text id="berserkInvText" class="invItem"/>
+              </Image>
+            </Button>
+          </Cell>
+      </Row>
+
+      <Row class="inventory">
+          <Cell>
+          </Cell>
+      </Row>
+
+      <Row class="inventory">
+          <Cell>
+            <Button id="adrenalinInvButton" class="invItem">
+              <Image id="adrenalinInvImage" class="invItem" image="adrenalin">
+                <Text id="adrenalinInvText" class="invItem"/>
+              </Image>
+            </Button>
+          </Cell>
+      </Row>
+
+      <Row class="inventory">
+          <Cell>
+            <Button id="cancelInvButton" class="invItem">
+              <Image id="cancelInvImage" class="invItem" image="cancel">
+                <Text id="cancelInvText" class="invItem"/>
+              </Image>
+            </Button>
+          </Cell>
+      </Row>
+
+    </TableLayout>
+  </TableLayout>
+
+
+  <!-- AIM, GUARD, DODGE, HEAL -->
+  <TableLayout
+    id="miscTable"
+
+    columnWidths="50"
+    preferredWidth="50"
+
+    cellSpacing="8"
+    cellBackgroundColor="clear"
+    >
+    <Row class="inventory">
+        <Cell>
+          <Button id="aimInvButton" class="invItem">
+            <Image id="aimInvImage" class="invItem" image="aim">
+              <Text id="aimInvText" class="invItem"/>
+            </Image>
+          </Button>
+        </Cell>
+    </Row>
+
+    <Row class="inventory">
+        <Cell>
+          <Button id="guardInvButton" class="invItem">
+            <Image id="guardInvImage" class="invItem" image="guard">
+              <Text id="guardInvText" class="invItem"/>
+            </Image>
+          </Button>
+        </Cell>
+    </Row>
+
+    <Row class="inventory">
+        <Cell>
+          <Button id="dodgeInvButton" class="invItem">
+            <Image id="dodgeInvImage" class="invItem" image="dodge">
+              <Text id="dodgeInvText" class="invItem"/>
+            </Image>
+          </Button>
+        </Cell>
+    </Row>
+
+    <Row class="inventory">
+        <Cell>
+          <Button id="healInvButton" class="invItem">
+            <Image id="healInvImage" class="invItem" image="heal">
+              <Text id="healInvText" class="invItem"/>
+            </Image>
+          </Button>
+        </Cell>
+    </Row>
+  </TableLayout>
+
+  <!-- RED/YELLOW/BLUE KEYS -->
+  <Panel preferredWidth="50">
+    <TableLayout
+      id="miscTable"
+      offsetXY="0 -29"
+
+      columnWidths="50"
+      preferredWidth="50"
+
+      cellSpacing="8"
+      cellBackgroundColor="clear"
+      >
+      <Row class="inventory">
+          <Cell>
+            <Button id="bluekeyInvButton" class="invItem">
+              <Image id="bluekeyInvImage" class="invItem" image="bluekey">
+                <Text id="bluekeyInvText" class="invItem"/>
+              </Image>
+            </Button>
+          </Cell>
+      </Row>
+
+      <Row class="inventory">
+          <Cell>
+            <Button id="yellowkeyInvButton" class="invItem">
+              <Image id="yellowkeyInvImage" class="invItem" image="yellowkey">
+                <Text id="yellowkeyInvText" class="invItem"/>
+              </Image>
+            </Button>
+          </Cell>
+      </Row>
+
+      <Row class="inventory">
+          <Cell>
+            <Button id="redkeyInvButton" class="invItem">
+              <Image id="redkeyInvImage" class="invItem" image="redkey">
+                <Text id="redkeyInvText" class="invItem"/>
+              </Image>
+            </Button>
+          </Cell>
+      </Row>
+    </TableLayout>
+  </Panel>
+</Panel>
