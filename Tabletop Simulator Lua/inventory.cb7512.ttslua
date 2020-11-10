@@ -460,7 +460,7 @@ function onModeControlClick(player, value, id)
       local dist = utils.getDistance(givingMarine, takingMarine)
       if dist ~= 1 then
         broadcastToColor(takingMarine.getName() .. " must be on adjacent space", player.color, player.color)
-        instances.click.call("markAsSingleClick", {color = player.color, id = id})
+        instances.click.call("markNextClickAsSignle", {color = player.color, id = id})
         return
       end
     end

@@ -30,6 +30,17 @@ function isDoubleClick(req)
 end
 
 
+-- Function ensures, that next click wll return false from isDoubleClick
+-- regardless of time interval
+function markNextClickAsSignle(req)
+  if not req or not req.color or not req.id then
+    log(req, "ERROR bad request to markAsSingleClick:")
+    return
+  end
+  clicks[req.color][req.id] = false
+end
+
+
 -- Usage: call on each click. It doesn't do anything until detecting click type,
 -- then invokes callback for either signle click or double click depending on detected type
 function handleClickByType(req)
