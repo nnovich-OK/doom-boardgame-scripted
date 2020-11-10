@@ -115,12 +115,12 @@ local itemLimit = {
   berserk = 3, -- number of tokens might be larger (6?), but this digit is about duration
                -- picking the new berserk should refresh the duration, so 3 is max
   cancel = 3,
-  adrenalin = 6, -- not sure, but this should be a good guess
+  adrenalin = 3,
 
   armor = 10,
-  shell = 15,
+  shell = 21,
   rocket = 15,
-  cell = 15,
+  cell = 9,
 }
 utils.setTableDefaultValue(itemLimit, 3) -- all weaopons have 3 copies total
 
