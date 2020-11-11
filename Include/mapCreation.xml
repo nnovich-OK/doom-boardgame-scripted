@@ -1,1 +1,14 @@
-<Defaluts />
+<Button
+  id="newGame"
+  class="whiteOnBlack"
+
+  onClick=""
+  text="NEW GAME"
+  visibility="White"
+
+  height="40"
+  width="120"
+  rectAlignment="UpperRight"
+  offsetXY="-300 -5"
+  >
+</Button>

@@ -13,3 +13,5 @@
 <Include src="damageCalculator.xml"/>
 
 <Include src="mapCreation.xml"/>
+
+<Include src="mapScanner.xml"/>

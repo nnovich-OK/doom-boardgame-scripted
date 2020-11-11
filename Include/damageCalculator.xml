@@ -21,7 +21,6 @@
   <Row class="tgl" preferredHeight="50"/>
 </Defaults>
 
-<!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
 <HorizontalLayout
   height="40"
   width="280"
@@ -46,6 +45,7 @@
   </Button>
 </HorizontalLayout>
 
+<!-- >>>>>>>>>> DAMAGE CALCULATOR starts here <<<<<<<<<< -->
 <VerticalLayout id="calculator"
   padding="0 3 0 0"
   spacing="15"
