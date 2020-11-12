@@ -13,12 +13,13 @@ local activityCached = {}
 setmetatable(activityCached, { __index = function(t, id)
   return Global.UI.getAttribute(id, "active") end})
 
-local interfaceGroups = {
-  inventoryPanelRed="inventory",
-  inventoryPanelGreen="inventory",
-  inventoryPanelBlue="inventory",
-  calculator="rightMenuGroup",
-  luckTracker="rightMenuGroup",
+local interfaceGroups = {}
+
+local groupInterfaces = {
+  inventory = {"inventoryPanelRed", "inventoryPanelGreen", "inventoryPanelBlue"},
+  rightMenuGroup = {"calculator", "luckTracker"},
+  centerMenuGroup = {"luckTracker", "scenarioMenu", "difficultyMenu", "stats",
+    "inventoryPanelRed", "inventoryPanelGreen", "inventoryPanelBlue"},
 }
 
 -- Local methods declaration
@@ -32,18 +33,34 @@ local cachedShow
 local cachedHide
 local commitVisibility
 
+function onLoad()
+  -- create inverfaceGroups from groupInterfaces
+  for group, interfaces in pairs(groupInterfaces) do
+    for _, inf in ipairs(interfaces) do
+      if interfaceGroups[inf] then
+        table.insert(interfaceGroups[inf], group)
+      else
+        interfaceGroups[inf] = {group}
+      end
+    end
+  end
+end
+
 function interfaceRequestCorrect(req)
   return req and req.id and req.color
 end
 
 
 function hideOtherInterfacesInGroup(id, color)
-  local groupToHide = interfaceGroups[id]
+  local groupsToHide = interfaceGroups[id]
 
-  if groupToHide then
-    for interface, group in pairs(interfaceGroups) do
-      if interface ~= id and group == groupToHide then
-        cachedHide(interface, color)
+  if groupsToHide then
+    for _, group in ipairs(groupsToHide) do
+      for _, inf in ipairs(groupInterfaces[group]) do
+        print(group, inf)
+        if inf ~= id then
+          cachedHide(inf, color)
+        end
       end
     end
   end

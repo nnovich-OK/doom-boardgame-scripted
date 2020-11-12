@@ -1,8 +1,13 @@
 require("instances")
 require("maps")
 
-local campaignName = "Episode 1"
-local scenarioName = "Knee Deep in the Dead"
+local campaignLoaded = "Episode 1"
+local scenarioLoaded = "Knee Deep in the Dead"
+local difficultyLoaded = 3
+
+local campaignToLoad = "Episode 1"
+local scenarioToLoad = "Knee Deep in the Dead"
+local difficultyToLoad = 3
 
 
 -- Local methods declaration
@@ -16,23 +21,44 @@ function onNewGameClick(player, value, id)
 end
 
 function onCampaignChanged(player, value, id)
-  Global.UI.setAttribute(campaignName.." Dropdown", "active", "false")
-  campaignName = value
-  Global.UI.setAttribute(campaignName.." Dropdown", "active", "true")
-  Global.UI.setAttribute("campaignNotes", "text", maps[campaignName].notes)
+  Global.UI.setAttribute(campaignToLoad.." Dropdown", "active", "false")
+  campaignToLoad = value
+  Global.UI.setAttribute(campaignToLoad.." Dropdown", "active", "true")
+  Global.UI.setAttribute("campaignNotes", "text", maps[campaignToLoad].notes)
 
-  for k in pairs(maps[campaignName].scenarios) do
-    scenarioName = k
+  for k in pairs(maps[campaignToLoad].scenarios) do
+    scenarioToLoad = k
     break
   end
   refreshPreview()
 end
 
 function onScenarioChanged(player, value, id)
-  scenarioName = value
+  scenarioToLoad = value
   refreshPreview()
 end
 
 function refreshPreview()
-  Global.UI.setAttribute("scenarioPreview", "image", "PREVIEW "..campaignName.." - "..scenarioName)
+  Global.UI.setAttribute("scenarioPreview", "image", "PREVIEW "..campaignToLoad.." - "..scenarioToLoad)
+end
+
+function onCancelClick(player, value, id)
+  instances.vis.call("hideInterface", {id = value, color = player.color})
+end
+
+function onDifficultyClick(player, value, id)
+  print("difficulty"..difficultyToLoad)
+  Global.UI.setAttribute("difficulty"..difficultyToLoad, "color", "rgba(0.4, 0.4, 0.4, 1)")
+  difficultyToLoad = value
+  Global.UI.setAttribute("difficulty"..difficultyToLoad, "color", "White")
+end
+
+
+function onMapChosen(player, value, id)
+  instances.vis.call("showInterface", {id = "difficultyMenu", color=player.color})
+end
+
+function onDifficultyChosen(player, value, id)
+  instances.vis.call("hideInterface", {id = "difficultyMenu", color = player.color})
+  --TODO: clear, then load
 end

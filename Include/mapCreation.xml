@@ -88,9 +88,52 @@
       spacing="40"
       preferredHeight="60"
       flexibleHeight="0" >
-      <Button text="OK" />
-      <Button text="Cancel" />
+      <Button text="OK" onClick="a25fea/onMapChosen" />
+      <Button text="Cancel" onClick="a25fea/onCancelClick(scenarioMenu)" />
     </HorizontalLayout>
   </VerticalLayout>
 
 </Panel>
+
+<VerticalLayout
+  id="difficultyMenu"
+  rectAlignment="MiddleCenter"
+  width="1400"
+  height="700"
+  offsetXY="0 -60"
+
+  padding="15 15 15 15"
+  spacing="30"
+  color="rgba(0, 0, 0, 0.95)"
+  active="false" >
+
+  <Text preferredHeight="50" flexibleHeight="0" fontSize="32" fontStyle="Bold" alignment="UpperCenter">
+    DIFFICULTY SELECTION
+  </Text>
+  <HorizontalLayout preferredHeight="600" spacing="5" >
+    <Button onClick="a25fea/onDifficultyClick(1)" color="Clear" >
+      <Image id="difficulty1" image="difficulty1" color="rgba(0.4, 0.4, 0.4, 1)" />
+    </Button>
+    <Button onClick="a25fea/onDifficultyClick(2)" color="Clear" >
+      <Image id="difficulty2" image="difficulty2" color="rgba(0.4, 0.4, 0.4, 1)" />
+    </Button>
+    <Button onClick="a25fea/onDifficultyClick(3)" color="Clear" >
+      <Image id="difficulty3" image="difficulty3" color="White" />
+    </Button>
+    <Button onClick="a25fea/onDifficultyClick(4)" color="Clear" >
+      <Image id="difficulty4" image="difficulty4" color="rgba(0.4, 0.4, 0.4, 1)" />
+    </Button>
+    <Button onClick="a25fea/onDifficultyClick(5)" color="Clear" >
+      <Image id="difficulty5" image="difficulty5" color="rgba(0.4, 0.4, 0.4, 1)" />
+    </Button>
+  </HorizontalLayout>
+
+  <HorizontalLayout
+    padding="500 500 0 0"
+    spacing="40"
+    preferredHeight="60"
+    flexibleHeight="0" >
+    <Button text="OK" onClick="a25fea/onDifficultyChosen" />
+    <Button text="Cancel" onClick="a25fea/onCancelClick(difficultyMenu)" />
+  </HorizontalLayout>
+</VerticalLayout>
