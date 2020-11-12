@@ -1,8 +1,11 @@
+<Defaults>
+</Defaults>
+
 <Button
-  id="newGame"
+  id="newGameButton"
   class="whiteOnBlack"
 
-  onClick=""
+  onClick="a25fea/onNewGameClick"
   text="NEW GAME"
   visibility="White"
 
@@ -12,3 +15,77 @@
   offsetXY="-300 -5"
   >
 </Button>
+
+<Panel
+  id="scenarioMenu"
+  rectAlignment="MiddleCenter"
+  width="1000"
+  height="900"
+  offsetXY="0 -60"
+
+  padding="15 15 15 15"
+  spacing="30"
+  color="rgba(0, 0, 0, 0.95)"
+  active="false" >
+
+  <VerticalLayout spacing = "10" childForceExpandHeight="false" >
+    <Text preferredHeight="50" flexibleHeight="0" fontSize="32" fontStyle="Bold" alignment="UpperCenter">
+      MAP SELECTION
+    </Text>
+
+    <HorizontalLayout preferredHeight="40" flexibleHeight="0" spacing="15" >
+      <Panel preferredWidth="150" padding="20 0 0 0">
+        <Text alignment="MiddleLeft" fontSize="22" >
+          Campaign:
+        </Text>
+      </Panel>
+      <Dropdown preferredWidth="280">
+        <Option selected="true">Episode 1</Option>
+      </Dropdown>
+      <Text flexibleWidth="1" preferredWidth="600"/>
+    </HorizontalLayout>
+
+    <Panel padding="20 0 0 0">
+      <Text preferredHeight="80" flexibleHeight="0" alignment="UpperLeft" >
+        Some scenario description is shown here. Author credits as well.
+        Second string,
+        third string.
+        4th string.
+      </Text>
+    </Panel>
+
+    <HorizontalLayout preferredHeight="40" flexibleHeight="0" spacing="15" >
+      <Panel preferredWidth="150" padding="20 0 0 0">
+        <Text alignment="MiddleLeft" fontSize="22" >
+          Scenario:
+        </Text>
+      </Panel>
+      <Dropdown active="true" preferredWidth="280">
+        <Option selected="true">Knee Deep in the Dead</Option>
+        <Option>The Shores of Hell</Option>
+        <Option>Inferno</Option>
+        <Option>Thy Flesh Consumed</Option>
+        <Option>...And Hell Followed</Option>
+      </Dropdown>
+      <Panel preferredWidth="600" >
+        <Toggle>
+          <Text>
+            Clear inventory
+          </Text>
+        </Toggle>
+      </Panel>
+    </HorizontalLayout>
+
+    <Image id="scenarioPreview" image="" preferredHeight="600" flexibleHeight="1" padding="10 10 10 10"/>
+
+    <HorizontalLayout
+      padding="300 300 0 0"
+      spacing="40"
+      preferredHeight="60"
+      flexibleHeight="0" >
+      <Button text="OK" />
+      <Button text="Cancel" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+</Panel>

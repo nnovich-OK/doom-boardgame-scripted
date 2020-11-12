@@ -1,2 +1,8 @@
+require("instances")
+
 function onLoad()
+end
+
+function onNewGameClick(player, value, id)
+  instances.vis.call("toggleInterface", {id="scenarioMenu", color=player.color})
 end
