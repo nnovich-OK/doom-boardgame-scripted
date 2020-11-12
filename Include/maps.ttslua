@@ -1,0 +1,76 @@
+maps = {}
+local package = maps
+
+-- PACKAGE IMPORT
+--setmetatable(utils, {__index = _G}) --TODO delete
+local JSON = JSON
+local maps=maps
+
+-- PACKAGE BODY
+local _ENV = package
+
+-- Variables
+
+-- Local methods declaration
+
+maps["Episode 1"] = {
+  notes = "The first half of official 10 maps campaign. The secodn one requires expansion set.",
+  guide = "https://www.dropbox.com/s/0rs2ev6j9r9ohrn/Doom_ep_1_web.pdf?dl=1",
+  scenarios = {
+    ["Knee Deep in the Dead"] = {
+      guidePage = 1,
+      areas = JSON.decode([[
+
+      ]])
+
+    },
+
+    ["The Shores of Hell"] = {
+      guidePage = 2,
+      areas = JSON.decode([[
+
+      ]])
+
+    },
+
+    ["Inferno"] = {
+      guidePage = 3,
+      areas = JSON.decode([[
+
+      ]])
+
+    },
+
+    ["Thy Flesh Consumed"] = {
+      guidePage = 4,
+      areas = JSON.decode([[
+
+      ]])
+
+    },
+
+    ["...And Hell Followed"] = {
+      guidePage = 5,
+      areas = JSON.decode([[
+
+      ]])
+
+    },
+  }
+}
+
+maps["Mines of Mars"] = {
+  notes = "Single map scenario by Knuckles Eki.",
+  guide = "http://cloud-3.steamusercontent.com/ugc/1669108591173352598/FB24ABE1C7D883E34EFA5C3D574996EBED5BBE7F/",
+  scenarios = {
+    ["Mines of Mars"] = {
+      guidePage = 1,
+      areas = JSON.decode([[
+
+      ]])
+
+    },
+  }
+}
+
+return package

@@ -39,18 +39,16 @@
           Campaign:
         </Text>
       </Panel>
-      <Dropdown preferredWidth="280">
+      <Dropdown id="campaignDropdown" preferredWidth="280" onValueChanged="a25fea/onCampaignChanged" >
         <Option selected="true">Episode 1</Option>
+        <Option>Mines of Mars</Option>
       </Dropdown>
       <Text flexibleWidth="1" preferredWidth="600"/>
     </HorizontalLayout>
 
     <Panel padding="20 0 0 0">
-      <Text preferredHeight="80" flexibleHeight="0" alignment="UpperLeft" >
-        Some scenario description is shown here. Author credits as well.
-        Second string,
-        third string.
-        4th string.
+      <Text id="campaignNotes" preferredHeight="80" flexibleHeight="0" alignment="UpperLeft" >
+        The first half of official 10 maps campaign. The secodn one requires expansion set.
       </Text>
     </Panel>
 
@@ -60,12 +58,15 @@
           Scenario:
         </Text>
       </Panel>
-      <Dropdown active="true" preferredWidth="280">
+      <Dropdown id="Episode 1 Dropdown" active="true" preferredWidth="280" onValueChanged="a25fea/onScenarioChanged" >
         <Option selected="true">Knee Deep in the Dead</Option>
         <Option>The Shores of Hell</Option>
         <Option>Inferno</Option>
         <Option>Thy Flesh Consumed</Option>
         <Option>...And Hell Followed</Option>
+      </Dropdown>
+      <Dropdown id="Mines of Mars Dropdown" active="false" preferredWidth="280" onValueChanged="a25fea/onScenarioChanged" >
+        <Option selected="true">Mines of Mars</Option>
       </Dropdown>
       <Panel preferredWidth="600" >
         <Toggle>
@@ -76,7 +77,11 @@
       </Panel>
     </HorizontalLayout>
 
-    <Image id="scenarioPreview" image="" preferredHeight="600" flexibleHeight="1" padding="10 10 10 10"/>
+    <Image id="scenarioPreview"
+      image="PREVIEW Episode 1 - Knee Deep in the Dead"
+      preferredHeight="600"
+      flexibleHeight="1"
+      padding="10 10 10 10"/>
 
     <HorizontalLayout
       padding="300 300 0 0"

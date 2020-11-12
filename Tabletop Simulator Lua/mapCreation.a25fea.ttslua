@@ -1,8 +1,38 @@
 require("instances")
+require("maps")
+
+local campaignName = "Episode 1"
+local scenarioName = "Knee Deep in the Dead"
+
+
+-- Local methods declaration
+local refreshPreview
 
 function onLoad()
 end
 
 function onNewGameClick(player, value, id)
   instances.vis.call("toggleInterface", {id="scenarioMenu", color=player.color})
+end
+
+function onCampaignChanged(player, value, id)
+  Global.UI.setAttribute(campaignName.." Dropdown", "active", "false")
+  campaignName = value
+  Global.UI.setAttribute(campaignName.." Dropdown", "active", "true")
+  Global.UI.setAttribute("campaignNotes", "text", maps[campaignName].notes)
+
+  for k in pairs(maps[campaignName].scenarios) do
+    scenarioName = k
+    break
+  end
+  refreshPreview()
+end
+
+function onScenarioChanged(player, value, id)
+  scenarioName = value
+  refreshPreview()
+end
+
+function refreshPreview()
+  Global.UI.setAttribute("scenarioPreview", "image", "PREVIEW "..campaignName.." - "..scenarioName)
 end
