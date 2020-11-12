@@ -2,8 +2,8 @@ require("constants")
 require("instances")
 require("utils")
 
-local hitLuck = {Red={}, Green={}, Blue={}, White={}}
-local ammoLuck = {Red={}, Green={}, Blue={}, White={}}
+local hitLuck = nil
+local ammoLuck = nil
 
 local legendString = [[
 n - number of rolles
@@ -30,13 +30,7 @@ local updateLuck
 local displayLuck
 
 function onPreprocFinished()
-  -- set all default values to 0 for luck tables
-  for _, color in ipairs(constants.allPlayerColors) do
-    utils.setTableDefaultValue(hitLuck[color], 0)
-    utils.setTableDefaultValue(ammoLuck[color], 0)
-    hitLuck[color].type = "Wounds"..color
-    ammoLuck[color].type = "Ammo"..color
-  end
+  resetLuck()
 end
 
 -- color, hit, ammo, stats
@@ -124,4 +118,28 @@ end
 function onLuckClick(player, value, id)
   instances.vis.call("toggleInterface",
     {color = player.color, id = "luckTracker"})
+end
+
+function resetLuck()
+  hitLuck = {Red={}, Green={}, Blue={}, White={}}
+  ammoLuck = {Red={}, Green={}, Blue={}, White={}}
+
+  -- set all default values to 0 for luck tables
+  for _, color in ipairs(constants.allPlayerColors) do
+    utils.setTableDefaultValue(hitLuck[color], 0)
+    utils.setTableDefaultValue(ammoLuck[color], 0)
+    hitLuck[color].type = "Wounds"..color
+    ammoLuck[color].type = "Ammo"..color
+
+    Global.UI.setAttribute("luckN" .. color, "text", "")
+    for _, type in ipairs({hitLuck[color].type, ammoLuck[color].type}) do
+      Global.UI.setAttribute("luckExpected" .. type, "text", "")
+      Global.UI.setAttribute("luckRolled" .. type, "text", "")
+      Global.UI.setAttribute("luckPerRoll" .. type, "text", "")
+      
+      Global.UI.setAttribute("luckDeviation" .. type, "text", "")
+      Global.UI.setAttribute("luckK" .. type, "text", "")
+      Global.UI.setAttribute("luckProbability" .. type, "text", "")
+    end
+  end
 end

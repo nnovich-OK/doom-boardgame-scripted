@@ -74,6 +74,7 @@ function onDifficultyChosen(player, value, id)
 
 
   instances.inv.call("resetFrags")
+  instances.luck.call("resetLuck")
   if keepInvWhenLoading then
     instances.inv.call("resetInventoryPartial")
   else

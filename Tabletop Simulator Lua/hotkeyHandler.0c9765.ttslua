@@ -76,6 +76,9 @@ function onScriptingButtonDown(index,  player_color)
   elseif index == 7 then
     findMonsterToActivate(player_color)
 
+  elseif index == 5 then  --TODO: remove
+    print(Player["White"].getHoverObject().tag)
+
   end
 end
 
