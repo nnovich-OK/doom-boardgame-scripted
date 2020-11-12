@@ -69,9 +69,9 @@
         <Option selected="true">Mines of Mars</Option>
       </Dropdown>
       <Panel preferredWidth="600" >
-        <Toggle>
+        <Toggle id="keepInventory" isOn="true" onValueChanged="a25fea/onKeepInventoryClick">
           <Text>
-            Clear inventory
+            Keep inventory
           </Text>
         </Toggle>
       </Panel>

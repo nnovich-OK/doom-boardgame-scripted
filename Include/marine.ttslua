@@ -6,6 +6,8 @@ local health = {
    max = 10
 }
 
+local startingHealthModifier = {2, 2, 0, -1, -2}
+
 local initialLocation = {
   Red = {pos = {32.50, 1.01, -29.50}, rot = {0.00, 90.00, 0.00}},
   Green = {pos = {46.50, 1.01, -7.50}, rot = {0.00, 0.00, 0.00}},
@@ -261,4 +263,10 @@ function onOrderChange(newOrder)
     self.UI.setAttribute("orderButton", "active", "true")
     self.UI.setAttribute("orderImage", "image", newOrder)
   end
+end
+
+function resetHealth(difficulty)
+  health.max = 11 - utils.getMarineCount() + startingHealthModifier[difficulty]
+  health.value = health.max
+  updateHealthUI()
 end

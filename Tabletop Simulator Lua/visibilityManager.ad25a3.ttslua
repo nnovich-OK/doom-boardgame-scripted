@@ -57,7 +57,6 @@ function hideOtherInterfacesInGroup(id, color)
   if groupsToHide then
     for _, group in ipairs(groupsToHide) do
       for _, inf in ipairs(groupInterfaces[group]) do
-        print(group, inf)
         if inf ~= id then
           cachedHide(inf, color)
         end

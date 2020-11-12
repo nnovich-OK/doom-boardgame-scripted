@@ -16,6 +16,8 @@ local fragTintColors = {
 local invMode = {Red={}, Green={}, Blue={}, White={}}
 local lastInvMode = {Red={}, Green={}, Blue={}, White={}}
 
+local startingAmmoModifier = {2, 2, 0, -1, -1}
+
 local pickableTokens = {
   ['Armor']='armor',
 
@@ -345,6 +347,14 @@ function addFrag(source)
     "showInterface",
     {id="fragsPanel", color="White|Red|Green|Blue"})
 
+end
+
+function resetFrags()
+  for i = 1, fragsScored do
+    Global.UI.setAttribute("fragImage" .. i, "color", "rgba(0.4, 0.4, 0.4, 1)")
+    Global.UI.setAttribute("frag" .. i, "tooltip", "Double click to add")
+  end
+  fragsScored = 0
 end
 
 function onInventoryItemClick(player, value, id)
@@ -712,4 +722,38 @@ function activateMarineOrder(player_color, newOrder)
     utils.getMarine(marineColor).call("onOrderChange", marineOrder[marineColor])
   end
 
+end
+
+function resetInventoryPartial()
+  broadcastToAll("Inventory is preserved except for keys, berserk and orders", Color.Orange)
+  for _, clr in ipairs(constants.allMarineColors) do
+    setItemCount(clr, "berserk", 0)
+    if marineOrder[clr] then
+      activateMarineOrder(clr, nil)
+    end
+  end
+
+  setItemCount("Blue", "bluekey", 0)
+  setItemCount("Blue", "yellowkey", 0)
+  setItemCount("Blue", "redkey", 0)
+end
+
+function resetInventoryFull(difficulty)
+  local shellCount = 5 - utils.getMarineCount() + startingAmmoModifier[difficulty]
+
+  for _, clr in ipairs(constants.allMarineColors) do
+    for item in pairs(saveStateItems) do
+      if item == "armor" then
+        setItemCount(clr, item, 2)
+      elseif item == "shell" then
+        setItemCount(clr, item, shellCount)
+      else
+        setItemCount(clr, item, 0)
+      end
+    end
+    
+    if marineOrder[clr] then
+      activateMarineOrder(clr, nil)
+    end
+  end
 end

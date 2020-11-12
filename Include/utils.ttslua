@@ -26,6 +26,17 @@ function getMarine(color)
   return getObjectFromGUID(marines[color])
 end
 
+function getMarineCount()
+  local count = 0
+  for _, clr in ipairs(constants.allMarineColors) do
+    if Player[clr].seated then
+      count = count + 1
+    end
+  end
+
+  return math.max(1, count)
+end
+
 
 function setTableDefaultValue(table, value)
   local key = {}
@@ -156,7 +167,6 @@ function isAboveMap(obj)
   end
 
   return false
-
 end
 
 return package

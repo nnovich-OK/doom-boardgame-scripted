@@ -1,5 +1,7 @@
 require("instances")
 require("maps")
+require("constants")
+require("utils")
 
 local campaignLoaded = "Episode 1"
 local scenarioLoaded = "Knee Deep in the Dead"
@@ -8,6 +10,7 @@ local difficultyLoaded = 3
 local campaignToLoad = "Episode 1"
 local scenarioToLoad = "Knee Deep in the Dead"
 local difficultyToLoad = 3
+local keepInvWhenLoading = true
 
 
 -- Local methods declaration
@@ -47,10 +50,13 @@ function onCancelClick(player, value, id)
 end
 
 function onDifficultyClick(player, value, id)
-  print("difficulty"..difficultyToLoad)
   Global.UI.setAttribute("difficulty"..difficultyToLoad, "color", "rgba(0.4, 0.4, 0.4, 1)")
-  difficultyToLoad = value
+  difficultyToLoad = tonumber(value, 10)
   Global.UI.setAttribute("difficulty"..difficultyToLoad, "color", "White")
+end
+
+function onKeepInventoryClick(player, value, id)
+  keepInvWhenLoading = string.lower(value) == "true"
 end
 
 
@@ -59,6 +65,23 @@ function onMapChosen(player, value, id)
 end
 
 function onDifficultyChosen(player, value, id)
+  broadcastToAll("LOADING NEW SCENARIO", Color.Orange)
+  printToAll(" Campaign: ".. campaignToLoad, Color.Orange)
+  printToAll(" Scenario: ".. scenarioToLoad, Color.Orange)
+  printToAll(" Difficulty: "..difficultyToLoad, Color.Orange)
+  printToAll(" Keep inventory: " .. tostring(keepInvWhenLoading), Color.Orange)
   instances.vis.call("hideInterface", {id = "difficultyMenu", color = player.color})
+
+
+  instances.inv.call("resetFrags")
+  if keepInvWhenLoading then
+    instances.inv.call("resetInventoryPartial")
+  else
+    instances.inv.call("resetInventoryFull", difficultyToLoad)
+    for _, clr in ipairs(constants.allMarineColors) do
+      utils.getMarine(clr).call("resetHealth", difficultyToLoad)
+    end
+  end
+
   --TODO: clear, then load
 end
