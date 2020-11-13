@@ -52,6 +52,14 @@ end
 function toggleOpen(params)
   local state = self.getStateId()
   if state == 1 then
+    local gmNotes = self.getGMNotes()
+    if gmNotes and string.find(gmNotes, "Reveal:") then
+      instances.map.call("revealArea", {
+        area=string.gsub(gmNotes, "Reveal:", ""),
+        color=params.color
+      })
+      self.setGMNotes("")
+    end
     self.setState(2)
   elseif state == 2 then
     self.setState(1)

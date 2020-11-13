@@ -93,7 +93,7 @@ function onObjectSpawn(object)
 end
 
 function onObjectDestroy(obj)
-  if not utils.isMonster(obj) then
+  if not utils.isMonster(obj) or string.find(obj.getName(), "Grey") then
     return
   end
 
@@ -189,4 +189,41 @@ function onManualClearActive(monster)
   if monster == activeMonster then
     activeMonster = nil
   end
+end
+
+function spawnElement(req)
+  local bagName = req.elem.name
+  local monsterType = utils.getMonsterType(req.elem.name)
+
+  if string.find(req.elem.name, "Grey") and monsterType then
+    local maxCount = 0
+    for _, color in ipairs(constants.allMarineColors) do
+      if Player[color].seated then
+        local currentCount = getBagContentCount(allBags[color.." "..monsterType])
+        if maxCount < currentCount then
+          maxCount = currentCount
+          bagName = color.." "..monsterType
+        end
+      end
+    end
+
+    if maxCount == 0 then
+      broadcastToAll("No figures left for ".. req.elem.name, Color.Oragne)
+      return
+    end
+  end
+
+  allBags[bagName].takeObject({
+    position=req.elem.position,
+    rotation=req.elem.rotation,
+    smooth=false,
+    callback_function=function(obj)
+      if req.lock then
+        obj.setLock(true)
+      end
+      if req.elem.reveal then
+        obj.setGMNotes("Reveal:"..req.elem.reveal)
+      end
+    end,
+  })
 end

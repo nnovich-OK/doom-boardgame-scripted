@@ -12,6 +12,8 @@ local scenarioToLoad = "Knee Deep in the Dead"
 local difficultyToLoad = 3
 local keepInvWhenLoading = true
 
+local revealedAreas = {}
+
 
 -- Local methods declaration
 local refreshPreview
@@ -96,5 +98,75 @@ function onDifficultyChosen(player, value, id)
     end
   end
 
-  --TODO: clear, then load
+  revealedAreas = {}
+  for areaName in pairs(maps[campaignToLoad].scenarios[scenarioToLoad].areas) do
+    revealArea({area=areaName, color=player.color})
+    break
+  end
+end
+
+function revealArea(req)
+  if revealedAreas[req.area] then
+    return
+  end
+
+  broadcastToAll("Revealing "..req.area, req.color)
+
+  local area = maps[campaignToLoad].scenarios[scenarioToLoad].areas[req.area]
+  for _, tile in ipairs(area.mapTiles) do
+    instances.creator.call("spawnElement", {elem=tile, lock=true})
+  end
+
+  for _, door in ipairs(area.doors) do
+    if not revealedAreas[door.reveal] then
+      instances.creator.call("spawnElement", {elem=door, lock=true})
+    end
+  end
+
+  for _, tp in ipairs(area.teleporters) do
+    instances.creator.call("spawnElement", {elem=tp, lock=true})
+  end
+
+  for _, ammo in ipairs(area.ammoTokens) do
+    instances.creator.call("spawnElement", {elem=ammo})
+    if difficultyToLoad == 1 then
+      instances.creator.call("spawnElement", {elem=ammo})
+    end
+  end
+
+  for _, token in ipairs(area.otherTokens) do
+    local lock = false
+    if string.find(token.name, "Compass")
+      or string.find(token.name, "Encounter")
+      or string.find(token.name, "Obstacle")
+      or string.find(token.name, "Duct")
+      or string.find(token.name, "Barrel")
+    then
+      lock = true
+    end
+    instances.creator.call("spawnElement", {elem=token, lock=lock})
+  end
+
+
+  for _, mnst in ipairs(area.colorMonsters) do
+    if Player[utils.getColor(mnst.name)].seated or true then --TODO: remove "or true"
+      instances.creator.call("spawnElement", {elem=mnst})
+    end
+  end
+
+  for _, mnst in ipairs(area.greyMonsters) do
+    instances.creator.call("spawnElement", {elem=mnst})
+  end
+
+  for _, mrn in ipairs(area.marines) do
+    local color = utils.getColor(mrn.name)
+    local marine = utils.getMarine(color)
+    if Player[color].seated then
+      marine.setPosition(mrn.position)
+    else
+      marine.call("resetPosition")
+    end
+  end
+
+  revealedAreas[req.area] = true
 end

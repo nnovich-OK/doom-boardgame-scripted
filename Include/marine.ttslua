@@ -238,8 +238,7 @@ function defeatClick(player, value, id)
   local deathTokenPos = self.getPosition()
   -- without this correction, token is spawned slightly in air
   deathTokenPos.y = deathTokenPos.y - 0.03
-  self.setPositionSmooth(initialLocation[color].pos, false, false)
-  self.setRotationSmooth(initialLocation[color].rot, false, false)
+  resetPosition()
 
   instances.inv.call("onMarineDeath", color)
 
@@ -250,6 +249,12 @@ function defeatClick(player, value, id)
     snap_to_grid      = true,
   })
 
+end
+
+function resetPosition()
+  local color = utils.getColor(self.getName())
+  self.setPositionSmooth(initialLocation[color].pos, false, false)
+  self.setRotationSmooth(initialLocation[color].rot, false, false)
 end
 
 function onArmorSet(armorValue)

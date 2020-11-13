@@ -12,6 +12,7 @@ local guidList = {
     monster = "48b7e7", -- monsterTemplate
     door = "c28d4a", -- doorTemplate
     scanner = "457f3e", -- mapScanner
+    map = "a25fea", -- mapCreation
 }
 
 setmetatable(instances, {__index = function(t, k)

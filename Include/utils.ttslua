@@ -218,4 +218,14 @@ function isAboveMap(obj)
   return false
 end
 
+function getMonsterType(fullName)
+  for _, type in ipairs(constants.mnstList) do
+    if string.find(fullName, type) then
+      return type
+    end
+  end
+
+  return nil
+end
+
 return package

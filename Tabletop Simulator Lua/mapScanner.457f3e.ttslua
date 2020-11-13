@@ -113,7 +113,7 @@ function onPrintClick(player, value, id)
     end
   end
 
-  log(JSON.encode_pretty(map))
+  print(JSON.encode_pretty(map))
 end
 
 function onClearClick(player, value, id)
@@ -128,7 +128,6 @@ function onCheckClick(player, value, id)
     hiddenObjects = player.getSelectedObjects()
 
     for _, obj in ipairs(hiddenObjects) do
-      --obj.setColorTint(Color.Black)
       obj.setHiddenFrom({player.color})
     end
   else
