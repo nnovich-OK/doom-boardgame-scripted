@@ -76,12 +76,43 @@ function storeObject(mapTable, object)
     rotation = object.getRotation(),
   }
   if utils.isDoor(object) then
-    description.guid = object.getGUID()
+    description.mark = object.getGUID()
+    description.reveal = areaName
+  elseif utils.isTeleporter(object) then
+    description.mark = object.getName()
+    description.reveal = areaName
   end
   table.insert(mapTable, description)
 end
 
 function onPrintClick(player, value, id)
+  local marked = {}
+  for areaName, area in pairs(map) do
+    for _, type in ipairs({"doors", "teleporters"}) do
+      for _, obj in ipairs(area[type]) do
+        if obj.mark then
+          if not marked[obj.mark] then
+            marked[obj.mark] = {}
+          end
+          table.insert(marked[obj.mark], obj)
+        end
+      end
+    end
+  end
+
+  for mark, objects in pairs(marked) do
+    if #objects ~= 2 then
+      broadcastToColor("WTF! ".. #objects.." objects with mark "..mark, player.color, player.color)
+    else
+      local tmpReveal = objects[1].reveal
+      objects[1].reveal = objects[2].reveal
+      objects[2].reveal = tmpReveal
+
+      objects[1].mark = nil
+      objects[2].mark = nil
+    end
+  end
+
   log(JSON.encode_pretty(map))
 end
 
