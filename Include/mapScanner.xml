@@ -1,1 +1,33 @@
 <Defaluts />
+
+<Button
+  id="scannerToggle"
+  class="whiteOnBlack"
+  rectAlignment="LowerRight"
+  offsetXY="-90 10"
+
+  width="80"
+  height="40"
+  active="false"
+  visibility="White"
+
+  onClick="457f3e/onScanToggle"
+  text="Scanner"
+/>
+
+
+<HorizontalLayout
+  id="scanner"
+  rectAlignment="LowerRight"
+  offsetXY="-180 10"
+
+  width="500"
+  height="40"
+  active="false"
+  visibility="White"
+  >
+  <InputField id="scanSectionName" minWidth="300" fontSize="20">
+  </InputField>
+  <Button id="scanSectionButton" class="whiteOnBlack" onClick="457f3e/onScanClick" text="Scan" />
+  <Button id="scanSummaryButton" class="whiteOnBlack" onClick="457f3e/onPrintClick" text="Print" />
+</HorizontalLayout>

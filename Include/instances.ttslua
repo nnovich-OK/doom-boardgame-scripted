@@ -11,6 +11,7 @@ local guidList = {
     luck = "9c48d4", -- luckTracker
     monster = "48b7e7", -- monsterTemplate
     door = "c28d4a", -- doorTemplate
+    scanner = "457f3e", -- mapScanner
 }
 
 setmetatable(instances, {__index = function(t, k)
