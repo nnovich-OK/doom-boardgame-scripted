@@ -21,13 +21,15 @@
   rectAlignment="LowerRight"
   offsetXY="-180 10"
 
-  width="500"
+  width="580"
   height="40"
   active="false"
   visibility="White"
   >
-  <InputField id="scanSectionName" minWidth="300" fontSize="20">
+  <InputField id="scanSectionName" minWidth="300" fontSize="20" onEndEdit="457f3e/onAreaNameSet">
   </InputField>
+  <Button id="scanCheckButton" class="whiteOnBlack" onClick="457f3e/onCheckClick" text="Check" />
   <Button id="scanSectionButton" class="whiteOnBlack" onClick="457f3e/onScanClick" text="Scan" />
   <Button id="scanSummaryButton" class="whiteOnBlack" onClick="457f3e/onPrintClick" text="Print" />
+  <Button id="scanClearButton" class="whiteOnBlack" onClick="457f3e/onClearClick" text="Clear" />
 </HorizontalLayout>

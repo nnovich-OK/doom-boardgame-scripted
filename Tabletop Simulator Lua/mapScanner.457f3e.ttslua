@@ -1,5 +1,13 @@
 require("instances")
+require("utils")
 
+local map={}
+local areaName = nil
+local hiddenObjects = nil
+
+
+-- Local methods declaration
+local storeObject
 
 function onPreprocFinished()
   if Player["White"].steam_id == "76561198028110617" then
@@ -12,4 +20,90 @@ end
 
 function onScanToggle(player, value, id)
   instances.vis.call("toggleInterface", {id = "scanner", color = player.color})
+end
+
+function onAreaNameSet(player, value, id)
+  areaName = value
+end
+
+function onScanClick(player, value, id)
+  print("Area: ", areaName)
+
+  map[areaName] = {
+    mapTiles={},
+    doors={},
+    teleporters={},
+    ammoTokens={},
+    otherTokens={},
+
+    marines={},
+    greyMonsters={},
+    colorMonsters={},
+  }
+
+  objects = player.getSelectedObjects()
+  for _, obj in ipairs(objects) do
+    if utils.isMarine(obj) then
+      print("storing")
+      storeObject(map[areaName].marines, obj)
+    elseif utils.isMonster(obj) then
+      if string.find(obj.getName(), "Grey") then
+        storeObject(map[areaName].greyMonsters, obj)
+      else
+        storeObject(map[areaName].colorMonsters, obj)
+      end
+    elseif utils.isMapTile(obj) then
+      storeObject(map[areaName].mapTiles, obj)
+    elseif utils.isDoor(obj) then
+      storeObject(map[areaName].doors, obj)
+    elseif utils.isTeleporter(obj) then
+      storeObject(map[areaName].teleporters, obj)
+    elseif utils.isAmmoToken(obj) then
+      storeObject(map[areaName].ammoTokens, obj)
+    elseif utils.isToken(obj) then
+      storeObject(map[areaName].otherTokens, obj)
+    else
+      broadcastToColor("Uncategorized object: ".. obj.getName().."("..obj.getGUID()..")",
+        player.color, player.color)
+    end
+  end
+end
+
+function storeObject(mapTable, object)
+  local description = {
+    name = object.getName(),
+    position = object.getPosition(),
+    rotation = object.getRotation(),
+  }
+  if utils.isDoor(object) then
+    description.guid = object.getGUID()
+  end
+  table.insert(mapTable, description)
+end
+
+function onPrintClick(player, value, id)
+  log(JSON.encode_pretty(map))
+end
+
+function onClearClick(player, value, id)
+  if instances.click.call("isDoubleClick", {id=id, color=player.color} ) then
+    map = {}
+    broadcastToColor("Map cleared", player.color, player.color)
+  end
+end
+
+function onCheckClick(player, value, id)
+  if not hiddenObjects then
+    hiddenObjects = player.getSelectedObjects()
+
+    for _, obj in ipairs(hiddenObjects) do
+      --obj.setColorTint(Color.Black)
+      obj.setHiddenFrom({player.color})
+    end
+  else
+    for _, obj in ipairs(hiddenObjects) do
+      obj.setHiddenFrom({})
+    end
+    hiddenObjects = nil
+  end
 end
