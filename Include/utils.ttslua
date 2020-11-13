@@ -79,8 +79,43 @@ function isCharacter(obj)
 end
 
 function isDoor(obj)
-  return obj.tag == "Generic" and string.find(obj.getName(), "Door")
+  return obj.tag == "Generic" and string.find(obj.getName(), "Door") ~= nil
 end
+
+function isMapTile(obj)
+  return obj.tag == "Generic" and string.find(obj.getName(), "Map") ~= nil
+end
+
+function isAmmoToken(obj)
+  return obj.tag == "Card" and
+    (string.find(obj.getName(), "Shells/Bullets") ~= nil
+    or string.find(obj.getName(), "Rockets/Grenades") ~= nil
+    or string.find(obj.getName(), "Energy Cell") ~= nil)
+end
+
+function isTeleporter(obj)
+  return obj.tag == "Card" and string.find(obj.getName(), "Teleporter") ~= nil
+end
+
+function isObstacleToken(obj)
+  return (obj.tag == "Card" or obj.tag == "Generic") and
+    (string.find(obj.getName(), "Obstacle") ~= nil
+    or string.find(obj.getName(), "Barrel") ~= nil
+    or string.find(obj.getName(), "Duct") ~= nil)
+end
+
+function isCompassToken(obj)
+  return obj.tag == "Card" and string.find(obj.getName(), "Compass") ~= nil
+end
+
+function isEncounterToken(obj)
+  return (obj.tag == "Card" or obj.tag=="Generic") and string.find(obj.getName(), "Encounter") ~= nil
+end
+
+function isToken(obj)
+  return (obj.tag == "Card" or obj.tag=="Generic") and constants.tokenList[obj.getName()]
+end
+
 
 -- recursion is internal parameter, shouldn't be used from outside
 function getColor(str, recursion)

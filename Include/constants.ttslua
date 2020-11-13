@@ -19,4 +19,48 @@ mnstList = {
   "Cyberdemon",
 }
 
+tokenList = {
+  ['Armor']=true,
+
+  ['Shells/Bullets']=true,
+  ['Rockets/Grenades']=true,
+  ['Energy Cell']=true,
+
+  ['Chainsaw']=true,
+  ['Shotgun']=true,
+  ['Machine Gun']=true,
+  ['Chain Gun']=true,
+  ['Rocket Launcher']=true,
+  ['Plasma Gun']=true,
+  ['BFG']=true,
+
+  ['Berserk']=true,
+  ['Adrenaline']=true,
+
+  ['Blue Key']=true,
+  ['Yellow Key']=true,
+  ['Red Key']=true,
+
+  ['Health']=true,
+
+  ['Frag Location']= true,
+  ['Red Teleporter']= true,
+  ['Yellow Teleporter']= true,
+  ['Blue Teleporter']= true,
+  ['Compass Rose']= true,
+  ['Encounter']= true,
+  ['Cancel']= true,
+  ['Heal']= true,
+  ['Dodge']= true,
+  ['Guard']= true,
+  ['Aim']= true,
+  ['Blocking Obstacle 1']= true,
+  ['Blocking Obstacle 2']= true,
+  ['Blocking Obstacle 3']= true,
+  ['Damaging Obstacle']= true,
+  ['Exploding Barrel']= true,
+  ['Body Encounter']= true,
+  ['Duct']= true,
+}
+
 return package

@@ -77,9 +77,19 @@ function onScriptingButtonDown(index,  player_color)
     findMonsterToActivate(player_color)
 
   elseif index == 5 then  --TODO: remove
-    print(Player["White"].getHoverObject().tag)
-
+    local obj = Player["White"].getHoverObject()
+    --print(obj.tag)
+    --print(obj.getName())
+    print(utils.isToken(obj) and "Token")
+    print(utils.isDoor(obj) and " Door")
+    print(utils.isMapTile(obj) and " Map")
+    print(utils.isAmmoToken(obj) and " Ammo")
+    print(utils.isTeleporter(obj) and " Teleporter")
+    print(utils.isObstacleToken(obj) and " Obstacle")
+    print(utils.isCompassToken(obj) and " Compass")
+    print(utils.isEncounterToken(obj) and " Encounter")
   end
+
 end
 
 function getMonsterStats(name)
