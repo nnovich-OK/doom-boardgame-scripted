@@ -725,7 +725,7 @@ function activateMarineOrder(player_color, newOrder)
 end
 
 function resetInventoryPartial()
-  broadcastToAll("Inventory is preserved except for keys, berserk and orders", Color.Orange)
+  printToAll("Inventory is preserved except for keys, berserk and orders", Color.Orange)
   for _, clr in ipairs(constants.allMarineColors) do
     setItemCount(clr, "berserk", 0)
     if marineOrder[clr] then
@@ -751,7 +751,7 @@ function resetInventoryFull(difficulty)
         setItemCount(clr, item, 0)
       end
     end
-    
+
     if marineOrder[clr] then
       activateMarineOrder(clr, nil)
     end

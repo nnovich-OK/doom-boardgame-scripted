@@ -116,6 +116,20 @@ function isToken(obj)
   return (obj.tag == "Card" or obj.tag=="Generic") and constants.tokenList[obj.getName()]
 end
 
+function isDeckOfTokens(obj)
+  if obj.tag ~= "Deck" or obj.getQuantity() == -1 then
+    return false
+  end
+
+  for _, innerObj in ipairs(obj.getObjects()) do
+    if not constants.tokenList[innerObj.name] then
+      return false
+    end
+  end
+
+  return true
+end
+
 
 -- recursion is internal parameter, shouldn't be used from outside
 function getColor(str, recursion)

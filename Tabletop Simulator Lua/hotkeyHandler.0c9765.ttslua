@@ -88,6 +88,8 @@ function onScriptingButtonDown(index,  player_color)
     print(utils.isObstacleToken(obj) and " Obstacle")
     print(utils.isCompassToken(obj) and " Compass")
     print(utils.isEncounterToken(obj) and " Encounter")
+    print(utils.isDeckOfTokens(obj) and " Deck of Tokens")
+
   end
 
 end

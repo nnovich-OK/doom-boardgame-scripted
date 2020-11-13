@@ -84,5 +84,17 @@ function onDifficultyChosen(player, value, id)
     end
   end
 
+  -- clear all tiles/tokens
+  for _, obj in ipairs(getAllObjects()) do
+    if utils.isMonster(obj)
+      or utils.isMapTile(obj)
+      or utils.isToken(obj)
+      or utils.isDoor(obj)
+      or utils.isDeckOfTokens(obj)
+    then
+      obj.destruct()
+    end
+  end
+
   --TODO: clear, then load
 end
