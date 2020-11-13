@@ -154,8 +154,12 @@ function revealArea(req)
     end
   end
 
-  for _, mnst in ipairs(area.greyMonsters) do
-    instances.creator.call("spawnElement", {elem=mnst})
+  for i, mnst in ipairs(area.greyMonsters) do
+    -- workaround with delay, so monster count has time to update
+    Wait.time(function()
+      instances.creator.call("spawnElement", {elem=mnst})
+    end,
+    0.1 * i)
   end
 
   for _, mrn in ipairs(area.marines) do
