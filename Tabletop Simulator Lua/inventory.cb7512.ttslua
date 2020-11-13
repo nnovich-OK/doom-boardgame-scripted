@@ -240,6 +240,7 @@ local setItemCount
 local adjustItemCount
 local haveItem
 local fullWithItem
+local pickItem
 local activateMarineOrder
 
 function onPreprocFinished()
@@ -519,25 +520,35 @@ function onAutopickClick(player, value, id)
 
   local pickWorked = false
   for _, hit in ipairs(hitTable) do
-    local item = pickableTokens[hit.hit_object.getName()]
-    if hit.hit_object.tag == "Card" and item then
-
-      local picked = true
-      local amount = 1
-      if item == "health" then
-        amount = 0 -- no item is stored, health is applied immediately
-        picked = marine.call("onHealthPickup", marineColor)
-      elseif item == "berserk" then
-        amount = 3
-      end
-
-      if picked then
-        adjustItemCount(marineColor, item, amount)
-        printToAll(marine.getName() .. " picked " .. item, player.color)
+    if utils.isToken(hit.hit_object) and item then
+      if pickItem(player.color, marineColor, pickableTokens[hit.hit_object.getName()]) then
         hit.hit_object.destruct()
+        pickWorked = true
       end
 
-      pickWorked = pickWorked or picked
+    elseif utils.isDeckOfTokens(hit.hit_object) then
+      local consumedIndexes = {}
+      for _, innerObj in ipairs(hit.hit_object.getObjects()) do
+        if pickItem(player.color, marineColor, pickableTokens[innerObj.name]) then
+          pickWorked = true
+          table.insert(consumedIndexes, 1, innerObj.index)
+        end
+      end
+      if #consumedIndexes == hit.hit_object.getQuantity() then
+        hit.hit_object.destruct()
+      else
+        for i, index in ipairs(consumedIndexes) do
+          Wait.time(function()
+            local pos = hit.hit_object.getPosition()
+            pos.y = pos.y - 1
+            hit.hit_object.takeObject({index=index, position = pos, smooth = false,
+              callback_function = function(obj) obj.destruct() end
+            })
+          end,
+          (i-1)*0.1)
+        end
+      end
+
     end
   end
 
@@ -546,6 +557,29 @@ function onAutopickClick(player, value, id)
       player.color,
       player.color)
   end
+end
+
+function pickItem(player_color, marineColor, item)
+  if not item then
+    return false
+  end
+
+  local picked = true
+  local amount = 1
+  local marine = utils.getMarine(marineColor)
+  if item == "health" then
+    amount = 0 -- no item is stored, health is applied immediately
+    picked = marine.call("onHealthPickup", marineColor)
+  elseif item == "berserk" then
+    amount = 3
+  end
+
+  if picked then
+    adjustItemCount(marineColor, item, amount)
+    printToAll(marine.getName() .. " picked " .. item, player_color)
+  end
+
+  return picked
 end
 
 -- all colors can be different: white player forcing blue marine to share with red one
