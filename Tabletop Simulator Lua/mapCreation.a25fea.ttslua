@@ -99,10 +99,7 @@ function onDifficultyChosen(player, value, id)
   end
 
   revealedAreas = {}
-  for areaName in pairs(maps[campaignToLoad].scenarios[scenarioToLoad].areas) do
-    revealArea({area=areaName, color=player.color})
-    break
-  end
+  revealArea({area="Start area", color=player.color})
 end
 
 function revealArea(req)
