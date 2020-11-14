@@ -44,7 +44,6 @@ function onScanClick(player, value, id)
   objects = player.getSelectedObjects()
   for _, obj in ipairs(objects) do
     if utils.isMarine(obj) then
-      print("storing")
       storeObject(map[areaName].marines, obj)
     elseif utils.isMonster(obj) then
       if string.find(obj.getName(), "Grey") then

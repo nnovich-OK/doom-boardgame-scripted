@@ -42,6 +42,7 @@
       <Dropdown id="campaignDropdown" preferredWidth="280" onValueChanged="a25fea/onCampaignChanged" >
         <Option selected="true">Episode 1</Option>
         <Option>Mines of Mars</Option>
+        <Option>Doom Maps Damoqles part 1</Option>
       </Dropdown>
       <Text flexibleWidth="1" preferredWidth="600"/>
     </HorizontalLayout>
@@ -67,6 +68,17 @@
       </Dropdown>
       <Dropdown id="Mines of Mars Dropdown" active="false" preferredWidth="280" onValueChanged="a25fea/onScenarioChanged" >
         <Option selected="true">Mines of Mars</Option>
+      </Dropdown>
+      <Dropdown id="Doom Maps Damoqles part 1 Dropdown" active="false" preferredWidth="280" onValueChanged="a25fea/onScenarioChanged" >
+        <Option selected="true">Map 1</Option>
+        <Option>Map 2</Option>
+        <Option>Map 3</Option>
+        <Option>Map 4</Option>
+        <Option>Map 5</Option>
+        <Option>Map 6</Option>
+        <Option>Map 7</Option>
+        <Option>Map 8</Option>
+        <Option>Map 9</Option>
       </Dropdown>
       <Panel preferredWidth="600" >
         <Toggle id="keepInventory" isOn="true" onValueChanged="a25fea/onKeepInventoryClick">
