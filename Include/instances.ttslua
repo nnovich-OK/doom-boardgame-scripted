@@ -13,6 +13,7 @@ local guidList = {
     door = "c28d4a", -- doorTemplate
     scanner = "457f3e", -- mapScanner
     map = "a25fea", -- mapCreation
+    teleport = "07fbc0", --teleportTemplate
 }
 
 setmetatable(instances, {__index = function(t, k)

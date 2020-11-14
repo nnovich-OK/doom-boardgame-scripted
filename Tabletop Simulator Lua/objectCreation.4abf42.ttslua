@@ -74,6 +74,9 @@ function onObjectSpawn(object)
   if utils.isDoor(object) then
     object.setLuaScript(instances.door.getLuaScript())
 
+  elseif utils.isTeleporter(object) then
+    object.setLuaScript(instances.teleport.getLuaScript())
+
   elseif utils.isMonster(object) then
     local count = getBagContentCount(allBags[object.getName()])
 

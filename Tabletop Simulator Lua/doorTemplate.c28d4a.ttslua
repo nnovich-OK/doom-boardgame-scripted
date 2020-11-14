@@ -27,7 +27,6 @@ end
 
 function onSave()
    local save_state = JSON.encode({xml = self.UI.getXml()})
-   -- local save_state = ""
    self.script_state = save_state
 end
 

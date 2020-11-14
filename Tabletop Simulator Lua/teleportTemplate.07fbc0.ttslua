@@ -1,0 +1,107 @@
+require("instances")
+require("utils")
+
+if string.find(self.getName(), "Template") then
+  return
+end
+
+local trackedMarine = nil
+
+
+-- Local methods declaration
+
+
+function onLoad(save_state)
+  saved_data = JSON.decode(save_state)
+
+  -- XML
+  if saved_data and saved_data.xml then
+    self.UI.setXml(saved_data.xml)
+  else
+    self.UI.setXml(instances.teleport.UI.getXml())
+  end
+end
+
+function onSave()
+   local save_state = JSON.encode({xml = self.UI.getXml()})
+   self.script_state = save_state
+end
+
+
+function onTeleportClick(player, value, id)
+  instances.click.call("handleClickByType",
+    {color = player.color,
+    id = id..self.getGUID(),
+    owner = self,
+    single = "askForDoubleClick",
+    parametersSingle = {color=player.color},
+    double = "teleport",
+    parametersDouble = {color=player.color},
+  })
+end
+
+function askForDoubleClick(params)
+  broadcastToColor("Doubleclick to teleport",
+    params.color, params.color)
+end
+
+function teleport(params)
+  local gmNotes = self.getGMNotes()
+  if gmNotes and string.find(gmNotes, "Reveal:") then
+    instances.map.call("revealArea", {
+      area=string.gsub(gmNotes, "Reveal:", ""),
+      color=params.color
+    })
+    self.setGMNotes("")
+  end
+
+  for _, obj in ipairs(getAllObjects()) do
+    if obj.getName() == self.getName()
+      and obj.tag == self.tag
+      and obj.getGUID() ~= self.getGUID()
+    then
+      local hitTable = Physics.cast(
+        {origin=obj.getPosition(), direction={0,1,0}, debug=false, max_distance=10})
+
+      for _, hit in ipairs(hitTable) do
+        if utils.isCharacter(hit.hit_object) then
+          broadcastToColor("Destination teleporter is occupied, please move figurine manually",
+            params.color, params.color)
+          return
+        end
+      end
+
+      trackedMarine.setPositionSmooth(obj.getPosition())
+      self.UI.setAttribute("teleport", "active", "false")
+      obj.call("onMarineArrived", trackedMarine)
+      trackedMarine = nil
+    end
+  end
+end
+
+function onObjectDrop(player_color, obj)
+  if not utils.isMarine(obj) then
+    return
+  end
+
+  if utils.getDistance(obj, self) ~= 0 then
+    return
+  end
+
+  trackedMarine = obj
+  self.UI.setAttribute("teleport", "active", "true")
+  self.UI.setAttribute("teleport", "textColor", "White")
+end
+
+function onObjectPickUp(player_color, obj)
+  if obj == trackedMarine then
+    self.UI.setAttribute("teleport", "active", "false")
+    trackedMarine = nil
+  end
+end
+
+function onMarineArrived(marine)
+  trackedMarine = marine
+  self.UI.setAttribute("teleport", "active", "true")
+  self.UI.setAttribute("teleport", "textColor", "White")
+end

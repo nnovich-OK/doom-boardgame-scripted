@@ -205,7 +205,7 @@ end
 
 function isAboveMap(obj)
   local hitTable = Physics.cast(
-    {origin=obj.getPosition(), direction={0,-1,0}, debug=false, max_distance=10}) --TODO: remove debug
+    {origin=obj.getPosition(), direction={0,-1,0}, debug=false, max_distance=10})
 
   for _, hit in ipairs(hitTable) do
     if hit.hit_object.tag == "Generic"

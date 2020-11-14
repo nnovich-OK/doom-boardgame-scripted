@@ -1,0 +1,19 @@
+<Button id="teleport"
+  class="whiteOnBlack"
+
+  onClick="onTeleportClick"
+
+  position="0 0 -2800"
+  rotation="270 0 0"
+  width="200"
+  height="100"
+  scale="1 5 1"
+
+  text="Teleport"
+  textColor="White"
+  fontSize="40"
+  fontStyle="Bold"
+  color="rgba(0, 0, 0, 0.95)"
+
+  active="false">
+</Button>
