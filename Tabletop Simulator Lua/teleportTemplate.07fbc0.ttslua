@@ -9,6 +9,7 @@ local trackedMarine = nil
 
 
 -- Local methods declaration
+local moveMarineFigurine
 
 
 function onLoad(save_state)
@@ -53,8 +54,15 @@ function teleport(params)
       color=params.color
     })
     self.setGMNotes("")
-  end
 
+    -- Wait for the second teleporter to spawn
+    Wait.time(function() moveMarineFigurine(params.color) end, 0.5)
+  else
+    moveMarineFigurine(params.color)
+  end
+end
+
+function moveMarineFigurine(player_color)
   for _, obj in ipairs(getAllObjects()) do
     if obj.getName() == self.getName()
       and obj.tag == self.tag
@@ -66,7 +74,7 @@ function teleport(params)
       for _, hit in ipairs(hitTable) do
         if utils.isCharacter(hit.hit_object) then
           broadcastToColor("Destination teleporter is occupied, please move figurine manually",
-            params.color, params.color)
+            player_color, player_color)
           return
         end
       end
