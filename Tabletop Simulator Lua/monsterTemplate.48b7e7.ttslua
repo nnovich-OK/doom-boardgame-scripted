@@ -83,9 +83,8 @@ function onLoad(save_state)
 end
 
 function onSave()
-   local save_state = JSON.encode({health = health, xml = self.UI.getXml()})
-   -- local save_state = ""
-   self.script_state = save_state
+  local save_state = JSON.encode({health = health, xml = self.UI.getXml()})
+  self.script_state = save_state
 end
 
 function createBtns()

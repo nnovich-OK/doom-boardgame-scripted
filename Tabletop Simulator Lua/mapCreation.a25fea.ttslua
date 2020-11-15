@@ -18,7 +18,36 @@ local revealedAreas = {}
 -- Local methods declaration
 local refreshPreview
 
-function onLoad()
+function onLoad(save_state)
+  saved_data = JSON.decode(save_state)
+
+  -- XML
+  if saved_data then
+    if saved_data.campaignLoaded then
+      campaignLoaded = saved_data.campaignLoaded
+    end
+    if saved_data.scenarioLoaded then
+      scenarioLoaded = saved_data.scenarioLoaded
+    end
+    if saved_data.difficultyLoaded then
+      difficultyLoaded = saved_data.difficultyLoaded
+    end
+    if saved_data.revealedAreas then
+      revealedAreas = saved_data.revealedAreas
+    end
+  end
+
+end
+
+function onSave()
+  local save_state = JSON.encode({
+    campaignLoaded = campaignLoaded,
+    scenarioLoaded = scenarioLoaded,
+    difficultyLoaded = difficultyLoaded,
+    revealedAreas = revealedAreas,
+  })
+
+  self.script_state = save_state
 end
 
 function onNewGameClick(player, value, id)
