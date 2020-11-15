@@ -240,7 +240,7 @@ local setItemCount
 local adjustItemCount
 local haveItem
 local fullWithItem
-local pickItem
+local pickToken
 local activateMarineOrder
 
 function onPreprocFinished()
@@ -520,8 +520,9 @@ function onAutopickClick(player, value, id)
 
   local pickWorked = false
   for _, hit in ipairs(hitTable) do
-    if utils.isToken(hit.hit_object) and item then
-      if pickItem(player.color, marineColor, pickableTokens[hit.hit_object.getName()]) then
+
+    if utils.isToken(hit.hit_object) then
+      if pickToken(player.color, marineColor, hit.hit_object) then
         hit.hit_object.destruct()
         pickWorked = true
       end
@@ -529,7 +530,7 @@ function onAutopickClick(player, value, id)
     elseif utils.isDeckOfTokens(hit.hit_object) then
       local consumedIndexes = {}
       for _, innerObj in ipairs(hit.hit_object.getObjects()) do
-        if pickItem(player.color, marineColor, pickableTokens[innerObj.name]) then
+        if pickToken(player.color, marineColor, innerObj) then
           pickWorked = true
           table.insert(consumedIndexes, 1, innerObj.index)
         end
@@ -538,6 +539,8 @@ function onAutopickClick(player, value, id)
         hit.hit_object.destruct()
       else
         for i, index in ipairs(consumedIndexes) do
+          -- spread destruction in time, so tokens doesn't form new stack
+          -- when taken from current stack
           Wait.time(function()
             local pos = hit.hit_object.getPosition()
             pos.y = pos.y - 1
@@ -559,27 +562,54 @@ function onAutopickClick(player, value, id)
   end
 end
 
-function pickItem(player_color, marineColor, item)
-  if not item then
+function pickToken(player_color, marineColor, tokenInfo)
+  local name = type(tokenInfo) == "table" and tokenInfo.name or tokenInfo.getName()
+  local mainItem = pickableTokens[name]
+
+  local gmNotes = type(tokenInfo) == "table" and tokenInfo.gm_notes or tokenInfo.getGMNotes()
+  local bonusItem = nil
+  if string.find(gmNotes, "^Bonus:") then
+    bonusItem = pickableTokens[string.gsub(gmNotes, "^Bonus:", "")]
+  end
+
+  if not mainItem then
     return false
   end
 
-  local picked = true
-  local amount = 1
+  local items = {mainItem, bonusItem}
+  local doubleItem = false
+  if mainItem == bonusItem then
+    items = {mainItem}
+    doubleItem = true
+  end
+
   local marine = utils.getMarine(marineColor)
-  if item == "health" then
-    amount = 0 -- no item is stored, health is applied immediately
-    picked = marine.call("onHealthPickup", marineColor)
-  elseif item == "berserk" then
-    amount = 3
+  local pickedSomething = false
+
+  for i = 1, #items do
+    local item = items[i]
+    local picked = true
+    local amount = doubleItem and i==1 and 2 or 1
+    if item == "health" then
+      amount = 0 -- no item is stored, health is applied immediately, can't be doubleItem
+      picked = marine.call("onHealthPickup", marineColor)
+    elseif item == "berserk" then
+      amount = 3
+    end
+
+    if picked then
+      pickedSomething = true
+      adjustItemCount(marineColor, item, amount)
+      if item == "berserk" then
+        printToAll(marine.getName() .. " activated " .. item, player_color)
+      else
+        local xStr = amount~=1 and " x"..amount or ""
+        printToAll(marine.getName() .. " picked " .. item .. xStr, player_color)
+      end
+    end
   end
 
-  if picked then
-    adjustItemCount(marineColor, item, amount)
-    printToAll(marine.getName() .. " picked " .. item, player_color)
-  end
-
-  return picked
+  return pickedSomething
 end
 
 -- all colors can be different: white player forcing blue marine to share with red one

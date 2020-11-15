@@ -157,9 +157,10 @@ function revealArea(req)
   end
 
   for _, ammo in ipairs(area.ammoTokens) do
-    instances.creator.call("spawnElement", {elem=ammo})
-    if difficultyLoaded == 1 then
+    if difficultyLoaded ~= 1 then
       instances.creator.call("spawnElement", {elem=ammo})
+    else
+      instances.creator.call("spawnElement", {elem=ammo, bonus=ammo.name})
     end
   end
 

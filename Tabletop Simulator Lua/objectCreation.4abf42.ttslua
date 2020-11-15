@@ -226,6 +226,8 @@ function spawnElement(req)
       end
       if req.elem.reveal then
         obj.setGMNotes("Reveal:"..req.elem.reveal)
+      elseif req.bonus then
+        obj.setGMNotes("Bonus:"..req.bonus)
       end
     end,
   })
