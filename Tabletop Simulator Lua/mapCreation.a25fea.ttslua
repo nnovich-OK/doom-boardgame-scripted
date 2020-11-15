@@ -98,6 +98,9 @@ function onDifficultyChosen(player, value, id)
     end
   end
 
+  campaignLoaded = campaignToLoad
+  scenarioLoaded = scenarioToLoad
+  difficultyLoaded = difficultyToLoad
   revealedAreas = {}
   revealArea({area="Start area", color=player.color})
 end
@@ -109,7 +112,7 @@ function revealArea(req)
 
   broadcastToAll("Revealing "..req.area, req.color)
 
-  local area = maps[campaignToLoad].scenarios[scenarioToLoad].areas[req.area]
+  local area = maps[campaignLoaded].scenarios[scenarioLoaded].areas[req.area]
   for _, tile in ipairs(area.mapTiles) do
     instances.creator.call("spawnElement", {elem=tile, lock=true})
   end
@@ -126,7 +129,7 @@ function revealArea(req)
 
   for _, ammo in ipairs(area.ammoTokens) do
     instances.creator.call("spawnElement", {elem=ammo})
-    if difficultyToLoad == 1 then
+    if difficultyLoaded == 1 then
       instances.creator.call("spawnElement", {elem=ammo})
     end
   end
