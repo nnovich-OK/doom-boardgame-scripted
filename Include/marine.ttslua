@@ -117,6 +117,10 @@ function onHealthPickup(player_color)
   return true
 end
 
+function onBarrelExplosion(player_color)
+  healthChange(player_color, "sub")
+end
+
 function healthChange(playerColor, change)
   local oldHP = health.value
 

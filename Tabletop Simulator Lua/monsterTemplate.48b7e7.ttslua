@@ -109,6 +109,10 @@ end
 function add(self, playerColor, value, id) healthChange(playerColor, "add") end
 function sub(self, playerColor, value, id) healthChange(playerColor, "sub") end
 
+function onBarrelExplosion(player_color)
+  healthChange(player_color, "sub")
+end
+
 function healthChange(playerColor, change)
   local oldHP = health.value
 
