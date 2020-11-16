@@ -14,37 +14,6 @@ local initialLocation = {
   Blue = {pos = {39.50, 1.01, 29.50}, rot = {0.00, 270.00, 0.00}},
 }
 
-local deathTokenJSON = [[
-{
-  "Name": "Card",
-  "Transform": {
-    "scaleX": 0.305394262,
-    "scaleY": 1.0,
-    "scaleZ": 0.305394262
-  },
-  "Nickname": "Frag location",
-  "Description": "Marks location of marine death to help with finding respawn zone",
-  "ColorDiffuse": {
-    "r": 0.713235259,
-    "g": 0.713235259,
-    "b": 0.713235259
-  },
-  "Locked": true,
-  "CardID": 429,
-  "SidewaysCard": false,
-  "CustomDeck": {
-    "4": {
-      "FaceURL": "https://www.dropbox.com/s/i6nu0krw0tluvgy/httpdoomttsspaghetticattokens20frontjpg.jpg?dl=1",
-      "BackURL": "https://www.dropbox.com/s/k1hgysontgv9yb5/httpdoomttsspaghetticattokens20backjpg.jpg?dl=1",
-      "NumWidth": 10,
-      "NumHeight": 7,
-      "BackIsHidden": false,
-      "UniqueBack": true,
-      "Type": 0
-    }
-  },
-}]]
-
 local armor = 2
 
 -- Local methods declaration
@@ -246,13 +215,8 @@ function defeatClick(player, value, id)
 
   instances.inv.call("onMarineDeath", color)
 
-  spawnObjectJSON({
-    json              = deathTokenJSON,
-    position          = deathTokenPos,
-    rotation          = {0,0,0},
-    snap_to_grid      = true,
-  })
-
+  local elem = {name="Frag Location", position = deathTokenPos, rotation = {0,0,0}}
+  instances.creator.call("spawnElement", {elem=elem, lock=true})
 end
 
 function resetPosition()

@@ -13,8 +13,6 @@ function onPreprocFinished()
   if Player["White"].steam_id == "76561198028110617" then
     Global.UI.setAttribute("scannerToggle", "active", "true")
     Global.UI.setAttribute("scannerToggle", "textColor", "White")
-  else
-    print(Player["White"].steam_id )
   end
 end
 
