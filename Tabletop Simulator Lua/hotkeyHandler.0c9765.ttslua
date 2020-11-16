@@ -58,6 +58,7 @@ mnstStats = {
 
 local attackingChar = {}
 local monsterActivationIndex = 0
+local gmOut = false
 
 -- Local methods declaration
 local getMonsterStats
@@ -76,10 +77,17 @@ function onScriptingButtonDown(index,  player_color)
   elseif index == 7 then
     findMonsterToActivate(player_color)
 
-  elseif index == 5 then  --TODO: remove
+  elseif index == 6 and player_color=="White" then
+    local greeting = gmOut and ": I'm back!" or ": I'm out!"
+    gmOut = not gmOut
+    Player[player_color].blindfolded = not Player[player_color].blindfolded
+    broadcastToAll(Player[player_color].steam_name..greeting, text_color)
+
+  elseif index == 5 and player_color == "White" then  --TODO: remove
     local obj = Player["White"].getHoverObject()
-    obj.setColorTint(Color.Black)
-    obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
+    --obj.setColorTint(Color.Black)
+    --obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
+    print(obj.UI.getXml())
 
   end
 
