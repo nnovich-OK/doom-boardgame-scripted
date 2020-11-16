@@ -204,8 +204,17 @@ function getDistance(first, second)
 end
 
 function isAboveMap(obj)
+  local castPosition = obj.getPosition()
+  local large = isLarge(obj)
+  if large.x and large.z then
+    -- for large creatures cast from center of any square instead of center of full figurine
+    -- this way even standing above connection of two pieces will still be reported as above map
+    -- despite figurine center is directly above crack
+    castPosition.x = castPosition.x + 0.5
+    castPosition.z = castPosition.z + 0.5
+  end
   local hitTable = Physics.cast(
-    {origin=obj.getPosition(), direction={0,-1,0}, debug=false, max_distance=10})
+    {origin=castPosition, direction={0,-1,0}, debug=false, max_distance=10})
 
   for _, hit in ipairs(hitTable) do
     if hit.hit_object.tag == "Generic"
