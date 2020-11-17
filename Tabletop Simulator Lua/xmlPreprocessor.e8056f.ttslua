@@ -1,5 +1,6 @@
 require("instances")
 require("constants")
+require("maps")
 
 -- Local methods declaration
 local walkDepth
@@ -9,6 +10,10 @@ local performSplit
 local findRename
 local performRename
 local deepcopy
+local findCampaignList
+local fillCampaignList
+local findScenarioDropdownTemplate
+local createScenarioDropdowns
 
 
 --TODO delete
@@ -26,6 +31,7 @@ end
 
 
 --[[
+Preprocessing split.
 Searches for nodes with preproc attribute, then:
  - splitColor -> removes node, but inserts four deep copies of it, one for each player.
  Each copy has the same name as original appended with player color (e.g fieldNameBlue)
@@ -35,11 +41,21 @@ Searches for nodes with preproc attribute, then:
  - splitNumber<N> (e.g. splitNumber6) -> same as splitColor, but number of copies is N,
  name appendix is number from 1 to N
   - splitNumber0<N> (e.g. splitNumber06) -> same as above, but appendix is from 0 to N
+
+Preprocessing campaign list
+Search for specific dropdown item and populate its options with names from maps structure
+
+Preprocessing scenario selection
+Search for xml item and create dropdown for each campaign containing scenarios of that
+campaign. Make only one dropdown list active for the first campaign in the list.
 ]]
 function preprocess()
   local xml = Global.UI.getXmlTable()
   walkDepth(xml, findSplit, performSplit)
+  walkDepth(xml, findCampaignList, fillCampaignList)
+  walkDepth(xml, findScenarioDropdownTemplate, createScenarioDropdowns)
   Global.UI.setXmlTable(xml)
+
 
   --debugShowNode(xml, "giveToRedItem")
 
@@ -158,4 +174,61 @@ function deepcopy(orig)
         copy = orig
     end
     return copy
+end
+
+function findCampaignList(xml, pos)
+  return xml
+    and xml[pos]
+    and xml[pos].attributes
+    and xml[pos].attributes.id
+    and string.find(xml[pos].attributes.id, "campaignDropdown", 1, true)
+end
+
+function fillCampaignList(xml, pos)
+  local firstOption = true
+  for campName in pairs(maps) do
+    local option = {tag="Option", value=campName}
+    if firstOption then
+      firstOption = false
+      option.attributes = {selected="true"}
+    end
+    table.insert(xml[pos].children, option)
+  end
+end
+
+function findScenarioDropdownTemplate(xml, pos)
+  return xml
+    and xml[pos]
+    and xml[pos].attributes
+    and xml[pos].attributes.id
+    and string.find(xml[pos].attributes.id, "scenarioDropdownTemplate", 1, true)
+end
+
+function createScenarioDropdowns(xml, pos)
+  local template = table.remove(xml, pos)
+
+  local firstDropdown = true
+  for campName in pairs(maps) do
+    local dropdown = deepcopy(template)
+
+    dropdown.attributes.id = campName .. " Dropdown"
+    if firstDropdown then
+      firstDropdown = false
+      dropdown.attributes.active = "true"
+    end
+
+    local firstOption = true
+    for scenName in pairs(maps[campName].scenarios) do
+      local option = {tag="Option", value=scenName}
+      if firstOption then
+        firstOption = false
+        option.attributes = {selected="true"}
+      end
+      table.insert(dropdown.children, option)
+    end
+
+    table.insert(xml, pos, dropdown)
+    --log(dropdown, "Scenario dropdown " .. pos)
+    pos = pos + 1
+  end
 end

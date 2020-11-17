@@ -10,7 +10,7 @@ local difficultyLoaded = 3
 local campaignToLoad = "Episode 1"
 local scenarioToLoad = "Knee Deep in the Dead"
 local difficultyToLoad = 3
-local keepInvWhenLoading = true
+local keepInvWhenLoading = false
 
 local revealedAreas = {}
 
