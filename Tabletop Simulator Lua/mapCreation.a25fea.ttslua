@@ -189,7 +189,7 @@ function onDifficultyChosen(player, value, id)
     newGuideJSON = string.gsub(newGuideJSON, "pdf_page_placeholder", newPage)
     spawnObjectJSON({json = newGuideJSON})
   else
-    guide.setPage(newPage)
+    guide.Book.setPage(newPage)
   end
 
   -- enable turns if they aren't already
