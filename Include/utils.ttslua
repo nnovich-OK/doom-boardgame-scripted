@@ -13,7 +13,6 @@ local marines = {}
 local guideGUID = ""
 
 -- Local methods declaration
-local isLarge
 
 function getMarine(color)
   if #marines == 0 then
