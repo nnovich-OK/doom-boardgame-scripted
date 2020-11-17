@@ -191,6 +191,11 @@ function onDifficultyChosen(player, value, id)
   else
     guide.setPage(newPage)
   end
+
+  -- enable turns if they aren't already
+  if not Turns.enable then
+    Turns.enable = true
+  end
 end
 
 function revealArea(req)
