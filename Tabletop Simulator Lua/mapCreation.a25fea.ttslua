@@ -29,7 +29,7 @@ local guideJSON = [[
     "scaleZ": 4.0
   },
   "Nickname": "Invader Player Guide",
-  "Description": "",
+  "Description": "Guide is visible only to white player",
   "GMNotes": "pdf_url_placeholder",
   "ColorDiffuse": {
     "r": 1.0,
