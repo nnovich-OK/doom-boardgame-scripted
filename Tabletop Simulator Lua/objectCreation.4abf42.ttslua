@@ -216,7 +216,7 @@ function spawnElement(req)
     end
   end
 
-  allBags[bagName].takeObject({
+  local spawnedObject = allBags[bagName].takeObject({
     position=req.elem.position,
     rotation=req.elem.rotation,
     smooth=false,
@@ -231,4 +231,14 @@ function spawnElement(req)
       end
     end,
   })
+
+  -- work around TTS bug, that spawned objects might appear at different positions/rotations
+  -- for different players
+  Wait.time(function()
+    spawnedObject.setPosition(spawnedObject.getPosition())
+    spawnedObject.setRotation(spawnedObject.getRotation())
+    --spawnedObject.reload()
+    print("Refreshing: ", spawnedObject.getName())
+  end,
+  15 + math.random()*5)
 end
