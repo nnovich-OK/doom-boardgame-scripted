@@ -125,11 +125,11 @@ function onCheckClick(player, value, id)
     hiddenObjects = player.getSelectedObjects()
 
     for _, obj in ipairs(hiddenObjects) do
-      obj.setHiddenFrom({player.color})
+      obj.setInvisibleTo({player.color})
     end
   else
     for _, obj in ipairs(hiddenObjects) do
-      obj.setHiddenFrom({})
+      obj.setInvisibleTo({})
     end
     hiddenObjects = nil
   end

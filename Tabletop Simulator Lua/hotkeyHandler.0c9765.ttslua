@@ -85,9 +85,8 @@ function onScriptingButtonDown(index,  player_color)
 
   elseif index == 5 and player_color == "White" then  --TODO: remove
     local obj = Player["White"].getHoverObject()
-    --obj.setColorTint(Color.Black)
-    --obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
-    print(utils.getGuideUrl())
+    obj.setColorTint(Color.Black)
+    obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
 
   end
 
