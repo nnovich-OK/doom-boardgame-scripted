@@ -10,6 +10,7 @@ local _ENV = package
 
 -- Variables
 local marines = {}
+local guideGUID = ""
 
 -- Local methods declaration
 local isLarge
@@ -235,6 +236,20 @@ function getMonsterType(fullName)
   end
 
   return nil
+end
+
+function getGuide()
+  local guide = getObjectFromGUID(guideGUID)
+  if guide then
+    return guide
+  end
+
+  for _, obj in ipairs(getAllObjects()) do
+    if obj.getName() == "Invader Player Guide" then
+      guideGUID = obj.getGUID()
+      return obj
+    end
+  end
 end
 
 return package

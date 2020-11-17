@@ -23,27 +23,27 @@ maps["Episode 1"] = {
   guide = "https://www.dropbox.com/s/0rs2ev6j9r9ohrn/Doom_ep_1_web.pdf?dl=1",
   scenarios = {
     ["Knee Deep in the Dead"] = {
-      guidePage = 1,
+      guidePage = 0,
       areas = JSON.decode(ep1_1.map),
     },
 
     ["The Shores of Hell"] = {
-      guidePage = 2,
+      guidePage = 1,
       areas = JSON.decode([[ ]]),
     },
 
     ["Inferno"] = {
-      guidePage = 3,
+      guidePage = 2,
       areas = JSON.decode([[ ]]),
     },
 
     ["Thy Flesh Consumed"] = {
-      guidePage = 4,
+      guidePage = 3,
       areas = JSON.decode([[ ]]),
     },
 
     ["...And Hell Followed"] = {
-      guidePage = 5,
+      guidePage = 4,
       areas = JSON.decode([[ ]]),
     },
   }
@@ -54,7 +54,7 @@ maps["Mines of Mars"] = {
   guide = "http://cloud-3.steamusercontent.com/ugc/1669108591173352598/FB24ABE1C7D883E34EFA5C3D574996EBED5BBE7F/",
   scenarios = {
     ["Mines of Mars"] = {
-      guidePage = 1,
+      guidePage = 0,
       areas = JSON.decode(mom.map),
     },
   }
@@ -71,17 +71,17 @@ Recommended mods: Organized Marines, Well-Trained, Unending Pistols."
   guide = "http://cloud-3.steamusercontent.com/ugc/1669108591180239052/FF33C1D2C9A0B2CE89FAF23BF086BD7A44989DFA/",
   scenarios = {
     ["Map 1"] = {
-      guidePage = 2,
+      guidePage = 1,
       areas = JSON.decode(damoqles1.map),
     },
 
     ["Map 2"] = {
-      guidePage = 3,
+      guidePage = 2,
       areas = JSON.decode(damoqles2.map),
     },
 
     ["Map 3"] = {
-      guidePage = 4,
+      guidePage = 3,
       areas = JSON.decode(damoqles3.map),
     },
   }

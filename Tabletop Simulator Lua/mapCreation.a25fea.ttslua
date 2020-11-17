@@ -14,6 +14,52 @@ local keepInvWhenLoading = false
 
 local revealedAreas = {}
 
+local guideJSON = [[
+{
+  "Name": "Custom_PDF",
+  "Transform": {
+    "posX": 0.8479757,
+    "posY": 1.16121733,
+    "posZ": -32.1827774,
+    "rotX": -4.03263822E-09,
+    "rotY": 270.0,
+    "rotZ": 180.0,
+    "scaleX": 4.0,
+    "scaleY": 1.0,
+    "scaleZ": 4.0
+  },
+  "Nickname": "Invader Player Guide",
+  "Description": "",
+  "GMNotes": "pdf_url_placeholder",
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomPDF": {
+    "PDFUrl": "pdf_url_placeholder",
+    "PDFPassword": "",
+    "PDFPage": pdf_page_placeholder,
+    "PDFPageOffset": 0
+  },
+  "LuaScript": "function onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "GUID": "4c5ab8"
+}
+]]
 
 -- Local methods declaration
 local refreshPreview
@@ -132,6 +178,19 @@ function onDifficultyChosen(player, value, id)
   difficultyLoaded = difficultyToLoad
   revealedAreas = {}
   revealArea({area="Start area", color=player.color})
+
+  -- Set guide URL and page if necessary
+  local guide = utils.getGuide()
+  local newUrl = maps[campaignLoaded].guide
+  local newPage = maps[campaignLoaded].scenarios[scenarioLoaded].guidePage
+  if guide.getGMNotes() ~= newUrl then
+    guide.destruct()
+    local newGuideJSON = string.gsub(guideJSON, "pdf_url_placeholder", newUrl)
+    newGuideJSON = string.gsub(newGuideJSON, "pdf_page_placeholder", newPage)
+    spawnObjectJSON({json = newGuideJSON})
+  else
+    guide.setPage(newPage)
+  end
 end
 
 function revealArea(req)

@@ -87,7 +87,7 @@ function onScriptingButtonDown(index,  player_color)
     local obj = Player["White"].getHoverObject()
     --obj.setColorTint(Color.Black)
     --obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
-    print(obj.UI.getXml())
+    print(utils.getGuideUrl())
 
   end
 
