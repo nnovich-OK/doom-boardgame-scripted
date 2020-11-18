@@ -11,6 +11,7 @@ local ep1_4 = require("maps/episode 1/thy flesh consumed")
 local ep1_5 = require("maps/episode 1/and hell followed")
 local mom = require("maps/mines of mars/mines of mars")
 local tal = require("maps/the abandoned lab/the abandoned lab")
+local rts = require("maps/rescue of the scientist/rescue of the scientist")
 local damoqles1 = require("maps/damoqles part1/damoqles1")
 local damoqles2 = require("maps/damoqles part1/damoqles2")
 local damoqles3 = require("maps/damoqles part1/damoqles3")
@@ -66,7 +67,11 @@ maps["Mines of Mars"] = {
 }
 
 maps["The Abandoned Lab"] = {
-  notes = "Fan-made single map scenario by Knuckles Eki.",
+  notes = [[
+Fan-made single map scenario by Knuckles Eki.
+
+This scenario is intended for 1 marine and 1 invader player ONLY!
+]],
   guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339060263/B942BD9A23201EA4E17D14769D5296D4D93D667F/",
   scenarios = {
     ["The Abandoned Lab"] = {
@@ -76,7 +81,18 @@ maps["The Abandoned Lab"] = {
   }
 }
 
-
+maps["Rescue of the Scientist"] = {
+  notes = [[
+Fan-made single map scenario by Knuckles Eki.
+]],
+  guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339243019/8C974F5AB5C9BAFCB9BC459DD7B04D4AB33D028D/",
+  scenarios = {
+    ["Rescue of the Scientist"] = {
+      guidePage = 0,
+      areas = JSON.decode(rts.map),
+    },
+  }
+}
 
 
 maps["Doom Maps Damoqles part 1"] = {
