@@ -251,4 +251,11 @@ function getGuide()
   end
 end
 
+-- gets table with x,y,z keys and shifts value for key y according to parameter
+function shiftY(vector, shift)
+  local result = vector
+  result.y = result.y + shift
+  return result
+end
+
 return package

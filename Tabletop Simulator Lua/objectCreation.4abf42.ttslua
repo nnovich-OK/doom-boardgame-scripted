@@ -233,9 +233,14 @@ function spawnElement(req)
     end
   end
 
+  -- when spawning slightly change position and rotation, then change back after random delay
+  -- this is a work around TTS bug, that spawned objects might appear
+  -- at different positions/rotations for different players
+  -- all clients are forced to sync position/rotation on shift back, so spawned object
+  -- looks the same for all involved players
   local spawnedObject = allBags[bagName].takeObject({
-    position=req.elem.position,
-    rotation=req.elem.rotation,
+    position=utils.shiftY(req.elem.position, -0.001),
+    rotation=utils.shiftY(req.elem.rotation, -0.1),
     smooth=false,
     callback_function=function(obj)
       if req.lock then
@@ -249,15 +254,9 @@ function spawnElement(req)
     end,
   })
 
-  -- work around TTS bug, that spawned objects might appear at different positions/rotations
-  -- for different players
-  --[[ TODO: uncomment and test
   Wait.time(function()
-    spawnedObject.setPosition(spawnedObject.getPosition())
-    spawnedObject.setRotation(spawnedObject.getRotation())
-    --spawnedObject.reload()
-    print("Refreshing: ", spawnedObject.getName())
+    spawnedObject.setPosition(utils.shiftY(spawnedObject.getPosition(), 0.001))
+    spawnedObject.setRotation(utils.shiftY(spawnedObject.getRotation(), 0.1))
   end,
-  15 + math.random()*5)
-  ]]
+  0.2 + math.random()*0.3)
 end
