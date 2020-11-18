@@ -10,6 +10,7 @@ local ep1_3 = require("maps/episode 1/inferno")
 local ep1_4 = require("maps/episode 1/thy flesh consumed")
 local ep1_5 = require("maps/episode 1/and hell followed")
 local mom = require("maps/mines of mars/mines of mars")
+local tal = require("maps/the abandoned lab/the abandoned lab")
 local damoqles1 = require("maps/damoqles part1/damoqles1")
 local damoqles2 = require("maps/damoqles part1/damoqles2")
 local damoqles3 = require("maps/damoqles part1/damoqles3")
@@ -54,7 +55,7 @@ maps["Episode 1"] = {
 }
 
 maps["Mines of Mars"] = {
-  notes = "Single map scenario by Knuckles Eki.",
+  notes = "Fan-made single map scenario by Knuckles Eki.",
   guide = "http://cloud-3.steamusercontent.com/ugc/1669108591173352598/FB24ABE1C7D883E34EFA5C3D574996EBED5BBE7F/",
   scenarios = {
     ["Mines of Mars"] = {
@@ -63,6 +64,19 @@ maps["Mines of Mars"] = {
     },
   }
 }
+
+maps["The Abandoned Lab"] = {
+  notes = "Fan-made single map scenario by Knuckles Eki.",
+  guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339060263/B942BD9A23201EA4E17D14769D5296D4D93D667F/",
+  scenarios = {
+    ["The Abandoned Lab"] = {
+      guidePage = 0,
+      areas = JSON.decode(tal.map),
+    },
+  }
+}
+
+
 
 
 maps["Doom Maps Damoqles part 1"] = {
