@@ -6,6 +6,7 @@ local JSON = JSON
 local maps=maps
 local ep1_1 = require("maps/episode 1/knee deep in the dead")
 local ep1_2 = require("maps/episode 1/the shores of hell")
+local ep1_3 = require("maps/episode 1/inferno")
 local mom = require("maps/mines of mars/mines of mars")
 local damoqles1 = require("maps/damoqles part1/damoqles1")
 local damoqles2 = require("maps/damoqles part1/damoqles2")
@@ -35,7 +36,7 @@ maps["Episode 1"] = {
 
     ["Inferno"] = {
       guidePage = 2,
-      areas = JSON.decode([[ ]]),
+      areas = JSON.decode(ep1_3.map),
     },
 
     ["Thy Flesh Consumed"] = {
