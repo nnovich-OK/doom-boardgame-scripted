@@ -251,6 +251,7 @@ function spawnElement(req)
 
   -- work around TTS bug, that spawned objects might appear at different positions/rotations
   -- for different players
+  --[[ TODO: uncomment and test
   Wait.time(function()
     spawnedObject.setPosition(spawnedObject.getPosition())
     spawnedObject.setRotation(spawnedObject.getRotation())
@@ -258,4 +259,5 @@ function spawnElement(req)
     print("Refreshing: ", spawnedObject.getName())
   end,
   15 + math.random()*5)
+  ]]
 end
