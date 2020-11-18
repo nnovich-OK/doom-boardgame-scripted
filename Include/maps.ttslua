@@ -3,19 +3,10 @@ local package = maps
 
 -- PACKAGE IMPORT
 local JSON = JSON
-local maps=maps
-local ep1_1 = require("maps/episode 1/knee deep in the dead")
-local ep1_2 = require("maps/episode 1/the shores of hell")
-local ep1_3 = require("maps/episode 1/inferno")
-local ep1_4 = require("maps/episode 1/thy flesh consumed")
-local ep1_5 = require("maps/episode 1/and hell followed")
-local mom = require("maps/mines of mars/mines of mars")
-local tal = require("maps/the abandoned lab/the abandoned lab")
-local rts = require("maps/rescue of the scientist/rescue of the scientist")
-local damoqles1 = require("maps/damoqles part1/damoqles1")
-local damoqles2 = require("maps/damoqles part1/damoqles2")
-local damoqles3 = require("maps/damoqles part1/damoqles3")
-local damoqles4 = require("maps/damoqles part1/damoqles4")
+local pairs = pairs
+local print = print
+local setmetatable = setmetatable
+local maps = maps
 
 -- PACKAGE BODY
 local _ENV = package
@@ -23,6 +14,7 @@ local _ENV = package
 -- Variables
 
 -- Local methods declaration
+local loadAreas
 
 maps["Episode 1"] = {
   notes = "The first half of official 10 maps campaign. The secodn one requires expansion set.",
@@ -30,27 +22,27 @@ maps["Episode 1"] = {
   scenarios = {
     ["Knee Deep in the Dead"] = {
       guidePage = 0,
-      areas = JSON.decode(ep1_1.map),
+      areasJSON = require("maps/episode 1/knee deep in the dead").map,
     },
 
     ["The Shores of Hell"] = {
       guidePage = 1,
-      areas = JSON.decode(ep1_2.map),
+      areasJSON = require("maps/episode 1/the shores of hell").map,
     },
 
     ["Inferno"] = {
       guidePage = 2,
-      areas = JSON.decode(ep1_3.map),
+      areasJSON = require("maps/episode 1/inferno").map,
     },
 
     ["Thy Flesh Consumed"] = {
       guidePage = 3,
-      areas = JSON.decode(ep1_4.map),
+      areasJSON = require("maps/episode 1/thy flesh consumed").map,
     },
 
     ["...And Hell Followed"] = {
       guidePage = 4,
-      areas = JSON.decode(ep1_5.map),
+      areasJSON = require("maps/episode 1/and hell followed").map,
     },
   }
 }
@@ -61,7 +53,7 @@ maps["Mines of Mars"] = {
   scenarios = {
     ["Mines of Mars"] = {
       guidePage = 0,
-      areas = JSON.decode(mom.map),
+      areasJSON = require("maps/mines of mars/mines of mars").map,
     },
   }
 }
@@ -76,7 +68,7 @@ This scenario is intended for 1 marine and 1 invader player ONLY!
   scenarios = {
     ["The Abandoned Lab"] = {
       guidePage = 0,
-      areas = JSON.decode(tal.map),
+      areasJSON = require("maps/the abandoned lab/the abandoned lab").map,
     },
   }
 }
@@ -89,7 +81,7 @@ Fan-made single map scenario by Knuckles Eki.
   scenarios = {
     ["Rescue of the Scientist"] = {
       guidePage = 0,
-      areas = JSON.decode(rts.map),
+      areasJSON = require("maps/rescue of the scientist/rescue of the scientist").map,
     },
   }
 }
@@ -106,24 +98,37 @@ Recommended mods: Organized Marines, Well-Trained, Unending Pistols."
   scenarios = {
     ["Map 1"] = {
       guidePage = 1,
-      areas = JSON.decode(damoqles1.map),
+      areasJSON = require("maps/damoqles part1/damoqles1").map,
     },
 
     ["Map 2"] = {
       guidePage = 2,
-      areas = JSON.decode(damoqles2.map),
+      areasJSON = require("maps/damoqles part1/damoqles2").map,
     },
 
     ["Map 3"] = {
       guidePage = 3,
-      areas = JSON.decode(damoqles3.map),
+      areasJSON = require("maps/damoqles part1/damoqles3").map,
     },
 
     ["Map 4"] = {
       guidePage = 4,
-      areas = JSON.decode(damoqles4.map),
+      areasJSON = require("maps/damoqles part1/damoqles4").map,
     },
   }
 }
+
+function loadAreas(t, k)
+  if k == "areas" then
+    t[k] = JSON.decode(t["areasJSON"])
+    return t[k]
+  end
+end
+
+for _, campaign in pairs(maps) do
+  for _, scenario in pairs(campaign.scenarios) do
+    setmetatable(scenario, {__index = loadAreas})
+  end
+end
 
 return package
