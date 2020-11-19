@@ -47,86 +47,6 @@ maps["Episode 1"] = {
   }
 }
 
-maps["Mines of Mars"] = {
-  notes = [[
-Fan-made single map scenario by Knuckles Eki.
-
-A simple short scenario based in a mine on Mars.
-This scenario features unmarked encounters that is done suddenly in a marine's turn, easily as an interrupt effect.
-This scenario is designed for 1 marine player. Games with 2 or more marines should use higher difficulty settings.
-]],
-  guide = "http://cloud-3.steamusercontent.com/ugc/1669108591173352598/FB24ABE1C7D883E34EFA5C3D574996EBED5BBE7F/",
-  scenarios = {
-    ["Mines of Mars"] = {
-      guidePage = 0,
-      areasJSON = require("maps/mines of mars/mines of mars").map,
-    },
-  }
-}
-
-maps["The Abandoned Lab"] = {
-  notes = [[
-Fan-made single map scenario by Knuckles Eki. This scenario is for 1 Marine and 1 Invader player ONLY.
-
-A marine accidentally falls into a shaft half hidden by sand. The squad leader throws in some weapons ]]
-.."but cannot risk sending in any marines."
-,
-  guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339060263/B942BD9A23201EA4E17D14769D5296D4D93D667F/",
-  scenarios = {
-    ["The Abandoned Lab"] = {
-      guidePage = 0,
-      areasJSON = require("maps/the abandoned lab/the abandoned lab").map,
-    },
-  }
-}
-
-maps["Rescue of the Scientist"] = {
-  notes = [[
-Fan-made single map scenario by Knuckles Eki.
-
-The demons have dragged a scientist into their portal. You must rescue him. Be prepared, this must be hell.
-]],
-  guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339243019/8C974F5AB5C9BAFCB9BC459DD7B04D4AB33D028D/",
-  scenarios = {
-    ["Rescue of the Scientist"] = {
-      guidePage = 0,
-      areasJSON = require("maps/rescue of the scientist/rescue of the scientist").map,
-    },
-  }
-}
-
-
-maps["Doom Maps Damoqles part 1"] = {
-  notes = [[
-Fan-made standalone maps by Damoqles:
-"Small but vicious, and/or larger, dense and brutal, but not necessarily impossible standalone maps. :)
-NOT intended to be played continuously as a campaign.
-Recommended mods: Organized Marines, Well-Trained, Unending Pistols."
-]],
-  guide = "http://cloud-3.steamusercontent.com/ugc/1669108591180239052/FF33C1D2C9A0B2CE89FAF23BF086BD7A44989DFA/",
-  scenarios = {
-    ["Map 1"] = {
-      guidePage = 1,
-      areasJSON = require("maps/damoqles part1/damoqles1").map,
-    },
-
-    ["Map 2"] = {
-      guidePage = 2,
-      areasJSON = require("maps/damoqles part1/damoqles2").map,
-    },
-
-    ["Map 3"] = {
-      guidePage = 3,
-      areasJSON = require("maps/damoqles part1/damoqles3").map,
-    },
-
-    ["Map 4"] = {
-      guidePage = 4,
-      areasJSON = require("maps/damoqles part1/damoqles4").map,
-    },
-  }
-}
-
 
 maps["Do as You're Told"] = {
   notes = [[
@@ -197,6 +117,90 @@ This campaign can be played as a followup after the "Do as You’re Told" campai
 
   }
 }
+
+
+maps["Doom Maps Damoqles part 1"] = {
+  notes = [[
+Fan-made standalone maps by Damoqles:
+"Small but vicious, and/or larger, dense and brutal, but not necessarily impossible standalone maps. :)
+NOT intended to be played continuously as a campaign.
+Recommended mods: Organized Marines, Well-Trained, Unending Pistols."
+]],
+  guide = "http://cloud-3.steamusercontent.com/ugc/1669108591180239052/FF33C1D2C9A0B2CE89FAF23BF086BD7A44989DFA/",
+  scenarios = {
+    ["Map 1"] = {
+      guidePage = 1,
+      areasJSON = require("maps/damoqles part1/damoqles1").map,
+    },
+
+    ["Map 2"] = {
+      guidePage = 2,
+      areasJSON = require("maps/damoqles part1/damoqles2").map,
+    },
+
+    ["Map 3"] = {
+      guidePage = 3,
+      areasJSON = require("maps/damoqles part1/damoqles3").map,
+    },
+
+    ["Map 4"] = {
+      guidePage = 4,
+      areasJSON = require("maps/damoqles part1/damoqles4").map,
+    },
+  }
+}
+
+
+maps["Mines of Mars"] = {
+  notes = [[
+Fan-made single map scenario by Knuckles Eki.
+
+A simple short scenario based in a mine on Mars.
+This scenario features unmarked encounters that is done suddenly in a marine's turn, easily as an interrupt effect.
+This scenario is designed for 1 marine player. Games with 2 or more marines should use higher difficulty settings.
+]],
+  guide = "http://cloud-3.steamusercontent.com/ugc/1669108591173352598/FB24ABE1C7D883E34EFA5C3D574996EBED5BBE7F/",
+  scenarios = {
+    ["Mines of Mars"] = {
+      guidePage = 0,
+      areasJSON = require("maps/mines of mars/mines of mars").map,
+    },
+  }
+}
+
+
+maps["The Abandoned Lab"] = {
+  notes = [[
+Fan-made single map scenario by Knuckles Eki. This scenario is for 1 Marine and 1 Invader player ONLY.
+
+A marine accidentally falls into a shaft half hidden by sand. The squad leader throws in some weapons ]]
+.."but cannot risk sending in any marines."
+,
+  guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339060263/B942BD9A23201EA4E17D14769D5296D4D93D667F/",
+  scenarios = {
+    ["The Abandoned Lab"] = {
+      guidePage = 0,
+      areasJSON = require("maps/the abandoned lab/the abandoned lab").map,
+    },
+  }
+}
+
+
+maps["Rescue of the Scientist"] = {
+  notes = [[
+Fan-made single map scenario by Knuckles Eki.
+
+The demons have dragged a scientist into their portal. You must rescue him. Be prepared, this must be hell.
+]],
+  guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339243019/8C974F5AB5C9BAFCB9BC459DD7B04D4AB33D028D/",
+  scenarios = {
+    ["Rescue of the Scientist"] = {
+      guidePage = 0,
+      areasJSON = require("maps/rescue of the scientist/rescue of the scientist").map,
+    },
+  }
+}
+
 
 function loadAreas(t, k)
   if k == "areas" then
