@@ -255,8 +255,19 @@ function spawnElement(req)
   })
 
   Wait.time(function()
-    spawnedObject.setPosition(utils.shiftY(spawnedObject.getPosition(), 0.001))
-    spawnedObject.setRotation(utils.shiftY(spawnedObject.getRotation(), 0.1))
+    if spawnedObject then
+      spawnedObject.setPosition(utils.shiftY(spawnedObject.getPosition(), 0.001))
+      spawnedObject.setRotation(utils.shiftY(spawnedObject.getRotation(), 0.1))
+    else
+      -- this happens if spawned tokens formed a deck
+      -- it might be reasonable to find all new decks and shift them
+      -- but this means a lot of effort with little to no benefits:
+      -- shift itself isn't noticeable, bug with position/rotation isn't visible on decks
+
+      -- Alternative hacky solution is to set different height for each token from stack during scan
+      -- This way they will spawn individually and will have enough airborne time to be treated
+      -- before stacking into deck. Currently neither solution is applied.
+    end
   end,
   0.2 + math.random()*0.3)
 end
