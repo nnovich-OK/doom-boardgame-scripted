@@ -23,6 +23,8 @@ local mnstCount = {
 local isMonsterBag
 local getBagContentName
 local getBagContentCount
+local increaseMonsterCount
+local decreaseMonsterCount
 
 function isMonsterBag(obj)
   if obj.getQuantity() == -1 or obj.tag ~= "Infinite" then
@@ -77,10 +79,10 @@ function onObjectSpawn(object)
   elseif utils.isTeleporter(object) then
     object.setLuaScript(instances.teleport.getLuaScript())
 
-  elseif utils.isMonster(object) then
-    local count = getBagContentCount(allBags[object.getName()])
-
-    if count == 0 then
+  elseif utils.isMonster(object) and not string.find(object.getName(), "Grey") then
+    if decreaseMonsterCount(object.getName()) then
+      object.setLuaScript(instances.monster.getLuaScript())
+    else
       broadcastToAll("No figures left of ".. object.getName(), Color.Oragne)
       -- make sure name is cleared before destruct, so onObjectDestroy doesn't change counter
       object.setName("")
@@ -88,10 +90,6 @@ function onObjectSpawn(object)
       return
     end
 
-    count = count - 1
-    allBags[object.getName()].setName(object.getName() .. " x" .. count)
-
-    object.setLuaScript(instances.monster.getLuaScript())
   end
 end
 
@@ -100,17 +98,7 @@ function onObjectDestroy(obj)
     return
   end
 
-  local count = getBagContentCount(allBags[obj.getName()])
-  count = count + 1
-
-  for mnst, max in pairs(mnstCount) do
-    if string.find(obj.getName(), mnst) then
-      count = math.min(count, max)
-      break
-    end
-  end
-
-  allBags[obj.getName()].setName(obj.getName() .. " x" .. count)
+  increaseMonsterCount(obj.getName())
 end
 
 function onAttackerSet(req)
@@ -270,4 +258,37 @@ function spawnElement(req)
     end
   end,
   0.2 + math.random()*0.3)
+end
+
+function onRenamedToGrey(monsterName)
+  increaseMonsterCount(monsterName)
+end
+
+function increaseMonsterCount(monsterName)
+  local count = getBagContentCount(allBags[monsterName])
+  count = count + 1
+
+  for mnst, max in pairs(mnstCount) do
+    if string.find(monsterName, mnst) then
+      if count > max then
+        return false
+      end
+      break
+    end
+  end
+
+  allBags[monsterName].setName(monsterName .. " x" .. count)
+  return true
+end
+
+function decreaseMonsterCount(monsterName)
+  local count = getBagContentCount(allBags[monsterName])
+
+  if count > 0 then
+    count = count - 1
+    allBags[monsterName].setName(monsterName .. " x" .. count)
+    return true
+  else
+    return false
+  end
 end

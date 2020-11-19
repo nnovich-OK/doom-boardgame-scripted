@@ -65,6 +65,7 @@ local getMonsterStats
 local saveAttackingCharacterHovered
 local prepareAttackParameters
 local findMonsterToActivate
+local renameHoveredMonsterToGrey
 
 
 function onScriptingButtonDown(index,  player_color)
@@ -83,13 +84,23 @@ function onScriptingButtonDown(index,  player_color)
     Player[player_color].blindfolded = not Player[player_color].blindfolded
     broadcastToAll(Player[player_color].steam_name..greeting, text_color)
 
-  elseif index == 5 and player_color == "White" then  --TODO: remove
-    local obj = Player["White"].getHoverObject()
-    obj.setColorTint(Color.Black)
-    obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
+  elseif index == 5 and player_color == "White" then
+    renameHoveredMonsterToGrey(player_color)
 
   end
 
+end
+
+function renameHoveredMonsterToGrey(player_color)
+  local obj = Player[player_color].getHoverObject()
+  if obj and utils.isMonster(obj) then
+    instances.creator.call("onRenamedToGrey", obj.getName())
+    obj.setColorTint(Color.Black)
+    obj.setName(string.gsub(obj.getName(), "^(%w+)", "Grey"))
+  else
+    broadcastToColor("Hotkey is intended to rename/recolor to grey monster which is hovered over.",
+      player_color, player_color)
+  end
 end
 
 function getMonsterStats(name)
