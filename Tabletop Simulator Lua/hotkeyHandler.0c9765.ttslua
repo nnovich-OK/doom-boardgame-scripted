@@ -176,8 +176,7 @@ function prepareAttackParameters(player_color)
     player_color,
     Color.Grey)
 
-  local isMelee = false -- TODO: tricky thing for marines
-                        -- probably can guess out of: last clicked weapon and single red die in play
+  local isMelee = false
 
   -- ATTACKER PARAMETERS: dice, accuracy and deadly bonuses
   --                      set for monster attacks only

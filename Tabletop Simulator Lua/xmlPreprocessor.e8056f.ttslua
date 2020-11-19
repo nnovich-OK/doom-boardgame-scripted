@@ -16,7 +16,6 @@ local findScenarioDropdownTemplate
 local createScenarioDropdowns
 
 
---TODO delete
 local function debugShowNode(xml, name)
   walkDepth(xml,
   function(xml, pos)   return xml

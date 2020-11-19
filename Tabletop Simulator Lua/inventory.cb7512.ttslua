@@ -366,7 +366,6 @@ function onInventoryItemClick(player, value, id)
     return
   end
 
-  --TODO check check berserk, check availability and not for white
   -- Set attack parameters
   if not invMode[player.color].action and gunStats[item] then
     prepareGunAttack(player.color, item)
