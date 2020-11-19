@@ -8,6 +8,7 @@ local hiddenObjects = nil
 
 -- Local methods declaration
 local storeObject
+local storeDeckOfTokens
 
 function onPreprocFinished()
   if Player["White"].steam_id == "76561198028110617" then
@@ -25,7 +26,7 @@ function onAreaNameSet(player, value, id)
 end
 
 function onScanClick(player, value, id)
-  print("Area: ", areaName)
+  print("Scanned: ", areaName)
 
   map[areaName] = {
     mapTiles={},
@@ -59,6 +60,8 @@ function onScanClick(player, value, id)
       storeObject(map[areaName].ammoTokens, obj)
     elseif utils.isToken(obj) then
       storeObject(map[areaName].otherTokens, obj)
+    elseif utils.isDeckOfTokens(obj) then
+      storeDeckOfTokens(obj)
     else
       broadcastToColor("Uncategorized object: ".. obj.getName().."("..obj.getGUID()..")",
         player.color, player.color)
@@ -80,6 +83,28 @@ function storeObject(mapTable, object)
     description.reveal = areaName
   end
   table.insert(mapTable, description)
+end
+
+function storeDeckOfTokens(deck)
+  local deckPos = deck.getPosition()
+  local deckRot = deck.getRotation()
+  for _, obj in ipairs(deck.getObjects()) do
+    local description = {
+      name = obj.name,
+      position = deckPos,
+      rotation = deckRot,
+    }
+
+    -- hopefully, stack of tokens is always about equipment
+    if (string.find(obj.name, "Shells/Bullets") ~= nil
+      or string.find(obj.name, "Rockets/Grenades") ~= nil
+      or string.find(obj.name, "Energy Cell") ~= nil)
+    then
+      table.insert(map[areaName].ammoTokens, description)
+    else
+      table.insert(map[areaName].otherTokens, description)
+    end
+  end
 end
 
 function onPrintClick(player, value, id)
