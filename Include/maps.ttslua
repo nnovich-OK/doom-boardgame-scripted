@@ -48,7 +48,13 @@ maps["Episode 1"] = {
 }
 
 maps["Mines of Mars"] = {
-  notes = "Fan-made single map scenario by Knuckles Eki.",
+  notes = [[
+Fan-made single map scenario by Knuckles Eki.
+
+A simple short scenario based in a mine on Mars.
+This scenario features unmarked encounters that is done suddenly in a marine's turn, easily as an interrupt effect.
+This scenario is designed for 1 marine player. Games with 2 or more marines should use higher difficulty settings.
+]],
   guide = "http://cloud-3.steamusercontent.com/ugc/1669108591173352598/FB24ABE1C7D883E34EFA5C3D574996EBED5BBE7F/",
   scenarios = {
     ["Mines of Mars"] = {
@@ -60,10 +66,11 @@ maps["Mines of Mars"] = {
 
 maps["The Abandoned Lab"] = {
   notes = [[
-Fan-made single map scenario by Knuckles Eki.
+Fan-made single map scenario by Knuckles Eki. This scenario is for 1 Marine and 1 Invader player ONLY.
 
-This scenario is intended for 1 marine and 1 invader player ONLY!
-]],
+A marine accidentally falls into a shaft half hidden by sand. The squad leader throws in some weapons ]]
+.."but cannot risk sending in any marines."
+,
   guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339060263/B942BD9A23201EA4E17D14769D5296D4D93D667F/",
   scenarios = {
     ["The Abandoned Lab"] = {
@@ -76,6 +83,8 @@ This scenario is intended for 1 marine and 1 invader player ONLY!
 maps["Rescue of the Scientist"] = {
   notes = [[
 Fan-made single map scenario by Knuckles Eki.
+
+The demons have dragged a scientist into their portal. You must rescue him. Be prepared, this must be hell.
 ]],
   guide = "http://cloud-3.steamusercontent.com/ugc/1653346493339243019/8C974F5AB5C9BAFCB9BC459DD7B04D4AB33D028D/",
   scenarios = {
@@ -115,6 +124,77 @@ Recommended mods: Organized Marines, Well-Trained, Unending Pistols."
       guidePage = 4,
       areasJSON = require("maps/damoqles part1/damoqles4").map,
     },
+  }
+}
+
+
+maps["Do as You're Told"] = {
+  notes = [[
+Fan-made four scnearios campaign by Tom Korpipaa.
+
+Can be followed by "Reclaiming the Base" campaign, but equipment doesn't linger.
+]],
+  guide = "http://cloud-3.steamusercontent.com/ugc/1653346591332811410/08A4399AFECD225C4C80EBD9B5EBE81296F74F41/",
+  scenarios = {
+    ["Boot Camp"] = {
+      guidePage = 1,
+      areasJSON = require("maps/do as you are told/boot camp").map,
+    },
+
+    ["The Armory"] = {
+      guidePage = 4,
+      areasJSON = require("maps/do as you are told/the armory").map,
+    },
+
+    ["The Observatory"] = {
+      guidePage = 7,
+      areasJSON = require("maps/do as you are told/the observatory").map,
+    },
+
+    ["The Rescue"] = {
+      guidePage = 10,
+      areasJSON = require("maps/do as you are told/the rescue").map,
+    },
+
+  }
+}
+
+
+maps["Reclaiming the Base"] = {
+  notes = [[
+Fan-made five scnearios campaign by Tom Korpipaa.
+
+This campaign can be played as a followup after the "Do as You’re Told" campaign ]]
+.."or as a standalone campaign. In either case, the marine status or equipment will not linger "
+.."from the previous campaign, but will start from the normal setup."
+,
+  guide = "http://cloud-3.steamusercontent.com/ugc/1653346591332811410/08A4399AFECD225C4C80EBD9B5EBE81296F74F41/",
+  scenarios = {
+    ["The Shuttle Bay"] = {
+      guidePage = 13,
+      areasJSON = require("maps/reclaiming the base/the shuttle bay").map,
+    },
+
+    ["Maintenance Hall"] = {
+      guidePage = 17,
+      areasJSON = require("maps/reclaiming the base/maintenance hall").map,
+    },
+
+    ["The Base"] = {
+      guidePage = 20,
+      areasJSON = require("maps/reclaiming the base/the base").map,
+    },
+
+    ["The Tunnels"] = {
+      guidePage = 23,
+      areasJSON = require("maps/reclaiming the base/the tunnels").map,
+    },
+
+    ["The Outpost"] = {
+      guidePage = 26,
+      areasJSON = require("maps/reclaiming the base/the outpost").map,
+    },
+
   }
 }
 

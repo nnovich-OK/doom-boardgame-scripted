@@ -1,5 +1,4 @@
-rescueOfTheScientist = {}
-local package = rescueOfTheScientist
+local package = {}
 
 -- PACKAGE IMPORT
 

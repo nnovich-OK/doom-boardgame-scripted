@@ -1,5 +1,4 @@
-kneeDeepInTheDead = {}
-local package = kneeDeepInTheDead
+local package = {}
 
 -- PACKAGE IMPORT
 

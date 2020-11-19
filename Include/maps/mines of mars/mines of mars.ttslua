@@ -1,5 +1,4 @@
-minesOfMars = {}
-local package = minesOfMars
+local package = {}
 
 -- PACKAGE IMPORT
 

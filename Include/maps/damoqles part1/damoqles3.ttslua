@@ -1,5 +1,4 @@
-damoqles3 = {}
-local package = damoqles3
+local package = {}
 
 -- PACKAGE IMPORT
 

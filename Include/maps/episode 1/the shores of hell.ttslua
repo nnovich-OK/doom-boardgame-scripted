@@ -1,5 +1,4 @@
-ep1_2 = {}
-local package = ep1_2
+local package = {}
 
 -- PACKAGE IMPORT
 

@@ -1,5 +1,4 @@
-theAbandonedLab = {}
-local package = theAbandonedLab
+local package = {}
 
 -- PACKAGE IMPORT
 
