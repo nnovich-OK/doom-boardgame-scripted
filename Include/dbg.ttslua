@@ -1,0 +1,21 @@
+dbg = {}
+local package = dbg
+
+-- PACKAGE IMPORT
+
+-- PACKAGE BODY
+local _ENV = package
+
+-- Variables
+cfg = {
+  scanEnabled = false,
+  unlimitedMonsters = false,
+  unconditionalGreySpawn = false,
+  unconditionalColorSpawn = false,
+  marineMapAccess = false,
+}
+
+-- Local methods declaration
+
+
+return package

@@ -1,5 +1,6 @@
 require("instances")
 require("utils")
+require("dbg")
 
 mnstStats = {
   Zombie     = {speed=3, armor=2, health=2,
@@ -84,8 +85,12 @@ function onScriptingButtonDown(index,  player_color)
     Player[player_color].blindfolded = not Player[player_color].blindfolded
     broadcastToAll(Player[player_color].steam_name..greeting, text_color)
 
-  elseif index == 5 and player_color == "White" then
+  elseif dbg.cfg.scanEnabled and index == 5 and player_color == "White" then
     renameHoveredMonsterToGrey(player_color)
+
+  elseif dbg.cfg.marineMapAccess and index == 5 and player_color ~= "White" then
+    instances.vis.call("toggleInterface", {id="newGameButton", color=player_color})
+    utils.getGuide().setInvisibleTo({})
 
   end
 

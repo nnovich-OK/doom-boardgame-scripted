@@ -1,5 +1,6 @@
 require("instances")
 require("utils")
+require("dbg")
 
 local map={}
 local areaName = nil
@@ -11,9 +12,8 @@ local storeObject
 local storeDeckOfTokens
 
 function onPreprocFinished()
-  if Player["White"].steam_id == "76561198028110617" then
-    Global.UI.setAttribute("scannerToggle", "active", "true")
-    Global.UI.setAttribute("scannerToggle", "textColor", "White")
+  if dbg.cfg.scanEnabled then
+    instances.vis.call("showInterface", {id = "scannerToggle", color = "White"})
   end
 end
 

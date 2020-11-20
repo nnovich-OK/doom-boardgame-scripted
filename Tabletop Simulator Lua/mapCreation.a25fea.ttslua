@@ -2,6 +2,7 @@ require("instances")
 require("maps")
 require("constants")
 require("utils")
+require("dbg")
 
 local campaignLoaded = "Episode 1"
 local scenarioLoaded = "Knee Deep in the Dead"
@@ -243,7 +244,7 @@ function revealArea(req)
 
 
   for _, mnst in ipairs(area.colorMonsters) do
-    if Player[utils.getColor(mnst.name)].seated then
+    if Player[utils.getColor(mnst.name)].seated or dbg.cfg.unconditionalColorSpawn then
       instances.creator.call("spawnElement", {elem=mnst})
     end
   end

@@ -1,6 +1,7 @@
 require("instances")
 require("utils")
 require("constants")
+require("dbg")
 
 local attackingCandidate = nil
 local activeMonster = nil
@@ -206,7 +207,7 @@ function spawnElement(req)
   if string.find(req.elem.name, "Grey") and monsterType then
     local maxCount = 0
     for _, color in ipairs(constants.allMarineColors) do
-      if Player[color].seated then
+      if Player[color].seated or dbg.cfg.unconditionalGreySpawn then
         local currentCount = getBagContentCount(allBags[color.." "..monsterType])
         if maxCount < currentCount then
           maxCount = currentCount
@@ -289,6 +290,6 @@ function decreaseMonsterCount(monsterName)
     allBags[monsterName].setName(monsterName .. " x" .. count)
     return true
   else
-    return false
+    return false or dbg.cfg.unlimitedMonsters
   end
 end
