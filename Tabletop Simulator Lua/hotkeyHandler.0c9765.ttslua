@@ -92,6 +92,11 @@ function onScriptingButtonDown(index,  player_color)
     instances.vis.call("toggleInterface", {id="newGameButton", color=player_color})
     utils.getGuide().setInvisibleTo({})
 
+  elseif dbg.cfg.miscHotkeyEnable and index == 8 then
+    local obj = Player[player_color].getHoverObject()
+    obj.setInvisibleTo({"Red", "Green", "Blue", "Grey"})
+
+
   end
 
 end
