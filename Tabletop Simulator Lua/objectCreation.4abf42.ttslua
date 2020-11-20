@@ -77,9 +77,6 @@ function onObjectSpawn(object)
   if utils.isDoor(object) then
     object.setLuaScript(instances.door.getLuaScript())
 
-  elseif utils.isInvisibleToken(object) then
-    object.setInvisibleTo({"Blue", "Green", "Red", "Grey"})
-
   elseif utils.isTeleporter(object) then
     object.setLuaScript(instances.teleport.getLuaScript())
 
