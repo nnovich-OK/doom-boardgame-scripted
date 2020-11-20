@@ -112,6 +112,10 @@ function isEncounterToken(obj)
   return (obj.tag == "Card" or obj.tag=="Generic") and string.find(obj.getName(), "Encounter") ~= nil
 end
 
+function isInvisibleToken(obj)
+  return obj.tag == "Generic" and string.find(obj.getName(), "Invisible Encounter") ~= nil
+end
+
 function isToken(obj)
   return (obj.tag == "Card" or obj.tag=="Generic") and constants.tokenList[obj.getName()]
 end

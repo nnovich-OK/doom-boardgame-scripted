@@ -77,6 +77,9 @@ function onObjectSpawn(object)
   if utils.isDoor(object) then
     object.setLuaScript(instances.door.getLuaScript())
 
+  elseif utils.isInvisibleToken(object) then
+    object.setInvisibleTo({"Blue", "Green", "Red", "Grey"})
+
   elseif utils.isTeleporter(object) then
     object.setLuaScript(instances.teleport.getLuaScript())
 
@@ -235,10 +238,15 @@ function spawnElement(req)
       if req.lock then
         obj.setLock(true)
       end
+
       if req.elem.reveal then
         obj.setGMNotes("Reveal:"..req.elem.reveal)
       elseif req.bonus then
         obj.setGMNotes("Bonus:"..req.bonus)
+      end
+
+      if req.script then
+        obj.setLuaScript(req.script)
       end
     end,
   })

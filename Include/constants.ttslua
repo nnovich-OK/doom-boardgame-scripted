@@ -61,6 +61,8 @@ tokenList = {
   ['Exploding Barrel']= true,
   ['Body Encounter']= true,
   ['Duct']= true,
+
+  ['Invisible Encounter']= true,
 }
 
 return package

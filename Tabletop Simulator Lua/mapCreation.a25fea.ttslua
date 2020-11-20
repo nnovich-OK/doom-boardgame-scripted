@@ -239,7 +239,11 @@ function revealArea(req)
     then
       lock = true
     end
-    instances.creator.call("spawnElement", {elem=token, lock=lock})
+    local script = nil
+    if token.scriptIndex then
+      script = area.scripts[token.scriptIndex]
+    end
+    instances.creator.call("spawnElement", {elem=token, lock=lock, script=script})
   end
 
 

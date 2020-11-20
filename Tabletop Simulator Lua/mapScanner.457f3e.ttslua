@@ -38,6 +38,8 @@ function onScanClick(player, value, id)
     marines={},
     greyMonsters={},
     colorMonsters={},
+
+    scripts={},
   }
 
   objects = player.getSelectedObjects()
@@ -81,6 +83,22 @@ function storeObject(mapTable, object)
   elseif utils.isTeleporter(object) then
     description.mark = object.getName()
     description.reveal = areaName
+  elseif utils.isEncounterToken(object) then
+    local script = object.getLuaScript()
+    if script and script ~= "" then
+      local alreadyStored = false
+      for i,v in ipairs(map[areaName].scripts) do
+        if v == script then
+          alreadyStored = true
+          description.scriptIndex = i
+          break
+        end
+      end
+      if not alreadyStored then
+        table.insert(map[areaName].scripts, script)
+        description.scriptIndex = #map[areaName].scripts
+      end
+    end
   end
   table.insert(mapTable, description)
 end
