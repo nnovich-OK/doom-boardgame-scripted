@@ -260,7 +260,7 @@ function revealArea(req)
   for _, mrn in ipairs(area.marines) do
     local color = utils.getColor(mrn.name)
     local marine = utils.getMarine(color)
-    if Player[color].seated then
+    if Player[color].seated or dbg.cfg.unconditionalMarineSpawn then
       marine.setPosition(mrn.position)
     else
       marine.call("resetPosition")

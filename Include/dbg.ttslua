@@ -12,6 +12,7 @@ cfg = {
   unlimitedMonsters = false,
   unconditionalGreySpawn = false,
   unconditionalColorSpawn = false,
+  unconditionalMarineSpawn = false,
   marineMapAccess = false,
 }
 
