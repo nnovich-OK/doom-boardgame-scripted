@@ -6,6 +6,12 @@
     characterLimit="3" characterValidation="integer"
     onEndEdit="d30728/onScoreEdit"
     />
+  <Text class="readyTick" text="✓" active="true"
+    fontSize="32" fontStyle="Bold" />
+  <Text class="levelupOptionText" alignment="MiddleLeft" fontSize="20" />
+  <Text class="levelupCostText" fontSize="24" visibility="White" />
+  <Button class="levelupTakeButton" visibility="Red|Green|Blue" fontSize="20" preferredHeight="45" />
+  <Cell class="levelupTakeCell" childForceExpandHeight="false" childAlignment="MiddleCenter" />
 </Defaults>
 
 <VerticalLayout
@@ -47,7 +53,7 @@
       id="levelUpButton"
       class="whiteOnBlack"
 
-      onClick=""
+      onClick="d30728/onLevelUpClick"
       text="Level Up"
       visibility="White"
       >
@@ -66,3 +72,143 @@
   </HorizontalLayout>
 
 </VerticalLayout>
+
+
+<Panel
+  id="lvlupMenu"
+  rectAlignment="MiddleCenter"
+  width="620"
+  height="900"
+  offsetXY="0 -60"
+
+  padding="15 15 15 15"
+  color="rgba(0, 0, 0, 0.95)"
+  active="false" >
+
+  <VerticalLayout spacing = "30" childForceExpandHeight="false" >
+    <Text preferredHeight="50" fontSize="32" fontStyle="Bold" alignment="UpperCenter">
+      LEVEL UP
+    </Text>
+
+    <TableLayout preferredHeight="600"
+      cellSpacing="15"
+      columnWidths="60 420 80"
+      cellBackgroundColor="clear"
+      >
+      <Row>
+        <Cell>
+          <Image image="heal" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Heal one wound" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="5 pts" />
+          <Button class="levelupTakeButton" text="5 pts" />
+        </Cell>
+      </Row>
+
+      <Row>
+        <Cell>
+          <Image image="shell" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Gain shells ammo (only if carrying 2 or less)" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="10 pts" />
+          <Button class="levelupTakeButton" text="10 pts" />
+        </Cell>
+      </Row>
+
+      <Row>
+        <Cell>
+          <Image image="rocket" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Gain rockets ammo (only if carrying 2 or less)" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="15 pts" />
+          <Button class="levelupTakeButton" text="15 pts" />
+        </Cell>
+      </Row>
+
+      <Row>
+        <Cell>
+          <Image image="cell" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Gain energy cell (only if carrying 2 or less)" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="20 pts" />
+          <Button class="levelupTakeButton" text="20 pts" />
+        </Cell>
+      </Row>
+
+      <Row>
+        <Cell>
+          <Image image="frag" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Max health +1" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="25 pts" />
+          <Button class="levelupTakeButton" text="25 pts" />
+        </Cell>
+      </Row>
+
+      <Row>
+        <Cell>
+          <Image image="armor" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Base armor +1 (once per campaign)" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="60 pts" />
+          <Button class="levelupTakeButton" text="60 pts" />
+        </Cell>
+      </Row>
+
+      <Row>
+        <Cell>
+          <Image image="skill" />
+        </Cell>
+        <Cell>
+          <Text class="levelupOptionText" text="Gain one random marine skill card" />
+        </Cell>
+        <Cell class="levelupTakeCell" >
+          <Text class="levelupCostText" text="65 pts" />
+          <Button class="levelupTakeButton" text="65 pts" />
+        </Cell>
+      </Row>
+
+    </TableLayout>
+
+    <HorizontalLayout preferredHeight="40" >
+      <Text class="readyTick" id="readyTickBlue" color="Blue" />
+      <Text class="readyTick" id="readyTickGreen" color="Green" />
+      <Text class="readyTick" id="readyTickRed" color="Red" />
+      <Text class="readyTick" id="readyTickWhite" color="White" />
+    </HorizontalLayout>
+
+    <HorizontalLayout
+      childAlignment="MiddleCenter"
+      preferredHeight="40"
+      spacing="10"
+      childForceExpandWidth="false"
+      >
+      <Button preferredWidth="250" fontSize="20" >
+        Ready to next map
+      </Button>
+      <Button preferredWidth="250" visibility="White" fontSize="20" >
+        Back
+      </Button>
+    </HorizontalLayout>
+
+  </VerticalLayout>
+
+</Panel>

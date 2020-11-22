@@ -75,3 +75,7 @@ function resetScore()
     refreshUI(clr)
   end
 end
+
+function onLevelUpClick(player, value, id)
+  instances.vis.call("toggleInterface", {color="Red|Green|Blue|White", id="lvlupMenu"})
+end
