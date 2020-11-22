@@ -160,6 +160,7 @@ function onDifficultyChosen(player, value, id)
     for _, clr in ipairs(constants.allMarineColors) do
       utils.getMarine(clr).call("resetHealth", difficultyToLoad)
     end
+    instances.score.call("resetScore")
   end
 
   -- clear all tiles/tokens

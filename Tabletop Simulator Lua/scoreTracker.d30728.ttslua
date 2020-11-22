@@ -1,5 +1,6 @@
 require("instances")
 require("utils")
+require("constants")
 
 local saveData = {}
 local score = {Red=0, Green=0, Blue=0}
@@ -56,4 +57,11 @@ function onScoreEdit(player, value, id, z, x, c)
   local field, color = utils.stripXmlFieldColor(id)
   score[color] = tonumber(value, 10)
   refreshUI(color)
+end
+
+function resetScore()
+  for _, clr in ipairs(constants.allMarineColors) do
+    score[clr] = 0
+    refreshUI(clr)
+  end
 end
