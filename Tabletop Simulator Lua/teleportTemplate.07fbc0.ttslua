@@ -87,15 +87,7 @@ function moveMarineFigurine(player_color)
   end
 end
 
-function onObjectDrop(player_color, obj)
-  if not utils.isMarine(obj) then
-    return
-  end
-
-  if utils.getDistance(obj, self) ~= 0 then
-    return
-  end
-
+function onMarineDrop(obj)
   trackedMarine = obj
   self.UI.setAttribute("teleport", "active", "true")
   self.UI.setAttribute("teleport", "textColor", "White")

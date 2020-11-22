@@ -207,6 +207,46 @@ function getDistance(first, second)
   return math.max(dx, dz)
 end
 
+-- only x and z values of position are meaningful
+function getObjectAt(position, filter)
+  local objects = getObjectsBelow({position.x, 10, position.z}, filter)
+
+  if #objects > 1 then
+    log(objects, "ERROR getObjectAt found several objects")
+  end
+
+  -- this is nil for empty table and proper object otherwise
+  return objects[1]
+end
+
+function getObjectsBelow(position, filter)
+  local hitTable = Physics.cast(
+    {origin=position, direction={0,-1,0}, debug=false, max_distance=10})
+
+  local result = {}
+  for _, hit in ipairs(hitTable) do
+    if filter(hit.hit_object) then
+      table.insert(result, hit.hit_object)
+    end
+  end
+
+  return result
+end
+
+function getObjectsInZone(position, size, rotation, filter)
+  local hitTable = Physics.cast(
+    {type=3, origin=position, size=size, orientation=rotation, debug=true}) --TODO debug false
+
+  local result = {}
+  for _, hit in ipairs(hitTable) do
+    if filter(hit.hit_object) then
+      table.insert(result, hit.hit_object)
+    end
+  end
+
+  return result
+end
+
 function isAboveMap(obj)
   local castPosition = obj.getPosition()
   local large = isLarge(obj)
@@ -217,18 +257,8 @@ function isAboveMap(obj)
     castPosition.x = castPosition.x + 0.5
     castPosition.z = castPosition.z + 0.5
   end
-  local hitTable = Physics.cast(
-    {origin=castPosition, direction={0,-1,0}, debug=false, max_distance=10})
 
-  for _, hit in ipairs(hitTable) do
-    if hit.hit_object.tag == "Generic"
-      and string.find(hit.hit_object.getName(), "Map")
-    then
-      return true
-    end
-  end
-
-  return false
+  return #getObjectsBelow(castPosition, isMapTile) ~= 0
 end
 
 function getMonsterType(fullName)

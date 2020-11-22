@@ -192,6 +192,16 @@ function onObjectDrop(player_color, obj)
     pos.z = math.floor(pos.z + 0.5)
     obj.setPositionSmooth(pos, false, false)
   end
+
+  -- and also activate encounters/teleporters under dropped marine
+  if utils.isMarine(obj) then
+    local reacting = utils.getObjectsBelow(obj.getPosition(), function(o)
+      return utils.isEncounterToken(o) or utils.isTeleporter(o)
+    end)
+    for _, r in ipairs(reacting) do
+      r.call("onMarineDrop", obj)
+    end
+  end
 end
 
 function onManualClearActive(monster)
