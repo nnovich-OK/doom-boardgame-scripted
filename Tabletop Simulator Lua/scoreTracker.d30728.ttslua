@@ -30,7 +30,7 @@ function onSave()
 end
 
 function changeScore(req)
-  if not req.color or not req.delta then
+  if not req.color or not req.delta or req.delta == 0 then
     log(req, "ERROR changeScore incorrect request")
     return
   end
@@ -41,7 +41,15 @@ function changeScore(req)
   else
     score[req.color] = newScore
     refreshUI(req.color)
+
+    local sign = req.delta > 0 and "+" or "" -- minus will be printed anyway
+    local msg = utils.getActorLabel(req.color) .. " score: " .. newScore
+      .. " (" .. sign .. tostring(req.delta) .. ")"
+
+    printToAll(msg, req.color)
   end
+
+  return true
 end
 
 function refreshUI(color)
@@ -57,6 +65,8 @@ function onScoreEdit(player, value, id)
   local field, color = utils.stripXmlFieldColor(id)
   score[color] = tonumber(value, 10)
   refreshUI(color)
+
+  printToAll(utils.getActorLabel(color) .. " score: " .. score[color] .. " (manual change)", color)
 end
 
 function resetScore()
