@@ -16,17 +16,17 @@ function onLoad(save_state)
 end
 
 
-function onPreprocFinish()
-  if saveData.scores then
-    scores = saveData.scores
-    refreshUI("Red")
-    refreshUI("Green")
-    refreshUI("Blue")
+function onPreprocFinished()
+  if saveData.score then
+    score = saveData.score
+    for _, clr in ipairs(constants.allMarineColors) do
+      refreshUI(clr)
+    end
   end
 end
 
 function onSave()
-  self.script_state = JSON.encode({})
+  self.script_state = JSON.encode({score=score})
 end
 
 function changeScore(req)
@@ -49,7 +49,7 @@ function refreshUI(color)
   Global.UI.setAttribute("scoreInput"..color, "text", score[color])
 end
 
-function onScoreEdit(player, value, id, z, x, c)
+function onScoreEdit(player, value, id)
   if value == "" then
     value = "0"
   end

@@ -60,7 +60,7 @@ function preprocess()
 
   -- notify anyone interested
   Wait.frames(function()
-      for _,v in ipairs({"inv", "luck", "scanner"}) do
+      for _,v in ipairs({"inv", "luck", "scanner", "score"}) do
         instances[v].call("onPreprocFinished")
       end
     end, 1)
