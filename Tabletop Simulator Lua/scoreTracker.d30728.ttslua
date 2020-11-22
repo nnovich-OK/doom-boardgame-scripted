@@ -1,0 +1,59 @@
+require("instances")
+require("utils")
+
+local saveData = {}
+local score = {Red=0, Green=0, Blue=0}
+
+
+-- Local methods declaration
+local refreshUI
+
+function onLoad(save_state)
+  if save_state and save_state ~= "" then
+    saveData = JSON.decode(save_state)
+  end
+end
+
+
+function onPreprocFinish()
+  if saveData.scores then
+    scores = saveData.scores
+    refreshUI("Red")
+    refreshUI("Green")
+    refreshUI("Blue")
+  end
+end
+
+function onSave()
+  self.script_state = JSON.encode({})
+end
+
+function changeScore(req)
+  if not req.color or not req.delta then
+    log(req, "ERROR changeScore incorrect request")
+    return
+  end
+
+  newScore = score[req.color] + req.delta
+  if newScore < 0 then
+    return false
+  else
+    score[req.color] = newScore
+    refreshUI(req.color)
+  end
+end
+
+function refreshUI(color)
+  Global.UI.setAttribute("scoreText"..color, "text", score[color])
+  Global.UI.setAttribute("scoreInput"..color, "text", score[color])
+end
+
+function onScoreEdit(player, value, id, z, x, c)
+  if value == "" then
+    value = "0"
+  end
+
+  local field, color = utils.stripXmlFieldColor(id)
+  score[color] = tonumber(value, 10)
+  refreshUI(color)
+end

@@ -15,3 +15,5 @@
 <Include src="mapCreation.xml"/>
 
 <Include src="mapScanner.xml"/>
+
+<Include src="scoreTracker.xml"/>

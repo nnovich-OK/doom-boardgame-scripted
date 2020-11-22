@@ -1,0 +1,68 @@
+<Defaults>
+  <InputField
+    class="scoreInput"
+    colors="Clear|White|Grey|Clear"
+    fontStyle="Bold" text="0"
+    characterLimit="3" characterValidation="integer"
+    onEndEdit="d30728/onScoreEdit"
+    />
+</Defaults>
+
+<VerticalLayout
+  rectAlignment="UpperRight"
+  offsetXY="-260 -5"
+
+  width="200"
+  height="111"
+  spacing="5"
+
+  visibility="Red|Green|Blue|White"
+  >
+
+  <VerticalLayout
+    color="rgba(0, 0, 0, 0.95)"
+
+    preferredHeight="71"
+
+    spacing="5"
+    padding="3 3 3 3"
+    >
+    <Text preferredHeight="30" >Kill score:</Text>
+
+    <HorizontalLayout visibility="Red|Green|Blue" spacing="5" preferredHeight="30" >
+      <Text id="scoreTextBlue" text="0" color="Blue" />
+      <Text id="scoreTextGreen" text="0" color="Green" />
+      <Text id="scoreTextRed" text="0" color="Red" />
+    </HorizontalLayout>
+
+    <HorizontalLayout visibility="White" spacing="5" preferredHeight="40" >
+      <InputField id="scoreInputBlue" textColor="Blue" class="scoreInput" />
+      <InputField id="scoreInputGreen" textColor="Green" class="scoreInput" />
+      <InputField id="scoreInputRed" textColor="Red" class="scoreInput" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <HorizontalLayout preferredHeight="40" spacing="5">
+    <Button
+      id="levelUpButton"
+      class="whiteOnBlack"
+
+      onClick=""
+      text="Level Up"
+      visibility="White"
+      >
+    </Button>
+
+
+    <Button
+      id="newGameButton"
+      class="whiteOnBlack"
+
+      onClick="a25fea/onNewGameClick"
+      text="New Game"
+      visibility="White"
+      >
+    </Button>
+  </HorizontalLayout>
+
+</VerticalLayout>

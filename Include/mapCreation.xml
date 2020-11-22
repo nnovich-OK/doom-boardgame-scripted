@@ -1,21 +1,6 @@
 <Defaults>
 </Defaults>
 
-<Button
-  id="newGameButton"
-  class="whiteOnBlack"
-
-  onClick="a25fea/onNewGameClick"
-  text="NEW GAME"
-  visibility="White"
-
-  height="40"
-  width="120"
-  rectAlignment="UpperRight"
-  offsetXY="-300 -5"
-  >
-</Button>
-
 <Panel
   id="scenarioMenu"
   rectAlignment="MiddleCenter"
