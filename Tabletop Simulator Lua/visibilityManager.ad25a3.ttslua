@@ -65,7 +65,13 @@ function hideOtherInterfacesInGroup(id, color)
     for _, group in ipairs(groupsToHide) do
       for _, inf in ipairs(groupInterfaces[group]) do
         if inf ~= id then
-          cachedHide(inf, color)
+          if sharedUI[inf] then
+            for clr in string.gmatch(sharedUI[inf], "[^|]+") do
+              cachedHide(inf, clr)
+            end
+          else
+            cachedHide(inf, color)
+          end
         end
       end
     end
