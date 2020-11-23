@@ -17,9 +17,16 @@ local interfaceGroups = {}
 
 local groupInterfaces = {
   inventory = {"inventoryPanelRed", "inventoryPanelGreen", "inventoryPanelBlue"},
-  rightMenuGroup = {"calculator", "luckTracker"},
-  centerMenuGroup = {"luckTracker", "scenarioMenu", "difficultyMenu", "stats",
+  rightBorder = {"calculator", "luckTracker"},
+  rightCenter = {"stats", "luckTracker", "scenarioMenu", "difficultyMenu"},
+  leftCenter = {"scenarioMenu", "difficultyMenu",
     "inventoryPanelRed", "inventoryPanelGreen", "inventoryPanelBlue"},
+
+  middleCenter = {"scenarioMenu", "difficultyMenu", "lvlupMenu"},
+}
+
+local sharedUI = {
+  lvlupMenu = "Red|Green|Blue|White"
 }
 
 -- Local methods declaration
@@ -116,6 +123,7 @@ end
 
 function showInterface(req)
   assert(interfaceRequestCorrect(req), "showInterface: wrong request")
+  req.color = sharedUI[req.id] or req.color
   for color in string.gmatch(req.color, "[^|]+") do
     cachedShow(req.id, color)
   end
@@ -125,6 +133,7 @@ end
 
 function hideInterface(req)
   assert(interfaceRequestCorrect(req), "hideInterface: wrong request")
+  req.color = sharedUI[req.id] or req.color
   for color in string.gmatch(req.color, "[^|]+") do
     cachedHide(req.id, color)
   end
@@ -134,6 +143,7 @@ end
 
 function toggleInterface(req)
   assert(interfaceRequestCorrect(req), "toggleInterface: wrong request")
+  req.color = sharedUI[req.id] or req.color
   for color in string.gmatch(req.color, "[^|]+") do
     if isVisible({id=req.id, color=color}) then
       cachedHide(req.id, color)
