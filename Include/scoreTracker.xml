@@ -6,7 +6,7 @@
     characterLimit="3" characterValidation="integer"
     onEndEdit="d30728/onScoreEdit"
     />
-  <Text class="readyTick" text="✓" active="true"
+  <Text class="readyTick" text="..." active="true"
     fontSize="32" fontStyle="Bold" />
   <Text class="lvlupOptionText" alignment="MiddleLeft" fontSize="20" />
   <Text class="lvlupCostText" fontSize="24" visibility="White" />
@@ -78,7 +78,7 @@
   id="lvlupMenu"
   rectAlignment="MiddleCenter"
   width="550"
-  height="900"
+  height="820"
   offsetXY="0 -60"
 
   padding="15 15 15 15"
@@ -86,7 +86,7 @@
   active="false" >
 
   <VerticalLayout spacing = "30" childForceExpandHeight="false" >
-    <Text preferredHeight="50" fontSize="32" fontStyle="Bold" alignment="UpperCenter">
+    <Text preferredHeight="40" fontSize="32" fontStyle="Bold" alignment="UpperCenter">
       LEVEL UP
     </Text>
 
@@ -189,6 +189,7 @@
     </TableLayout>
 
     <HorizontalLayout preferredHeight="40" >
+      <Text text="Ready:" alignment="MiddleCenter" fontSize="20" />
       <Text class="readyTick" id="readyTickBlue" color="Blue" />
       <Text class="readyTick" id="readyTickGreen" color="Green" />
       <Text class="readyTick" id="readyTickRed" color="Red" />
@@ -197,14 +198,14 @@
 
     <HorizontalLayout
       childAlignment="MiddleCenter"
-      preferredHeight="40"
-      spacing="10"
+      preferredHeight="50"
+      spacing="30"
       childForceExpandWidth="false"
       >
-      <Button preferredWidth="250" fontSize="20" >
+      <Button preferredWidth="200" fontSize="18" onClick="d30728/onReadyClick" >
         Ready to next map
       </Button>
-      <Button preferredWidth="250" visibility="White" fontSize="20"
+      <Button preferredWidth="200" visibility="White" fontSize="18"
         onClick="d30728/onLevelUpBackClick" >
         Back
       </Button>

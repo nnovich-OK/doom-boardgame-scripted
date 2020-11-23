@@ -4,10 +4,13 @@ require("constants")
 
 local saveData = {}
 local score = {Red=0, Green=0, Blue=0}
+local readiness = {Red=false, Green=false, Blue=false, White=false}
 
 
 -- Local methods declaration
 local refreshUI
+local setReadiness
+local checkAllReady
 
 function onLoad(save_state)
   if save_state and save_state ~= "" then
@@ -77,9 +80,38 @@ function resetScore()
 end
 
 function onLevelUpClick(player, value, id)
+  for _, clr in ipairs(constants.allPlayerColors) do
+    setReadiness(clr, false)
+  end
   instances.vis.call("toggleInterface", {color=player.color, id="lvlupMenu"})
 end
 
 function onLevelUpBackClick(player, value, id)
   instances.vis.call("hideInterface", {color=player.color, id="lvlupMenu"})
+end
+
+function onReadyClick(player, value, id)
+  setReadiness(player.color, not readiness[player.color])
+  local status = readiness[player.color] and "ready!" or "NOT ready..."
+  broadcastToAll(utils.getActorLabel(player.color).." is " .. status, player.color)
+
+  if checkAllReady() then
+    instances.vis.call("hideInterface", {color=player.color, id="lvlupMenu"})
+    instances.map.call("loadNextScenario", "White")
+  end
+end
+
+function setReadiness(color, value, quiet)
+  readiness[color] = value
+  Global.UI.setAttribute("readyTick"..color, "text", value and "✓" or "...")
+end
+
+function checkAllReady()
+  for _, clr in ipairs(constants.allPlayerColors) do
+    if Player[clr].seated and not readiness[clr] then
+      return false
+    end
+  end
+
+  return true
 end

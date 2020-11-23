@@ -106,9 +106,18 @@ function handleSpecialCases(id, color, mode)
         cachedHide("inventoryModePanel"..color, color)
       end
     end
+
   elseif fieldName == "calculator" and mode == "rem" then
     -- hide stats when hiding calculator
     cachedHide("stats", color, "rem")
+
+  elseif fieldName == "lvlupMenu" and mode == "add" then
+    -- show ready tick for seated players only
+    -- since ticks are always shown to all players, toggle "active" directly
+    -- without touching "visibility"
+    for _, clr in ipairs(constants.allPlayerColors) do
+      Global.UI.setAttribute("readyTick"..clr, "active", tostring(Player[clr].seated))
+    end
   end
 end
 

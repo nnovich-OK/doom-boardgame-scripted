@@ -64,6 +64,8 @@ local guideJSON = [[
 
 -- Local methods declaration
 local refreshPreview
+local loadMap
+local updateDifficultyUI
 
 function onLoad(save_state)
   saved_data = JSON.decode(save_state)
@@ -84,6 +86,10 @@ function onLoad(save_state)
     end
   end
 
+  printToAll("MAP DETAILS", Color.Orange)
+  printToAll(" Campaign: " .. campaignLoaded, Color.Orange)
+  printToAll(" Scenario: " .. scenarioLoaded, Color.Orange)
+  printToAll(" Difficulty: " .. difficultyLoaded, Color.Orange)
 end
 
 function onSave()
@@ -128,8 +134,12 @@ function onCancelClick(player, value, id)
 end
 
 function onDifficultyClick(player, value, id)
+  updateDifficultyUI(tonumber(value, 10))
+end
+
+function updateDifficultyUI(newDificulty)
   Global.UI.setAttribute("difficulty"..difficultyToLoad, "color", "rgba(0.4, 0.4, 0.4, 1)")
-  difficultyToLoad = tonumber(value, 10)
+  difficultyToLoad = newDificulty
   Global.UI.setAttribute("difficulty"..difficultyToLoad, "color", "White")
 end
 
@@ -143,22 +153,56 @@ function onMapChosen(player, value, id)
 end
 
 function onDifficultyChosen(player, value, id)
-  broadcastToAll("LOADING NEW SCENARIO", Color.Orange)
-  printToAll(" Campaign: ".. campaignToLoad, Color.Orange)
-  printToAll(" Scenario: ".. scenarioToLoad, Color.Orange)
-  printToAll(" Difficulty: "..difficultyToLoad, Color.Orange)
-  printToAll(" Keep inventory: " .. tostring(keepInvWhenLoading), Color.Orange)
   instances.vis.call("hideInterface", {id = "difficultyMenu", color = player.color})
+  loadMap(player.color, campaignToLoad, scenarioToLoad, difficultyToLoad, keepInvWhenLoading)
+end
+
+function loadNextScenario(player_color)
+  local nextScenarioName = nil
+  local isNextOne = false
+  for scenarioName in pairs(maps[campaignLoaded].scenarios) do
+    if not isNextOne then
+      isNextOne = scenarioName == scenarioLoaded
+    else
+      nextScenarioName = scenarioName
+      break
+    end
+  end
+
+  if nextScenarioName then
+    loadMap(player_color, campaignLoaded, nextScenarioName, difficultyLoaded, true)
+  else
+    -- That was the last scenario. Pop up menu to manually choose another map.
+    -- by default keep inventory since this is continuation
+    keepInvWhenLoading = true
+    Global.UI.setAttribute("keepInventory", "isOn", tostring(keepInvWhenLoading))
+    -- by default suggest current difficulty
+    updateDifficultyUI(difficultyLoaded)
+
+    instances.vis.call("showInterface", {id="scenarioMenu", color=player_color})
+    broadcastToAll("Congradulations! That was the last scenario in the campaign!", player_color)
+    printToColor("It's recommended to start each campaign without lingering items, "
+      .. "but you can tick \"Keep inventory\" to start any other map as continuation of this one",
+      player_color, player_color)
+  end
+end
+
+function loadMap(player_color, campaign, scenario, difficulty, keepInventory)
+  broadcastToAll("LOADING NEW SCENARIO", Color.Orange)
+  printToAll(" Campaign: ".. campaign, Color.Orange)
+  printToAll(" Scenario: ".. scenario, Color.Orange)
+  printToAll(" Difficulty: "..difficulty, Color.Orange)
+  printToAll(" Keep inventory: " .. tostring(keepInventory), Color.Orange)
 
 
   instances.inv.call("resetFrags")
   instances.luck.call("resetLuck")
-  if keepInvWhenLoading then
+  if keepInventory then
     instances.inv.call("resetInventoryPartial")
   else
-    instances.inv.call("resetInventoryFull", difficultyToLoad)
+    instances.inv.call("resetInventoryFull", difficulty)
     for _, clr in ipairs(constants.allMarineColors) do
-      utils.getMarine(clr).call("resetHealth", difficultyToLoad)
+      utils.getMarine(clr).call("resetHealth", difficulty)
     end
     instances.score.call("resetScore")
   end
@@ -175,11 +219,11 @@ function onDifficultyChosen(player, value, id)
     end
   end
 
-  campaignLoaded = campaignToLoad
-  scenarioLoaded = scenarioToLoad
-  difficultyLoaded = difficultyToLoad
+  campaignLoaded = campaign
+  scenarioLoaded = scenario
+  difficultyLoaded = difficulty
   revealedAreas = {}
-  revealArea({area="Start area", color=player.color})
+  revealArea({area="Start area", color=player_color})
 
   -- Set guide URL and page if necessary
   local guide = utils.getGuide()
