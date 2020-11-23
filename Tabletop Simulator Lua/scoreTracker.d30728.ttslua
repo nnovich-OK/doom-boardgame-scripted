@@ -6,6 +6,16 @@ local saveData = {}
 local score = {Red=0, Green=0, Blue=0}
 local readiness = {Red=false, Green=false, Blue=false, White=false}
 
+local upgadeCost = {
+  heal = 5,
+  shell = 10,
+  rocket = 15,
+  cell = 20,
+  maxhp = 25,
+  armor = 60,
+  skill = 65,
+}
+
 
 -- Local methods declaration
 local refreshUI
@@ -114,4 +124,31 @@ function checkAllReady()
   end
 
   return true
+end
+
+function onUpgradeClick(player, value, id)
+  local upgarde = string.lower(string.gsub(value, "lvlupTake", ""))
+
+  if score[player.color] < upgardeCost[upgrade] then
+    broadcastToColor("Not enough kill points", player.color, player.color)
+    return
+  end
+
+  local performed = true
+  if upgrade == "heal" or upgrade == "maxhp" then
+    performed = utils.getMarine(player.color).call("onUpgrade", upgrade)
+
+  elseif upgrade == "shell" or upgrade == "rocket" or upgrade == "cell" then
+    performed = instances.inv.call("getItemCount", {color=player.color, item=upgrade}) < 3
+    if performed then
+      instances.inv.call("gainItem", {color=player.color, item=upgrade})
+    end
+
+  elseif upgrade == "armor" then
+
+  end
+
+  if performed then
+
+  end
 end

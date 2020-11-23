@@ -10,7 +10,12 @@
     fontSize="32" fontStyle="Bold" />
   <Text class="lvlupOptionText" alignment="MiddleLeft" fontSize="20" />
   <Text class="lvlupCostText" fontSize="24" visibility="White" />
-  <Button class="lvlupTakeButton" visibility="Red|Green|Blue" fontSize="20" preferredHeight="45" />
+  <Button class="lvlupTakeButton"
+    onClick="d30728/onUpgradeClick"
+    visibility="Red|Green|Blue"
+    fontSize="20"
+    preferredHeight="45"
+    />
   <Cell class="lvlupTakeCell" childForceExpandHeight="false" childAlignment="MiddleCenter" />
 </Defaults>
 
@@ -104,7 +109,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="5 pts" />
-          <Button class="lvlupTakeButton" text="5 pts" />
+          <Button id="lvlupTakeHeal" class="lvlupTakeButton" text="5 pts" />
         </Cell>
       </Row>
 
@@ -117,7 +122,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="10 pts" />
-          <Button class="lvlupTakeButton" text="10 pts" />
+          <Button id="lvlupTakeShell" class="lvlupTakeButton" text="10 pts" />
         </Cell>
       </Row>
 
@@ -130,7 +135,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="15 pts" />
-          <Button class="lvlupTakeButton" text="15 pts" />
+          <Button id="lvlupTakeRocket" class="lvlupTakeButton" text="15 pts" />
         </Cell>
       </Row>
 
@@ -143,7 +148,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="20 pts" />
-          <Button class="lvlupTakeButton" text="20 pts" />
+          <Button id="lvlupTakeCell" class="lvlupTakeButton" text="20 pts" />
         </Cell>
       </Row>
 
@@ -156,7 +161,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="25 pts" />
-          <Button class="lvlupTakeButton" text="25 pts" />
+          <Button id="lvlupTakeMaxHP" class="lvlupTakeButton" text="25 pts" />
         </Cell>
       </Row>
 
@@ -169,7 +174,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="60 pts" />
-          <Button class="lvlupTakeButton" text="60 pts" />
+          <Button id="lvlupTakeArmor" class="lvlupTakeButton" text="60 pts" />
         </Cell>
       </Row>
 
@@ -182,7 +187,7 @@
         </Cell>
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="65 pts" />
-          <Button class="lvlupTakeButton" text="65 pts" />
+          <Button id="lvlupTakeSkill" class="lvlupTakeButton" text="65 pts" />
         </Cell>
       </Row>
 

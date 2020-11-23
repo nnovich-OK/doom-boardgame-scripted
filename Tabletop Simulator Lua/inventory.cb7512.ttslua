@@ -6,6 +6,7 @@ local saveState = {}
 local fragsScored = 0
 local fragLimit = 6
 local marineOrder = {}
+local armorBase = {Red=2, Green=2, Blue=2}
 
 local fragTintColors = {
   ["Red died"]="rgba(1, 0.6, 0.6, 1)",
@@ -235,7 +236,6 @@ gunStats = {
 local prepareGunAttack
 local clearInvMode
 local setInvMode
-local getItemCount
 local setItemCount
 local adjustItemCount
 local haveItem
@@ -273,6 +273,10 @@ function onPreprocFinished()
       activateMarineOrder(clr, order)
     end
   end
+
+  if saveState.armorBase then
+    armorBase = saveState.armorBase
+  end
 end
 
 function onLoad(saveStr)
@@ -286,7 +290,7 @@ function onSave()
   local inventory = {Red = {}, Green = {}, Blue = {}}
   for item in pairs(saveStateItems) do
     for _,clr in ipairs(constants.allMarineColors) do
-      inventory[clr][item] = getItemCount(clr, item)
+      inventory[clr][item] = getItemCount({color=clr, item=item})
     end
   end
   local frags = {scored=fragsScored, tint={}}
@@ -294,7 +298,13 @@ function onSave()
     local fieldName = "fragImage" .. i
     frags.tint[fieldName] = Global.UI.getAttribute(fieldName, "color")
   end
-  self.script_state = JSON.encode({inventory=inventory, frags=frags, order=marineOrder})
+
+  self.script_state = JSON.encode({
+    inventory=inventory,
+    frags=frags,
+    order=marineOrder,
+    armorBase=armorBase,
+  })
 end
 
 function showFrags(player, value, id)
@@ -374,15 +384,7 @@ function onInventoryItemClick(player, value, id)
     activateMarineOrder(player.color, item)
 
   elseif invMode[player.color].action == "gainItem" then
-    if obtainableItems[item] then
-      if adjustItemCount(itemColor, item, 1) == 1 then
-        printToAll(utils.getActorLabel(itemColor) .. " gained " .. item, player.color)
-      else
-        broadcastToColor("Can't have more", player.color, player.color)
-      end
-    else
-      broadcastToColor("Can't gain " .. item, player.color, player.color)
-    end
+    gainItem({color=itemColor, item=item})
 
   elseif invMode[player.color].action == "loseItem" then
     if obtainableItems[item] then
@@ -638,24 +640,37 @@ function transferItem(player_color, givingColor, takingColor, item)
   end
 end
 
-function getItemCount(player_color, item)
-  if player_color == "White" then
+function getItemCount(req)
+  if req.color == "White" then
     print("WTF! getItemCount for White, " .. item)
     return
   end
-  return tonumber(Global.UI.getAttribute(item.."InvText"..player_color, "text"), 10)
+  return tonumber(Global.UI.getAttribute(req.item.."InvText"..req.color, "text"), 10)
 end
 
 function haveItem(player_color, item)
-  return getItemCount(player_color, item) > 0
+  return getItemCount({color=player_color, item=item}) > 0
 end
 
 function fullWithItem(player_color, item)
-  return getItemCount(player_color, item) >= itemLimit[item]
+  return getItemCount({color=player_color, item=item}) >= itemLimit[item]
 end
 
 function setItemCount(color, item, amount)
-  adjustItemCount(color, item, amount - getItemCount(color, item))
+  adjustItemCount(color, item, amount - getItemCount({color=color, item=item}))
+end
+
+function gainItem(req)
+  assert(req and req.item and req.color, "gainItem incorrect request")
+  if obtainableItems[req.item] then
+    if adjustItemCount(req.color, req.item, 1) == 1 then
+      printToAll(utils.getActorLabel(req.color) .. " gained " .. req.item, player.color)
+    else
+      broadcastToColor("Can't have more", player.color, player.color)
+    end
+  else
+    broadcastToColor("Can't gain " .. req.item, player.color, player.color)
+  end
 end
 
 -- returns actual change in item count
@@ -668,7 +683,7 @@ function adjustItemCount(player_color, item, diff)
      return 0
   end
 
-  local originalCount = getItemCount(player_color, item)
+  local originalCount = getItemCount({color=player_color, item=item})
   local count = originalCount
   count = count + diff
   if count < 0 then
@@ -751,7 +766,7 @@ function onMarineDeath(color)
   addFrag(color.." died")
 
   --restore armor, clear berserk and all orders
-  setItemCount(color, "armor", 2)
+  setItemCount(color, "armor", armorBase[color])
   setItemCount(color, "berserk", 0)
   if marineOrder[color] then
     activateMarineOrder(color, nil)
@@ -759,8 +774,15 @@ function onMarineDeath(color)
   printToAll("On death cleared berserk, order, extra armor", Color.Orange)
 end
 
-function onMarineArmorSet(req)
-  setItemCount(req.color, "armor", req.armor)
+function onArmorBaseChange(req)
+  armorBase[req.color] = armorBase[req.color] + req.delta
+  armorBase[req.color] = math.max(armorBase[req.color], 1)
+  armorBase[req.color] = math.min(armorBase[req.color], 10)
+  adjustItemCount(req.color, "armor", req.delta)
+  local name = utils.getMarine(req.color).getName()
+  printToAll(name .. " armor: base " .. armorBase[req.color]
+    .. ", current " .. getItemCount({color=req.color, item="armor"}),
+    req.color)
 end
 
 function activateMarineOrder(player_color, newOrder)
@@ -805,9 +827,11 @@ function resetInventoryFull(difficulty)
   local shellCount = 5 - utils.getMarineCount() + startingAmmoModifier[difficulty]
 
   for _, clr in ipairs(constants.allMarineColors) do
+    armorBase[clr] = 2
+
     for item in pairs(saveStateItems) do
       if item == "armor" then
-        setItemCount(clr, item, 2)
+        setItemCount(clr, item, armorBase[clr])
       elseif item == "shell" then
         setItemCount(clr, item, shellCount)
       else

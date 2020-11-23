@@ -73,6 +73,22 @@ function hits(player, change)
   healthChange(player.color, change)
 end
 
+function onUpgrade(upgrade)
+  if upgrade == "heal" then
+    if (health.value == health.max) then
+      local color = utils.getColor(self.getName())
+      broadcastToColor("Already at full health", color, color)
+      return false
+    else
+      healthChange(utils.getColor(self.getName()), "add")
+      return true
+    end
+
+  elseif upgrade == "maxhp" then
+    healthChange(utils.getColor(self.getName()), "addMax")
+    return true
+  end
+end
 
 function onHealthPickup(player_color)
   if (health.value == health.max) then
@@ -195,11 +211,7 @@ end
 function addArmor() changeArmor(1) end
 function subArmor() changeArmor(-1) end
 function changeArmor(delta)
-  armor = tonumber(self.UI.getAttribute("armor", "text")) + delta
-  if armor > 10 then armor = 10 end
-  if armor < 1 then armor = 1 end
-  self.UI.setAttribute("armor", "text", armor)
-  instances.inv.call("onMarineArmorSet", {color=utils.getColor(self.getName()), armor=armor})
+  instances.inv.call("onArmorBaseChange", {color=utils.getColor(self.getName()), delta=delta})
 end
 
 -- Summon marker, move figure away,  restore hp, notify inventory to do the rest
