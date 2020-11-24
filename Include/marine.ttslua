@@ -73,6 +73,10 @@ function hits(player, change)
   healthChange(player.color, change)
 end
 
+function isFullHp()
+  return health.value == health.max
+end
+
 function onUpgrade(upgrade)
   if upgrade == "heal" then
     if (health.value == health.max) then
@@ -108,6 +112,7 @@ end
 
 function healthChange(playerColor, change)
   local oldHP = health.value
+  local oldMax = health.max
 
   if change == "add" then
     health.value = health.value + 1
@@ -130,11 +135,23 @@ function healthChange(playerColor, change)
      if oldHP ~= health.value then
         printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (+1)", stringColorToRGB(playerColor))
      end
+
   elseif change == "sub" then
      if oldHP ~= health.value then
         printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (-1)", stringColorToRGB(playerColor))
         instances.inv.call("onMarineWounded", utils.getColor(self.getName()))
      end
+
+  elseif change == "addMax" then
+     if oldMax ~= health.max then
+        printToAll("MaxHP of " .. self.getName() .. ": " .. health.max .. " (+1)", stringColorToRGB(playerColor))
+     end
+
+  elseif change == "subMax" then
+     if oldMax ~= health.max then
+        printToAll("MaxHP of " .. self.getName() .. ": " .. health.max .. " (-1)", stringColorToRGB(playerColor))
+     end
+
   end
 end
 
@@ -208,10 +225,12 @@ end
 
 
 -- Change armor value
-function addArmor() changeArmor(1) end
-function subArmor() changeArmor(-1) end
-function changeArmor(delta)
-  instances.inv.call("onArmorBaseChange", {color=utils.getColor(self.getName()), delta=delta})
+function addArmor(player, value, id) changeArmor(player.color, 1) end
+function subArmor(player, value, id) changeArmor(player.color, -1) end
+function changeArmor(player_color, delta)
+  instances.inv.call("onArmorBaseChange", {marineColor=utils.getColor(self.getName()),
+    delta=delta,
+    actorColor=player_color})
 end
 
 -- Summon marker, move figure away,  restore hp, notify inventory to do the rest

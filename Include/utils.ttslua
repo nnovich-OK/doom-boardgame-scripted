@@ -286,9 +286,14 @@ function getGuide()
 end
 
 -- gets table with x,y,z keys and shifts value for key y according to parameter
+-- for tables with 1,2,3 shifts the second value
 function shiftY(vector, shift)
   local result = vector
-  result.y = result.y + shift
+  if result.y then
+    result.y = result.y + shift
+  elseif result[2] then
+    result[2] = result[2] + shift
+  end
   return result
 end
 

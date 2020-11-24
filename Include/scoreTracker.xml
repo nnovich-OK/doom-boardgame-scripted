@@ -175,6 +175,7 @@
         <Cell class="lvlupTakeCell" >
           <Text class="lvlupCostText" text="60 pts" />
           <Button id="lvlupTakeArmor" class="lvlupTakeButton" text="60 pts" />
+          <Text id="lvlupArmorUpgraded" text="Done" active="false" fontSize="20" />
         </Cell>
       </Row>
 

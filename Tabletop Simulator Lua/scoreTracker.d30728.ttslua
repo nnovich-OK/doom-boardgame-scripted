@@ -4,9 +4,10 @@ require("constants")
 
 local saveData = {}
 local score = {Red=0, Green=0, Blue=0}
-local readiness = {Red=false, Green=false, Blue=false, White=false}
+local readiness = {}
+local armorUpgraded = {}
 
-local upgadeCost = {
+local upgradeCost = {
   heal = 5,
   shell = 10,
   rocket = 15,
@@ -18,9 +19,10 @@ local upgadeCost = {
 
 
 -- Local methods declaration
-local refreshUI
 local setReadiness
 local checkAllReady
+local updateScoreUi
+local updateTakeArmorButton
 
 function onLoad(save_state)
   if save_state and save_state ~= "" then
@@ -33,13 +35,21 @@ function onPreprocFinished()
   if saveData.score then
     score = saveData.score
     for _, clr in ipairs(constants.allMarineColors) do
-      refreshUI(clr)
+      updateScoreUi(clr)
     end
   end
+
+  if saveData.armorUpgraded then
+    armorUpgraded = saveData.armorUpgraded
+    for _, clr in ipairs(constants.allMarineColors) do
+      updateTakeArmorButton(clr)
+    end
+  end
+
 end
 
 function onSave()
-  self.script_state = JSON.encode({score=score})
+  self.script_state = JSON.encode({score=score, armorUpgraded=armorUpgraded})
 end
 
 function changeScore(req)
@@ -53,7 +63,7 @@ function changeScore(req)
     return false
   else
     score[req.color] = newScore
-    refreshUI(req.color)
+    updateScoreUi(req.color)
 
     local sign = req.delta > 0 and "+" or "" -- minus will be printed anyway
     local msg = utils.getActorLabel(req.color) .. " score: " .. newScore
@@ -65,7 +75,7 @@ function changeScore(req)
   return true
 end
 
-function refreshUI(color)
+function updateScoreUi(color)
   Global.UI.setAttribute("scoreText"..color, "text", score[color])
   Global.UI.setAttribute("scoreInput"..color, "text", score[color])
 end
@@ -77,7 +87,7 @@ function onScoreEdit(player, value, id)
 
   local field, color = utils.stripXmlFieldColor(id)
   score[color] = tonumber(value, 10)
-  refreshUI(color)
+  updateScoreUi(color)
 
   printToAll(utils.getActorLabel(color) .. " score: " .. score[color] .. " (manual change)", color)
 end
@@ -85,7 +95,7 @@ end
 function resetScore()
   for _, clr in ipairs(constants.allMarineColors) do
     score[clr] = 0
-    refreshUI(clr)
+    updateScoreUi(clr)
   end
 end
 
@@ -127,28 +137,62 @@ function checkAllReady()
 end
 
 function onUpgradeClick(player, value, id)
-  local upgarde = string.lower(string.gsub(value, "lvlupTake", ""))
+  local upgrade = string.lower(string.gsub(id, "lvlupTake", ""))
 
-  if score[player.color] < upgardeCost[upgrade] then
+  if score[player.color] < upgradeCost[upgrade] then
     broadcastToColor("Not enough kill points", player.color, player.color)
     return
   end
 
+  local msg = utils.getActorLabel(player.color) .. " takes " .. upgrade .. " for "
+    .. upgradeCost[upgrade] .. " points"
   local performed = true
+
   if upgrade == "heal" or upgrade == "maxhp" then
-    performed = utils.getMarine(player.color).call("onUpgrade", upgrade)
+    local marine = utils.getMarine(player.color)
+    if upgrade == "heal" and marine.call("isFullHp") then
+      broadcastToColor("Already at full health", player.color, player.color)
+      performed = false
+    end
+    if performed then
+      broadcastToAll(msg, player.color)
+      marine.call("onUpgrade", upgrade)
+    end
 
   elseif upgrade == "shell" or upgrade == "rocket" or upgrade == "cell" then
     performed = instances.inv.call("getItemCount", {color=player.color, item=upgrade}) < 3
     if performed then
-      instances.inv.call("gainItem", {color=player.color, item=upgrade})
+      broadcastToAll(msg, player.color)
+      instances.inv.call("gainItem", {marineColor=player.color, item=upgrade, actorColor=player.color})
+    else
+      broadcastToColor("Already carrying 3 or more", player.color, player.color)
     end
 
   elseif upgrade == "armor" then
+    broadcastToAll(msg, player.color)
+    instances.inv.call("onArmorBaseChange", {
+      delta=1, marineColor=player.color, actorColor=player.color})
+    armorUpgraded[player.color] = true
+    updateTakeArmorButton(player.color)
+
+
+  elseif upgrade == "skill" then
+    broadcastToAll(msg, player.color)
+    printToAll("Please deal skill card manually", player.color)
 
   end
 
   if performed then
+    changeScore({color=player.color, delta=-upgradeCost[upgrade]})
+  end
+end
 
+function updateTakeArmorButton(clr)
+  if armorUpgraded[clr] then
+    instances.vis.call("hideInterface", {color=clr, id="lvlupTakeArmor"})
+    instances.vis.call("showInterface", {color=clr, id="lvlupArmorUpgraded"})
+  else
+    instances.vis.call("showInterface", {color=clr, id="lvlupTakeArmor"})
+    instances.vis.call("hideInterface", {color=clr, id="lvlupArmorUpgraded"})
   end
 end

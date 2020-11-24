@@ -384,7 +384,7 @@ function onInventoryItemClick(player, value, id)
     activateMarineOrder(player.color, item)
 
   elseif invMode[player.color].action == "gainItem" then
-    gainItem({color=itemColor, item=item})
+    gainItem({marineColor=itemColor, item=item, actorColor=player.color})
 
   elseif invMode[player.color].action == "loseItem" then
     if obtainableItems[item] then
@@ -661,15 +661,17 @@ function setItemCount(color, item, amount)
 end
 
 function gainItem(req)
-  assert(req and req.item and req.color, "gainItem incorrect request")
+  assert(req and req.item and req.marineColor, "gainItem incorrect request")
+  req.actorColor = req.actorColor or req.marineColor
+
   if obtainableItems[req.item] then
-    if adjustItemCount(req.color, req.item, 1) == 1 then
-      printToAll(utils.getActorLabel(req.color) .. " gained " .. req.item, player.color)
+    if adjustItemCount(req.marineColor, req.item, 1) == 1 then
+      printToAll(utils.getActorLabel(req.marineColor) .. " gained " .. req.item, req.actorColor)
     else
-      broadcastToColor("Can't have more", player.color, player.color)
+      broadcastToColor("Can't have more", req.actorColor, req.actorColor)
     end
   else
-    broadcastToColor("Can't gain " .. req.item, player.color, player.color)
+    broadcastToColor("Can't gain " .. req.item, req.actorColor, req.actorColor)
   end
 end
 
@@ -771,18 +773,24 @@ function onMarineDeath(color)
   if marineOrder[color] then
     activateMarineOrder(color, nil)
   end
-  printToAll("On death cleared berserk, order, extra armor", Color.Orange)
+  printToAll("On death cleared berserk, order, set armor to base value", Color.Orange)
 end
 
 function onArmorBaseChange(req)
-  armorBase[req.color] = armorBase[req.color] + req.delta
-  armorBase[req.color] = math.max(armorBase[req.color], 1)
-  armorBase[req.color] = math.min(armorBase[req.color], 10)
-  adjustItemCount(req.color, "armor", req.delta)
-  local name = utils.getMarine(req.color).getName()
-  printToAll(name .. " armor: base " .. armorBase[req.color]
-    .. ", current " .. getItemCount({color=req.color, item="armor"}),
-    req.color)
+  -- adjust base armor
+  armorBase[req.marineColor] = armorBase[req.marineColor] + req.delta
+  armorBase[req.marineColor] = math.max(armorBase[req.marineColor], 1)
+  armorBase[req.marineColor] = math.min(armorBase[req.marineColor], 10)
+
+  -- adjust current armor and store new value
+  -- this is needed since getItemCount will not be updated this frame even after adjustment
+  local armorCurrent = getItemCount({color=req.marineColor, item="armor"})
+  armorCurrent = armorCurrent + adjustItemCount(req.marineColor, "armor", req.delta)
+
+  local name = utils.getMarine(req.marineColor).getName()
+  printToAll(name .. " armor: base " .. armorBase[req.marineColor]
+    .. ", current " .. armorCurrent,
+    req.actorColor)
 end
 
 function activateMarineOrder(player_color, newOrder)
