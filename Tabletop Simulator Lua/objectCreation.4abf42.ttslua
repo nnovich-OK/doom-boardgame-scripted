@@ -253,7 +253,10 @@ function spawnElement(req)
       end
 
       if req.script then
-        obj.setLuaScript(req.script)
+        local encounterScript = string.gsub(instances.requireAll.getLuaScript(),
+          [[%-%-ENCOUNTER_SCRIPT_LOCATION%-%-]],
+          req.script)
+        obj.setLuaScript(encounterScript)
       end
     end,
   })

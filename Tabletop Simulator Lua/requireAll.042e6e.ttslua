@@ -1,0 +1,12 @@
+require("instances")
+require("utils")
+require("constants")
+require("dbg")
+
+local requiresAdded = true
+
+-- All requires above are automatically added to encounter scripts during spawn
+-- This way saving encounter scripts is much easier and demands less time and space
+-- When editing any encounter, please remove all requires and this comment before scanning
+
+--ENCOUNTER_SCRIPT_LOCATION--

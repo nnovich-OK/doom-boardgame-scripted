@@ -16,6 +16,7 @@ local guidList = {
     teleport = "07fbc0", -- teleportTemplate
     score = "d30728", -- scoreTracker
     progress = "d373b2", -- progressTracker
+    requireAll = "042e6e", -- requireAll it is
 }
 
 setmetatable(instances, {__index = function(t, k)

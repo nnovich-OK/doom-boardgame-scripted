@@ -94,7 +94,7 @@ function onScriptingButtonDown(index,  player_color)
 
   elseif dbg.cfg.miscHotkeyEnable and index == 8 then
     local obj = Player[player_color].getHoverObject()
-    obj.setInvisibleTo({"Red", "Green", "Blue", "Grey"})
+    print(obj.getLuaScript())
 
 
   end
