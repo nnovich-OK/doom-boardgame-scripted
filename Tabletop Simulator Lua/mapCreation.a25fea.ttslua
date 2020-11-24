@@ -197,6 +197,7 @@ function loadMap(player_color, campaign, scenario, difficulty, keepInventory)
 
   instances.inv.call("resetFrags")
   instances.luck.call("resetLuck")
+  instances.progress.call("reset")
   if keepInventory then
     instances.inv.call("resetInventoryPartial")
   else
@@ -249,7 +250,7 @@ function revealArea(req)
     return
   end
 
-  broadcastToAll("Revealing "..req.area, req.color)
+  broadcastToAll("Revealing: "..req.area, req.color)
 
   local area = maps[campaignLoaded].scenarios[scenarioLoaded].areas[req.area]
   for _, tile in ipairs(area.mapTiles) do

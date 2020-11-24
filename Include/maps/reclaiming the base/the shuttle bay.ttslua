@@ -6,6 +6,1408 @@ local package = {}
 local _ENV = package
 
 map = [[
+{
+  "Area 1": {
+    "ammoTokens": [],
+    "colorMonsters": [ {
+      "name": "Red Imp",
+      "position": {
+        "x": 12.5,
+        "y": 1.27968907356262,
+        "z": 6.49999952316284
+      },
+      "rotation": {
+        "x": 1.55801844812231E-05,
+        "y": 269.956451416016,
+        "z": 2.61194645645446E-06
+      }
+    }, {
+      "name": "Red Imp",
+      "position": {
+        "x": 20.5,
+        "y": 1.27968907356262,
+        "z": 6.5
+      },
+      "rotation": {
+        "x": 1.22557946724555E-06,
+        "y": 270,
+        "z": 1.23696997889056E-06
+      }
+    }, {
+      "name": "Green Zombie",
+      "position": {
+        "x": 13.5,
+        "y": 1.2796893119812,
+        "z": 4.49999904632568
+      },
+      "rotation": {
+        "x": -1.11068618480203E-06,
+        "y": 90.0022354125977,
+        "z": -3.69367785424402E-06
+      }
+    }, {
+      "name": "Blue Trite",
+      "position": {
+        "x": 9.5,
+        "y": 1.27968943119049,
+        "z": 4.5
+      },
+      "rotation": {
+        "x": -6.86309931552387E-06,
+        "y": 3.01348063658224E-05,
+        "z": 7.91808815847617E-07
+      }
+    } ],
+    "doors": [ {
+      "name": "Door3",
+      "position": {
+        "x": 8.00000476837158,
+        "y": 1.23500037193298,
+        "z": 5.00000190734863
+      },
+      "reveal": "Start area",
+      "rotation": {
+        "x": 5.7731126617E-06,
+        "y": 359.968322753906,
+        "z": -6.41925726085901E-05
+      }
+    } ],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 20.5000019073486,
+        "y": 0.960000157356262,
+        "z": 7.50000524520874
+      },
+      "rotation": {
+        "x": 4.06113167628064E-06,
+        "y": 90.0032424926758,
+        "z": 6.20432865616749E-06
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 13.5000019073486,
+        "y": 0.960000216960907,
+        "z": 7.5000057220459
+      },
+      "rotation": {
+        "x": 5.06688083987683E-05,
+        "y": 90.0030822753906,
+        "z": 4.91610844619572E-05
+      }
+    }, {
+      "name": "Map Intersection 4x3",
+      "position": {
+        "x": 12.5,
+        "y": 0.959999680519104,
+        "z": 5.5
+      },
+      "rotation": {
+        "x": 1.73159776295506E-06,
+        "y": 269.991912841797,
+        "z": -5.70553129364271E-06
+      }
+    }, {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 16.5,
+        "y": 0.960000216960907,
+        "z": 5.5
+      },
+      "rotation": {
+        "x": 4.19830121245468E-06,
+        "y": 89.9988555908203,
+        "z": 3.36829652951565E-05
+      }
+    }, {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 9.5,
+        "y": 0.960000038146973,
+        "z": 5.5
+      },
+      "rotation": {
+        "x": 8.22726562432763E-08,
+        "y": 89.9988555908203,
+        "z": -6.27254576102132E-06
+      }
+    }, {
+      "name": "Map Intersection 4x3",
+      "position": {
+        "x": 19.5,
+        "y": 0.959999680519104,
+        "z": 4.5
+      },
+      "rotation": {
+        "x": 2.69032341293496E-07,
+        "y": 180.021774291992,
+        "z": 1.14783155424902E-07
+      }
+    }, {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 20.5,
+        "y": 0.960000514984131,
+        "z": 1.4999988079071
+      },
+      "rotation": {
+        "x": -1.71591594266829E-07,
+        "y": 179.991302490234,
+        "z": -6.75222690915689E-06
+      }
+    }, {
+      "name": "Map Intersection 4x4",
+      "position": {
+        "x": 20.4998016357422,
+        "y": 0.960000574588776,
+        "z": -2.49314069747925
+      },
+      "rotation": {
+        "x": -4.09195990869193E-06,
+        "y": 179.971237182617,
+        "z": -1.41808675380162E-06
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 17.5,
+        "y": 0.960000097751617,
+        "z": -1.49999976158142
+      },
+      "rotation": {
+        "x": -2.2865099253977E-06,
+        "y": 0.0172274112701416,
+        "z": -2.9377545160969E-06
+      }
+    }, {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 20.5,
+        "y": 0.960000574588776,
+        "z": -5.5
+      },
+      "rotation": {
+        "x": -1.40397571612993E-06,
+        "y": 179.986968994141,
+        "z": -4.47548381998786E-06
+      }
+    }, {
+      "name": "Map Intersection 4x3",
+      "position": {
+        "x": 19.5,
+        "y": 0.960000157356262,
+        "z": -9.5
+      },
+      "rotation": {
+        "x": 2.64260734184063E-06,
+        "y": 179.976287841797,
+        "z": -3.11142457576352E-07
+      }
+    }, {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 16.4999980926514,
+        "y": 0.960000038146973,
+        "z": -8.5
+      },
+      "rotation": {
+        "x": 4.89121566715767E-06,
+        "y": 89.9917221069336,
+        "z": 2.40536405726743E-06
+      }
+    }, {
+      "name": "Map Intersection 4x3",
+      "position": {
+        "x": 13.5,
+        "y": 0.959999561309814,
+        "z": -9.5
+      },
+      "rotation": {
+        "x": -2.98706095236412E-06,
+        "y": 90.020149230957,
+        "z": 9.56235999183264E-06
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 12.5,
+        "y": 0.96000063419342,
+        "z": -11.5000019073486
+      },
+      "rotation": {
+        "x": 2.75560012141796E-07,
+        "y": 270.023742675781,
+        "z": -7.45773468224797E-06
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 10.5,
+        "y": 0.960000157356262,
+        "z": -8.5
+      },
+      "rotation": {
+        "x": 3.14668955070374E-06,
+        "y": 0.0175946578383446,
+        "z": 5.93515233049402E-06
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Blocking Obstacle 2",
+      "position": {
+        "x": 19.4999370574951,
+        "y": 1.23500025272369,
+        "z": 7.50019264221191
+      },
+      "rotation": {
+        "x": -4.48379341833061E-06,
+        "y": 270.00146484375,
+        "z": -6.66967662255047E-06
+      }
+    }, {
+      "name": "Blocking Obstacle 2",
+      "position": {
+        "x": 12.5,
+        "y": 1.23500108718872,
+        "z": 7.49999094009399
+      },
+      "rotation": {
+        "x": -5.01279791933484E-05,
+        "y": 269.994537353516,
+        "z": -4.9111207772512E-05
+      }
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 19.5003662109375,
+        "y": 1.23499476909637,
+        "z": 6.49994659423828
+      },
+      "rotation": {
+        "x": -0.000458146794699132,
+        "y": 270.011291503906,
+        "z": 0.000905509397853166
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 19.5000038146973,
+        "y": 1.23500859737396,
+        "z": 5.50000381469727
+      },
+      "rotation": {
+        "x": 0.0010382590116933,
+        "y": 269.996826171875,
+        "z": 0.000123811085359193
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 19.4999961853027,
+        "y": 1.23499965667725,
+        "z": 4.50000190734863
+      },
+      "rotation": {
+        "x": 1.03536308415642E-06,
+        "y": 269.997375488281,
+        "z": 4.75242313768831E-06
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 19.5000057220459,
+        "y": 1.23499965667725,
+        "z": 3.49999070167542
+      },
+      "rotation": {
+        "x": -1.01712430478074E-05,
+        "y": 269.998291015625,
+        "z": -2.09467680178932E-06
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 21.475606918335,
+        "y": 1.2417768239975,
+        "z": -1.51429486274719
+      },
+      "rotation": {
+        "x": 0.0330128557980061,
+        "y": 269.063140869141,
+        "z": 359.950073242188
+      },
+      "scriptIndex": 2
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 21.4837532043457,
+        "y": 1.23831737041473,
+        "z": -2.49775624275208
+      },
+      "rotation": {
+        "x": 0.013532992452383,
+        "y": 270.472625732422,
+        "z": 359.625610351563
+      },
+      "scriptIndex": 2
+    } ],
+    "scripts": [ "-- Bundled by luabundle {\"version\":\"1.6.0\"}\nlocal __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (function(superRequire)\n\tlocal loadingPlaceholder = {[{}] = true}\n\n\tlocal register\n\tlocal modules = {}\n\n\tlocal require\n\tlocal loaded = {}\n\n\tregister = function(name, body)\n\t\tif not modules[name] then\n\t\t\tmodules[name] = body\n\t\tend\n\tend\n\n\trequire = function(name)\n\t\tlocal loadedModule = loaded[name]\n\n\t\tif loadedModule then\n\t\t\tif loadedModule == loadingPlaceholder then\n\t\t\t\treturn nil\n\t\t\tend\n\t\telse\n\t\t\tif not modules[name] then\n\t\t\t\tif not superRequire then\n\t\t\t\t\tlocal identifier = type(name) == 'string' and '\\\"' .. name .. '\\\"' or tostring(name)\n\t\t\t\t\terror('Tried to require ' .. identifier .. ', but no such module has been registered')\n\t\t\t\telse\n\t\t\t\t\treturn superRequire(name)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tloaded[name] = loadingPlaceholder\n\t\t\tloadedModule = modules[name](require, loaded, register, modules)\n\t\t\tloaded[name] = loadedModule\n\t\tend\n\n\t\treturn loadedModule\n\tend\n\n\treturn require, loaded, register, modules\nend)(nil)\n__bundle_register(\"__root\", function(require, _LOADED, __bundle_register, __bundle_modules)\nrequire(\"instances\")\r\nrequire(\"utils\")\r\n\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" peeks around the corner\", \"Teal\")\r\n  instances.map.call(\"revealArea\",\r\n    {area=\"Area 1 behind corner\", color=\"Teal\"})\r\n\r\n  local objects = utils.getObjectsInZone(\r\n    {19.50, 2.00, 5.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 4.00},\r\n    utils.isInvisibleToken\r\n  )\r\n\r\n\r\n  for _, obj in ipairs(objects) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\nend)\n__bundle_register(\"utils\", function(require, _LOADED, __bundle_register, __bundle_modules)\nutils = {}\r\nlocal package = utils\r\n\r\n-- PACKAGE IMPORT\r\nsetmetatable(utils, {__index = _G})\r\nlocal constants = require(\"constants\")\r\n\r\n-- PACKAGE BODY\r\nlocal _ENV = package\r\n\r\n-- Variables\r\nlocal marines = {}\r\nlocal guideGUID = \"\"\r\n\r\n-- Local methods declaration\r\n\r\nfunction getMarine(color)\r\n  if #marines == 0 then\r\n    for _,obj in ipairs(getAllObjects()) do\r\n      if isMarine(obj) then\r\n        local objColor = getColor(obj.getName())\r\n        marines[objColor] = obj.getGUID()\r\n      end\r\n    end\r\n  end\r\n  return getObjectFromGUID(marines[color])\r\nend\r\n\r\nfunction getMarineCount()\r\n  local count = 0\r\n  for _, clr in ipairs(constants.allMarineColors) do\r\n    if Player[clr].seated then\r\n      count = count + 1\r\n    end\r\n  end\r\n\r\n  return math.max(1, count)\r\nend\r\n\r\n\r\nfunction setTableDefaultValue(table, value)\r\n  local key = {}\r\n  local mt = getmetatable(table) or {}\r\n  mt.__index = function(t) return t[key] end\r\n  table[key] = value\r\n  setmetatable(table, mt)\r\nend\r\n\r\nfunction isSingleFigurine(obj)\r\n  -- Tag should be Figurine, but TTS apparently might set tag to Generic on first frame\r\n  return (obj.tag == \"Figurine\" or obj.tag == \"Generic\") and obj.getQuantity() == -1\r\nend\r\n\r\nfunction isMonster(obj)\r\n  if not isSingleFigurine(obj) then\r\n    return false\r\n  end\r\n\r\n  local name = obj.getName()\r\n  for i,v in ipairs(constants.mnstList) do\r\n    if (string.find(name, v, 1, true)) then\r\n      return true\r\n    end\r\n  end\r\n\r\n  return false\r\nend\r\n\r\nfunction isMarine(obj)\r\n  if not isSingleFigurine(obj) then\r\n    return false\r\n  end\r\n\r\n  return (string.find(obj.getName(), \"Marine\", 1, true) ~= nil)\r\nend\r\n\r\nfunction isCharacter(obj)\r\n  return isMonster(obj) or isMarine(obj)\r\nend\r\n\r\nfunction isDoor(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Door\") ~= nil\r\nend\r\n\r\nfunction isMapTile(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Map\") ~= nil\r\nend\r\n\r\nfunction isAmmoToken(obj)\r\n  return obj.tag == \"Card\" and\r\n    (string.find(obj.getName(), \"Shells/Bullets\") ~= nil\r\n    or string.find(obj.getName(), \"Rockets/Grenades\") ~= nil\r\n    or string.find(obj.getName(), \"Energy Cell\") ~= nil)\r\nend\r\n\r\nfunction isTeleporter(obj)\r\n  return obj.tag == \"Card\" and string.find(obj.getName(), \"Teleporter\") ~= nil\r\nend\r\n\r\nfunction isObstacleToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag == \"Generic\") and\r\n    (string.find(obj.getName(), \"Obstacle\") ~= nil\r\n    or string.find(obj.getName(), \"Barrel\") ~= nil\r\n    or string.find(obj.getName(), \"Duct\") ~= nil)\r\nend\r\n\r\nfunction isCompassToken(obj)\r\n  return obj.tag == \"Card\" and string.find(obj.getName(), \"Compass\") ~= nil\r\nend\r\n\r\nfunction isEncounterToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag==\"Generic\") and string.find(obj.getName(), \"Encounter\") ~= nil\r\nend\r\n\r\nfunction isInvisibleToken(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Invisible Encounter\") ~= nil\r\nend\r\n\r\nfunction isToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag==\"Generic\") and constants.tokenList[obj.getName()]\r\nend\r\n\r\nfunction isDeckOfTokens(obj)\r\n  if obj.tag ~= \"Deck\" or obj.getQuantity() == -1 then\r\n    return false\r\n  end\r\n\r\n  for _, innerObj in ipairs(obj.getObjects()) do\r\n    if not constants.tokenList[innerObj.name] then\r\n      return false\r\n    end\r\n  end\r\n\r\n  return true\r\nend\r\n\r\n\r\n-- recursion is internal parameter, shouldn't be used from outside\r\nfunction getColor(str, recursion)\r\n  for _, clr in ipairs(constants.allPlayerColors) do\r\n    if string.find(str, clr, 1, true) then\r\n      -- ensure it's the only color present in str\r\n      if not recursion and getColor(string.gsub(str, clr, \"\", 1), true) then\r\n        log(str, \"ERROR getColor is used on string with two colors\")\r\n        return nil\r\n      else\r\n        return clr\r\n      end\r\n    end\r\n  end\r\n\r\n  return nil\r\nend\r\n\r\nfunction getActorLabel(color)\r\n  return Player[color].steam_name or getMarine(color).getName()\r\nend\r\n\r\n-- should be applied to strings like \"myXmlFieldRed\" to remove \"Red\"\r\nfunction stripXmlFieldColor(str)\r\n  for _, clr in ipairs(constants.allPlayerColors) do\r\n    if string.find(str, clr..\"$\") then\r\n      return string.gsub(str, clr..\"$\", \"\"), clr\r\n    end\r\n  end\r\n  return str\r\nend\r\n\r\n\r\n-- return true if figure is 2 or more spaces width in direction of X and Z\r\nfunction isLarge(figure)\r\n  local bounds = figure.getBounds()\r\n  return {\r\n    x = (bounds.size.x > 1.5),\r\n    z = (bounds.size.z > 1.5)\r\n  }\r\nend\r\n\r\nfunction getDistance(first, second)\r\n  local roundingDelta = {x = 0.5, z = 0.5}\r\n\r\n  local position = {first.getPosition(), second.getPosition()}\r\n\r\n  for i, figure in ipairs({first, second}) do\r\n    local isLargeFigure = isLarge(figure)\r\n    if isLargeFigure.x then\r\n      roundingDelta.x = roundingDelta.x - 0.5\r\n    end\r\n\r\n    if isLargeFigure.z then\r\n      roundingDelta.z = roundingDelta.z - 0.5\r\n    end\r\n\r\n    if isLargeFigure.x ~= isLargeFigure.z then\r\n      -- special handling for demon, since its position doesn't corresponsd to geometric center\r\n      -- current position is center of head cell\r\n      -- correct, so we use geometric center instead\r\n      local angle = figure.getRotation().y * math.pi / 180\r\n      position[i].x = position[i].x + 0.5 * math.cos(angle)\r\n      position[i].z = position[i].z - 0.5 * math.sin(angle)\r\n    end\r\n  end\r\n\r\n  local dx = math.floor(math.abs(position[2].x - position[1].x) + roundingDelta.x)\r\n  local dz = math.floor(math.abs(position[2].z - position[1].z) + roundingDelta.z)\r\n\r\n  return math.max(dx, dz)\r\nend\r\n\r\n-- only x and z values of position are meaningful\r\nfunction getObjectAt(position, filter)\r\n  local objects = getObjectsBelow({position.x, 10, position.z}, filter)\r\n\r\n  if #objects > 1 then\r\n    log(objects, \"ERROR getObjectAt found several objects\")\r\n  end\r\n\r\n  -- this is nil for empty table and proper object otherwise\r\n  return objects[1]\r\nend\r\n\r\nfunction getObjectsBelow(position, filter)\r\n  local hitTable = Physics.cast(\r\n    {origin=position, direction={0,-1,0}, debug=false, max_distance=10})\r\n\r\n  local result = {}\r\n  for _, hit in ipairs(hitTable) do\r\n    if filter(hit.hit_object) then\r\n      table.insert(result, hit.hit_object)\r\n    end\r\n  end\r\n\r\n  return result\r\nend\r\n\r\nfunction getObjectsInZone(position, rotation, size, filter)\r\n  -- prevent getting objects, which only touch border by reducing actual size\r\n  reducedSize = Vector(size) - Vector(0.5, 0.5, 0.5)\r\n  local hitTable = Physics.cast(\r\n    {type=3, origin=position, size=reducedSize, orientation=rotation, direction={0,-1,0}, maxDistance=0, debug=false})\r\n\r\n    print(\"casting\")\r\n  local result = {}\r\n  for _, hit in ipairs(hitTable) do\r\n    print(\"obj:\", hit.hit_object.getName())\r\n    if filter(hit.hit_object) then\r\n      print(\"inserted: \", hit.hit_object.getName())\r\n      table.insert(result, hit.hit_object)\r\n    end\r\n  end\r\n\r\n  return result\r\nend\r\n\r\nfunction isAboveMap(obj)\r\n  local castPosition = obj.getPosition()\r\n  local large = isLarge(obj)\r\n  if large.x and large.z then\r\n    -- for large creatures cast from center of any square instead of center of full figurine\r\n    -- this way even standing above connection of two pieces will still be reported as above map\r\n    -- despite figurine center is directly above crack\r\n    castPosition.x = castPosition.x + 0.5\r\n    castPosition.z = castPosition.z + 0.5\r\n  end\r\n\r\n  return #getObjectsBelow(castPosition, isMapTile) ~= 0\r\nend\r\n\r\nfunction getMonsterType(fullName)\r\n  for _, type in ipairs(constants.mnstList) do\r\n    if string.find(fullName, type) then\r\n      return type\r\n    end\r\n  end\r\n\r\n  return nil\r\nend\r\n\r\nfunction getGuide()\r\n  local guide = getObjectFromGUID(guideGUID)\r\n  if guide then\r\n    return guide\r\n  end\r\n\r\n  for _, obj in ipairs(getAllObjects()) do\r\n    if obj.getName() == \"Invader Player Guide\" then\r\n      guideGUID = obj.getGUID()\r\n      return obj\r\n    end\r\n  end\r\nend\r\n\r\n-- gets table with x,y,z keys and shifts value for key y according to parameter\r\n-- for tables with 1,2,3 shifts the second value\r\nfunction shiftY(vector, shift)\r\n  local result = vector\r\n  if result.y then\r\n    result.y = result.y + shift\r\n  elseif result[2] then\r\n    result[2] = result[2] + shift\r\n  end\r\n  return result\r\nend\r\n\r\nreturn package\r\n\nend)\n__bundle_register(\"constants\", function(require, _LOADED, __bundle_register, __bundle_modules)\nconstants = {}\r\nlocal package = constants\r\n\r\nlocal _ENV = package\r\n\r\nallPlayerColors = {\"Red\", \"Green\", \"Blue\", \"White\"}\r\nallMarineColors = {\"Red\", \"Green\", \"Blue\"}\r\n\r\n\r\n-- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place\r\nmnstList = {\r\n  \"Zombie\",\r\n  \"Trite\",\r\n  \"Imp\",\r\n  \"Demon\",\r\n  \"Mancubus\",\r\n  \"Archvile\",\r\n  \"Hellknight\",\r\n  \"Cyberdemon\",\r\n}\r\n\r\ntokenList = {\r\n  ['Armor']=true,\r\n\r\n  ['Shells/Bullets']=true,\r\n  ['Rockets/Grenades']=true,\r\n  ['Energy Cell']=true,\r\n\r\n  ['Chainsaw']=true,\r\n  ['Shotgun']=true,\r\n  ['Machine Gun']=true,\r\n  ['Chain Gun']=true,\r\n  ['Rocket Launcher']=true,\r\n  ['Plasma Gun']=true,\r\n  ['BFG']=true,\r\n\r\n  ['Berserk']=true,\r\n  ['Adrenaline']=true,\r\n\r\n  ['Blue Key']=true,\r\n  ['Yellow Key']=true,\r\n  ['Red Key']=true,\r\n\r\n  ['Health']=true,\r\n\r\n  ['Frag Location']= true,\r\n  ['Red Teleporter']= true,\r\n  ['Yellow Teleporter']= true,\r\n  ['Blue Teleporter']= true,\r\n  ['Compass Rose']= true,\r\n  ['Encounter']= true,\r\n  ['Cancel']= true,\r\n  ['Heal']= true,\r\n  ['Dodge']= true,\r\n  ['Guard']= true,\r\n  ['Aim']= true,\r\n  ['Blocking Obstacle 1']= true,\r\n  ['Blocking Obstacle 2']= true,\r\n  ['Blocking Obstacle 3']= true,\r\n  ['Damaging Obstacle']= true,\r\n  ['Exploding Barrel']= true,\r\n  ['Body Encounter']= true,\r\n  ['Duct']= true,\r\n\r\n  ['Invisible Encounter']= true,\r\n}\r\n\r\nreturn package\r\n\nend)\n__bundle_register(\"instances\", function(require, _LOADED, __bundle_register, __bundle_modules)\ninstances = {}\r\n\r\nlocal guidList = {\r\n    calc = \"6411e1\", -- damage calculator\r\n    hotkeys = \"0c9765\", -- hotkey handler\r\n    preproc = \"e8056f\", -- xml preprocessor\r\n    creator = \"4abf42\", -- object creator\r\n    vis = \"ad25a3\", -- interface visibility manager\r\n    inv = \"cb7512\", -- inventory\r\n    click = \"300ffb\", -- doubleclickHandler\r\n    luck = \"9c48d4\", -- luckTracker\r\n    monster = \"48b7e7\", -- monsterTemplate\r\n    door = \"c28d4a\", -- doorTemplate\r\n    scanner = \"457f3e\", -- mapScanner\r\n    map = \"a25fea\", -- mapCreation\r\n    teleport = \"07fbc0\", -- teleportTemplate\r\n    score = \"d30728\", -- scoreTracker\r\n    progress = \"d373b2\", -- progressTracker\r\n}\r\n\r\nsetmetatable(instances, {__index = function(t, k)\r\n  if guidList[k] then\r\n    local obj = getObjectFromGUID(guidList[k])\r\n    assert(obj, \"instances: can't get \" .. k .. \" from GUID \" .. guidList[k])\r\n    t[k] = obj\r\n    return obj\r\n  end\r\n  error(\"instances: no preset GUID for \" .. k)\r\nend\r\n})\r\n\r\nreturn instances\r\n\nend)\nreturn __bundle_require(\"__root\")", "-- Bundled by luabundle {\"version\":\"1.6.0\"}\nlocal __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (function(superRequire)\n\tlocal loadingPlaceholder = {[{}] = true}\n\n\tlocal register\n\tlocal modules = {}\n\n\tlocal require\n\tlocal loaded = {}\n\n\tregister = function(name, body)\n\t\tif not modules[name] then\n\t\t\tmodules[name] = body\n\t\tend\n\tend\n\n\trequire = function(name)\n\t\tlocal loadedModule = loaded[name]\n\n\t\tif loadedModule then\n\t\t\tif loadedModule == loadingPlaceholder then\n\t\t\t\treturn nil\n\t\t\tend\n\t\telse\n\t\t\tif not modules[name] then\n\t\t\t\tif not superRequire then\n\t\t\t\t\tlocal identifier = type(name) == 'string' and '\\\"' .. name .. '\\\"' or tostring(name)\n\t\t\t\t\terror('Tried to require ' .. identifier .. ', but no such module has been registered')\n\t\t\t\telse\n\t\t\t\t\treturn superRequire(name)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tloaded[name] = loadingPlaceholder\n\t\t\tloadedModule = modules[name](require, loaded, register, modules)\n\t\t\tloaded[name] = loadedModule\n\t\tend\n\n\t\treturn loadedModule\n\tend\n\n\treturn require, loaded, register, modules\nend)(nil)\n__bundle_register(\"__root\", function(require, _LOADED, __bundle_register, __bundle_modules)\nrequire(\"instances\")\r\nrequire(\"utils\")\r\n\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"Monsters horde breaks trhough blockage!\", \"Teal\")\r\n\r\n  instances.map.call(\"revealArea\",\r\n    {area=\"Area 1 horde\", color=\"Teal\"})\r\n\r\n  local obstacles = utils.getObjectsInZone(\r\n    {16.50, 2.00, -9.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isObstacleToken\r\n  )\r\n\r\n  for _, obj in ipairs(obstacles) do\r\n    obj.destruct()\r\n  end\r\n\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {21.50, 2.00, -2.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isInvisibleToken\r\n  )\r\n\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n\nend)\n__bundle_register(\"utils\", function(require, _LOADED, __bundle_register, __bundle_modules)\nutils = {}\r\nlocal package = utils\r\n\r\n-- PACKAGE IMPORT\r\nsetmetatable(utils, {__index = _G})\r\nlocal constants = require(\"constants\")\r\n\r\n-- PACKAGE BODY\r\nlocal _ENV = package\r\n\r\n-- Variables\r\nlocal marines = {}\r\nlocal guideGUID = \"\"\r\n\r\n-- Local methods declaration\r\n\r\nfunction getMarine(color)\r\n  if #marines == 0 then\r\n    for _,obj in ipairs(getAllObjects()) do\r\n      if isMarine(obj) then\r\n        local objColor = getColor(obj.getName())\r\n        marines[objColor] = obj.getGUID()\r\n      end\r\n    end\r\n  end\r\n  return getObjectFromGUID(marines[color])\r\nend\r\n\r\nfunction getMarineCount()\r\n  local count = 0\r\n  for _, clr in ipairs(constants.allMarineColors) do\r\n    if Player[clr].seated then\r\n      count = count + 1\r\n    end\r\n  end\r\n\r\n  return math.max(1, count)\r\nend\r\n\r\n\r\nfunction setTableDefaultValue(table, value)\r\n  local key = {}\r\n  local mt = getmetatable(table) or {}\r\n  mt.__index = function(t) return t[key] end\r\n  table[key] = value\r\n  setmetatable(table, mt)\r\nend\r\n\r\nfunction isSingleFigurine(obj)\r\n  -- Tag should be Figurine, but TTS apparently might set tag to Generic on first frame\r\n  return (obj.tag == \"Figurine\" or obj.tag == \"Generic\") and obj.getQuantity() == -1\r\nend\r\n\r\nfunction isMonster(obj)\r\n  if not isSingleFigurine(obj) then\r\n    return false\r\n  end\r\n\r\n  local name = obj.getName()\r\n  for i,v in ipairs(constants.mnstList) do\r\n    if (string.find(name, v, 1, true)) then\r\n      return true\r\n    end\r\n  end\r\n\r\n  return false\r\nend\r\n\r\nfunction isMarine(obj)\r\n  if not isSingleFigurine(obj) then\r\n    return false\r\n  end\r\n\r\n  return (string.find(obj.getName(), \"Marine\", 1, true) ~= nil)\r\nend\r\n\r\nfunction isCharacter(obj)\r\n  return isMonster(obj) or isMarine(obj)\r\nend\r\n\r\nfunction isDoor(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Door\") ~= nil\r\nend\r\n\r\nfunction isMapTile(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Map\") ~= nil\r\nend\r\n\r\nfunction isAmmoToken(obj)\r\n  return obj.tag == \"Card\" and\r\n    (string.find(obj.getName(), \"Shells/Bullets\") ~= nil\r\n    or string.find(obj.getName(), \"Rockets/Grenades\") ~= nil\r\n    or string.find(obj.getName(), \"Energy Cell\") ~= nil)\r\nend\r\n\r\nfunction isTeleporter(obj)\r\n  return obj.tag == \"Card\" and string.find(obj.getName(), \"Teleporter\") ~= nil\r\nend\r\n\r\nfunction isObstacleToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag == \"Generic\") and\r\n    (string.find(obj.getName(), \"Obstacle\") ~= nil\r\n    or string.find(obj.getName(), \"Barrel\") ~= nil\r\n    or string.find(obj.getName(), \"Duct\") ~= nil)\r\nend\r\n\r\nfunction isCompassToken(obj)\r\n  return obj.tag == \"Card\" and string.find(obj.getName(), \"Compass\") ~= nil\r\nend\r\n\r\nfunction isEncounterToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag==\"Generic\") and string.find(obj.getName(), \"Encounter\") ~= nil\r\nend\r\n\r\nfunction isInvisibleToken(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Invisible Encounter\") ~= nil\r\nend\r\n\r\nfunction isToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag==\"Generic\") and constants.tokenList[obj.getName()]\r\nend\r\n\r\nfunction isDeckOfTokens(obj)\r\n  if obj.tag ~= \"Deck\" or obj.getQuantity() == -1 then\r\n    return false\r\n  end\r\n\r\n  for _, innerObj in ipairs(obj.getObjects()) do\r\n    if not constants.tokenList[innerObj.name] then\r\n      return false\r\n    end\r\n  end\r\n\r\n  return true\r\nend\r\n\r\n\r\n-- recursion is internal parameter, shouldn't be used from outside\r\nfunction getColor(str, recursion)\r\n  for _, clr in ipairs(constants.allPlayerColors) do\r\n    if string.find(str, clr, 1, true) then\r\n      -- ensure it's the only color present in str\r\n      if not recursion and getColor(string.gsub(str, clr, \"\", 1), true) then\r\n        log(str, \"ERROR getColor is used on string with two colors\")\r\n        return nil\r\n      else\r\n        return clr\r\n      end\r\n    end\r\n  end\r\n\r\n  return nil\r\nend\r\n\r\nfunction getActorLabel(color)\r\n  return Player[color].steam_name or getMarine(color).getName()\r\nend\r\n\r\n-- should be applied to strings like \"myXmlFieldRed\" to remove \"Red\"\r\nfunction stripXmlFieldColor(str)\r\n  for _, clr in ipairs(constants.allPlayerColors) do\r\n    if string.find(str, clr..\"$\") then\r\n      return string.gsub(str, clr..\"$\", \"\"), clr\r\n    end\r\n  end\r\n  return str\r\nend\r\n\r\n\r\n-- return true if figure is 2 or more spaces width in direction of X and Z\r\nfunction isLarge(figure)\r\n  local bounds = figure.getBounds()\r\n  return {\r\n    x = (bounds.size.x > 1.5),\r\n    z = (bounds.size.z > 1.5)\r\n  }\r\nend\r\n\r\nfunction getDistance(first, second)\r\n  local roundingDelta = {x = 0.5, z = 0.5}\r\n\r\n  local position = {first.getPosition(), second.getPosition()}\r\n\r\n  for i, figure in ipairs({first, second}) do\r\n    local isLargeFigure = isLarge(figure)\r\n    if isLargeFigure.x then\r\n      roundingDelta.x = roundingDelta.x - 0.5\r\n    end\r\n\r\n    if isLargeFigure.z then\r\n      roundingDelta.z = roundingDelta.z - 0.5\r\n    end\r\n\r\n    if isLargeFigure.x ~= isLargeFigure.z then\r\n      -- special handling for demon, since its position doesn't corresponsd to geometric center\r\n      -- current position is center of head cell\r\n      -- correct, so we use geometric center instead\r\n      local angle = figure.getRotation().y * math.pi / 180\r\n      position[i].x = position[i].x + 0.5 * math.cos(angle)\r\n      position[i].z = position[i].z - 0.5 * math.sin(angle)\r\n    end\r\n  end\r\n\r\n  local dx = math.floor(math.abs(position[2].x - position[1].x) + roundingDelta.x)\r\n  local dz = math.floor(math.abs(position[2].z - position[1].z) + roundingDelta.z)\r\n\r\n  return math.max(dx, dz)\r\nend\r\n\r\n-- only x and z values of position are meaningful\r\nfunction getObjectAt(position, filter)\r\n  local objects = getObjectsBelow({position.x, 10, position.z}, filter)\r\n\r\n  if #objects > 1 then\r\n    log(objects, \"ERROR getObjectAt found several objects\")\r\n  end\r\n\r\n  -- this is nil for empty table and proper object otherwise\r\n  return objects[1]\r\nend\r\n\r\nfunction getObjectsBelow(position, filter)\r\n  local hitTable = Physics.cast(\r\n    {origin=position, direction={0,-1,0}, debug=false, max_distance=10})\r\n\r\n  local result = {}\r\n  for _, hit in ipairs(hitTable) do\r\n    if filter(hit.hit_object) then\r\n      table.insert(result, hit.hit_object)\r\n    end\r\n  end\r\n\r\n  return result\r\nend\r\n\r\nfunction getObjectsInZone(position, rotation, size, filter)\r\n  -- prevent getting objects, which only touch border by reducing actual size\r\n  reducedSize = Vector(size) - Vector(0.5, 0.5, 0.5)\r\n  local hitTable = Physics.cast(\r\n    {type=3, origin=position, size=reducedSize, orientation=rotation, direction={0,-1,0}, maxDistance=0, debug=false})\r\n\r\n    print(\"casting\")\r\n  local result = {}\r\n  for _, hit in ipairs(hitTable) do\r\n    print(\"obj:\", hit.hit_object.getName())\r\n    if filter(hit.hit_object) then\r\n      print(\"inserted: \", hit.hit_object.getName())\r\n      table.insert(result, hit.hit_object)\r\n    end\r\n  end\r\n\r\n  return result\r\nend\r\n\r\nfunction isAboveMap(obj)\r\n  local castPosition = obj.getPosition()\r\n  local large = isLarge(obj)\r\n  if large.x and large.z then\r\n    -- for large creatures cast from center of any square instead of center of full figurine\r\n    -- this way even standing above connection of two pieces will still be reported as above map\r\n    -- despite figurine center is directly above crack\r\n    castPosition.x = castPosition.x + 0.5\r\n    castPosition.z = castPosition.z + 0.5\r\n  end\r\n\r\n  return #getObjectsBelow(castPosition, isMapTile) ~= 0\r\nend\r\n\r\nfunction getMonsterType(fullName)\r\n  for _, type in ipairs(constants.mnstList) do\r\n    if string.find(fullName, type) then\r\n      return type\r\n    end\r\n  end\r\n\r\n  return nil\r\nend\r\n\r\nfunction getGuide()\r\n  local guide = getObjectFromGUID(guideGUID)\r\n  if guide then\r\n    return guide\r\n  end\r\n\r\n  for _, obj in ipairs(getAllObjects()) do\r\n    if obj.getName() == \"Invader Player Guide\" then\r\n      guideGUID = obj.getGUID()\r\n      return obj\r\n    end\r\n  end\r\nend\r\n\r\n-- gets table with x,y,z keys and shifts value for key y according to parameter\r\n-- for tables with 1,2,3 shifts the second value\r\nfunction shiftY(vector, shift)\r\n  local result = vector\r\n  if result.y then\r\n    result.y = result.y + shift\r\n  elseif result[2] then\r\n    result[2] = result[2] + shift\r\n  end\r\n  return result\r\nend\r\n\r\nreturn package\r\n\nend)\n__bundle_register(\"constants\", function(require, _LOADED, __bundle_register, __bundle_modules)\nconstants = {}\r\nlocal package = constants\r\n\r\nlocal _ENV = package\r\n\r\nallPlayerColors = {\"Red\", \"Green\", \"Blue\", \"White\"}\r\nallMarineColors = {\"Red\", \"Green\", \"Blue\"}\r\n\r\n\r\n-- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place\r\nmnstList = {\r\n  \"Zombie\",\r\n  \"Trite\",\r\n  \"Imp\",\r\n  \"Demon\",\r\n  \"Mancubus\",\r\n  \"Archvile\",\r\n  \"Hellknight\",\r\n  \"Cyberdemon\",\r\n}\r\n\r\ntokenList = {\r\n  ['Armor']=true,\r\n\r\n  ['Shells/Bullets']=true,\r\n  ['Rockets/Grenades']=true,\r\n  ['Energy Cell']=true,\r\n\r\n  ['Chainsaw']=true,\r\n  ['Shotgun']=true,\r\n  ['Machine Gun']=true,\r\n  ['Chain Gun']=true,\r\n  ['Rocket Launcher']=true,\r\n  ['Plasma Gun']=true,\r\n  ['BFG']=true,\r\n\r\n  ['Berserk']=true,\r\n  ['Adrenaline']=true,\r\n\r\n  ['Blue Key']=true,\r\n  ['Yellow Key']=true,\r\n  ['Red Key']=true,\r\n\r\n  ['Health']=true,\r\n\r\n  ['Frag Location']= true,\r\n  ['Red Teleporter']= true,\r\n  ['Yellow Teleporter']= true,\r\n  ['Blue Teleporter']= true,\r\n  ['Compass Rose']= true,\r\n  ['Encounter']= true,\r\n  ['Cancel']= true,\r\n  ['Heal']= true,\r\n  ['Dodge']= true,\r\n  ['Guard']= true,\r\n  ['Aim']= true,\r\n  ['Blocking Obstacle 1']= true,\r\n  ['Blocking Obstacle 2']= true,\r\n  ['Blocking Obstacle 3']= true,\r\n  ['Damaging Obstacle']= true,\r\n  ['Exploding Barrel']= true,\r\n  ['Body Encounter']= true,\r\n  ['Duct']= true,\r\n\r\n  ['Invisible Encounter']= true,\r\n}\r\n\r\nreturn package\r\n\nend)\n__bundle_register(\"instances\", function(require, _LOADED, __bundle_register, __bundle_modules)\ninstances = {}\r\n\r\nlocal guidList = {\r\n    calc = \"6411e1\", -- damage calculator\r\n    hotkeys = \"0c9765\", -- hotkey handler\r\n    preproc = \"e8056f\", -- xml preprocessor\r\n    creator = \"4abf42\", -- object creator\r\n    vis = \"ad25a3\", -- interface visibility manager\r\n    inv = \"cb7512\", -- inventory\r\n    click = \"300ffb\", -- doubleclickHandler\r\n    luck = \"9c48d4\", -- luckTracker\r\n    monster = \"48b7e7\", -- monsterTemplate\r\n    door = \"c28d4a\", -- doorTemplate\r\n    scanner = \"457f3e\", -- mapScanner\r\n    map = \"a25fea\", -- mapCreation\r\n    teleport = \"07fbc0\", -- teleportTemplate\r\n    score = \"d30728\", -- scoreTracker\r\n    progress = \"d373b2\", -- progressTracker\r\n}\r\n\r\nsetmetatable(instances, {__index = function(t, k)\r\n  if guidList[k] then\r\n    local obj = getObjectFromGUID(guidList[k])\r\n    assert(obj, \"instances: can't get \" .. k .. \" from GUID \" .. guidList[k])\r\n    t[k] = obj\r\n    return obj\r\n  end\r\n  error(\"instances: no preset GUID for \" .. k)\r\nend\r\n})\r\n\r\nreturn instances\r\n\nend)\nreturn __bundle_require(\"__root\")" ],
+    "teleporters": []
+  },
+  "Area 1 behind corner": {
+    "ammoTokens": [],
+    "colorMonsters": [ {
+      "name": "Blue Trite",
+      "position": {
+        "x": 19.5,
+        "y": 1.27968990802765,
+        "z": 2.5
+      },
+      "rotation": {
+        "x": -5.31417413185409E-07,
+        "y": 179.995391845703,
+        "z": -7.29622161088628E-06
+      }
+    }, {
+      "name": "Green Zombie",
+      "position": {
+        "x": 19.5000095367432,
+        "y": 1.27968990802765,
+        "z": -5.5
+      },
+      "rotation": {
+        "x": -4.98884537591948E-06,
+        "y": 90,
+        "z": 1.98340762835869E-06
+      }
+    }, {
+      "name": "Red Archvile",
+      "position": {
+        "x": 18.5,
+        "y": 1.27968955039978,
+        "z": -8.50000095367432
+      },
+      "rotation": {
+        "x": 8.69588347995887E-06,
+        "y": 180.008422851563,
+        "z": 3.27782390741049E-06
+      }
+    } ],
+    "doors": [ {
+      "name": "Door3",
+      "position": {
+        "x": 21.9998950958252,
+        "y": 1.23503947257996,
+        "z": -2.00003957748413
+      },
+      "reveal": "Area 3",
+      "rotation": {
+        "x": 0.000440284260548651,
+        "y": 359.985870361328,
+        "z": 0.00966802425682545
+      }
+    }, {
+      "name": "Door3",
+      "position": {
+        "x": 20,
+        "y": 1.2350001335144,
+        "z": -10.9999952316284
+      },
+      "reveal": "Area 2",
+      "rotation": {
+        "x": 4.21382679860471E-07,
+        "y": 89.9856414794922,
+        "z": 1.92434272321407E-05
+      }
+    } ],
+    "greyMonsters": [ {
+      "name": "Grey Demon",
+      "position": {
+        "x": 19.4995727539063,
+        "y": 1.27817046642303,
+        "z": -1.49999940395355
+      },
+      "rotation": {
+        "x": 9.87517182693409E-07,
+        "y": 179.999893188477,
+        "z": 0.110697768628597
+      }
+    } ],
+    "mapTiles": [],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Blocking Obstacle 2",
+      "position": {
+        "x": 17.5,
+        "y": 1.2350001335144,
+        "z": -1.50000011920929
+      },
+      "rotation": {
+        "x": -2.34147159972053E-06,
+        "y": -0.00262299343012273,
+        "z": -3.67277789337095E-06
+      }
+    }, {
+      "name": "Blocking Obstacle 3",
+      "position": {
+        "x": 16.5000858306885,
+        "y": 1.24854493141174,
+        "z": -8.49944400787354
+      },
+      "rotation": {
+        "x": -0.000637264514807612,
+        "y": 269.978576660156,
+        "z": 179.991134643555
+      }
+    }, {
+      "name": "Blocking Obstacle 3",
+      "position": {
+        "x": 16.5003814697266,
+        "y": 1.29825377464294,
+        "z": -9.49997901916504
+      },
+      "rotation": {
+        "x": -0.000782093789894134,
+        "y": 269.9775390625,
+        "z": 180.014343261719
+      }
+    }, {
+      "name": "Blocking Obstacle 2",
+      "position": {
+        "x": 12.5000009536743,
+        "y": 1.23500072956085,
+        "z": -11.5000028610229
+      },
+      "rotation": {
+        "x": 3.21957628557357E-07,
+        "y": 269.994476318359,
+        "z": -8.3991862993571E-06
+      }
+    }, {
+      "name": "Blocking Obstacle 2",
+      "position": {
+        "x": 10.499979019165,
+        "y": 1.23500025272369,
+        "z": -8.5
+      },
+      "rotation": {
+        "x": 2.85871851701813E-06,
+        "y": -0.00259245303459466,
+        "z": 5.67293409403646E-06
+      }
+    } ],
+    "scripts": [],
+    "teleporters": []
+  },
+  "Area 2": {
+    "ammoTokens": [ {
+      "name": "Rockets/Grenades",
+      "position": {
+        "x": 20.5000019073486,
+        "y": 1.24860489368439,
+        "z": -14.5000076293945
+      },
+      "rotation": {
+        "x": 1.32690638565691E-06,
+        "y": 179.98567199707,
+        "z": -4.79566438116308E-07
+      }
+    }, {
+      "name": "Rockets/Grenades",
+      "position": {
+        "x": 18.4998474121094,
+        "y": 1.24860501289368,
+        "z": -13.499755859375
+      },
+      "rotation": {
+        "x": 1.83046495294548E-06,
+        "y": 179.98616027832,
+        "z": 4.50302337640096E-07
+      }
+    } ],
+    "colorMonsters": [],
+    "doors": [ {
+      "mark": "cc043c",
+      "name": "Door3",
+      "position": {
+        "x": 19.9999904632568,
+        "y": 1.23499989509583,
+        "z": -14.9999723434448
+      },
+      "reveal": "Area 2",
+      "rotation": {
+        "x": 3.1666462746216E-05,
+        "y": 89.9852447509766,
+        "z": -0.000293763063382357
+      }
+    }, {
+      "name": "Door3",
+      "position": {
+        "x": 20,
+        "y": 1.2350001335144,
+        "z": -10.9999952316284
+      },
+      "reveal": "Area 1 behind corner",
+      "rotation": {
+        "x": 4.21382679860471E-07,
+        "y": 89.9856414794922,
+        "z": 1.92434272321407E-05
+      }
+    } ],
+    "greyMonsters": [ {
+      "name": "Grey Hellknight",
+      "position": {
+        "x": 22.0000114440918,
+        "y": 1.2796893119812,
+        "z": -12.9999961853027
+      },
+      "rotation": {
+        "x": -5.6296066759387E-06,
+        "y": 0.0364711917936802,
+        "z": -3.06073343381286E-05
+      }
+    } ],
+    "mapTiles": [ {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 22.5,
+        "y": 0.959999680519104,
+        "z": -13.5
+      },
+      "rotation": {
+        "x": 3.53729501512134E-06,
+        "y": 179.984817504883,
+        "z": 2.20643164539069E-06
+      }
+    }, {
+      "name": "Map Room 4x4",
+      "position": {
+        "x": 19.4999961853027,
+        "y": 0.960000097751617,
+        "z": -12.5000019073486
+      },
+      "rotation": {
+        "x": -1.52543873355171E-06,
+        "y": 0.00996417831629515,
+        "z": 2.47919871299018E-07
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 17.5,
+        "y": 0.960000097751617,
+        "z": -12.5
+      },
+      "rotation": {
+        "x": -8.02730210125446E-06,
+        "y": 0.0185381378978491,
+        "z": -2.67774503299734E-05
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Body Encounter",
+      "position": {
+        "x": 18.5000534057617,
+        "y": 1.23986876010895,
+        "z": -14.4926891326904
+      },
+      "rotation": {
+        "x": -9.07134506178409E-07,
+        "y": 269.946075439453,
+        "z": 359.442077636719
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Chainsaw",
+      "position": {
+        "x": 17.5,
+        "y": 1.24860489368439,
+        "z": -13.5
+      },
+      "rotation": {
+        "x": 7.52872756493161E-06,
+        "y": 180.000991821289,
+        "z": 2.66373208432924E-05
+      }
+    }, {
+      "name": "Armor",
+      "position": {
+        "x": 17.5,
+        "y": 1.24860501289368,
+        "z": -12.5000076293945
+      },
+      "rotation": {
+        "x": 8.81570758792805E-06,
+        "y": 180.005325317383,
+        "z": 2.66749502770836E-05
+      }
+    }, {
+      "name": "Duct",
+      "position": {
+        "x": 18.4999923706055,
+        "y": 1.24860501289368,
+        "z": -11.4999923706055
+      },
+      "rotation": {
+        "x": 2.28903058996366E-06,
+        "y": 179.998748779297,
+        "z": -9.6410849437234E-07
+      }
+    } ],
+    "scripts": [ "-- Bundled by luabundle {\"version\":\"1.6.0\"}\nlocal __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (function(superRequire)\n\tlocal loadingPlaceholder = {[{}] = true}\n\n\tlocal register\n\tlocal modules = {}\n\n\tlocal require\n\tlocal loaded = {}\n\n\tregister = function(name, body)\n\t\tif not modules[name] then\n\t\t\tmodules[name] = body\n\t\tend\n\tend\n\n\trequire = function(name)\n\t\tlocal loadedModule = loaded[name]\n\n\t\tif loadedModule then\n\t\t\tif loadedModule == loadingPlaceholder then\n\t\t\t\treturn nil\n\t\t\tend\n\t\telse\n\t\t\tif not modules[name] then\n\t\t\t\tif not superRequire then\n\t\t\t\t\tlocal identifier = type(name) == 'string' and '\\\"' .. name .. '\\\"' or tostring(name)\n\t\t\t\t\terror('Tried to require ' .. identifier .. ', but no such module has been registered')\n\t\t\t\telse\n\t\t\t\t\treturn superRequire(name)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tloaded[name] = loadingPlaceholder\n\t\t\tloadedModule = modules[name](require, loaded, register, modules)\n\t\t\tloaded[name] = loadedModule\n\t\tend\n\n\t\treturn loadedModule\n\tend\n\n\treturn require, loaded, register, modules\nend)(nil)\n__bundle_register(\"__root\", function(require, _LOADED, __bundle_register, __bundle_modules)\nrequire(\"instances\")\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"You find small remote controller\", \"Teal\")\r\n  instances.progress.call(\"mark\", \"remote controller\")\r\n  self.destruct()\r\nend\nend)\n__bundle_register(\"instances\", function(require, _LOADED, __bundle_register, __bundle_modules)\ninstances = {}\r\n\r\nlocal guidList = {\r\n    calc = \"6411e1\", -- damage calculator\r\n    hotkeys = \"0c9765\", -- hotkey handler\r\n    preproc = \"e8056f\", -- xml preprocessor\r\n    creator = \"4abf42\", -- object creator\r\n    vis = \"ad25a3\", -- interface visibility manager\r\n    inv = \"cb7512\", -- inventory\r\n    click = \"300ffb\", -- doubleclickHandler\r\n    luck = \"9c48d4\", -- luckTracker\r\n    monster = \"48b7e7\", -- monsterTemplate\r\n    door = \"c28d4a\", -- doorTemplate\r\n    scanner = \"457f3e\", -- mapScanner\r\n    map = \"a25fea\", -- mapCreation\r\n    teleport = \"07fbc0\", -- teleportTemplate\r\n    score = \"d30728\", -- scoreTracker\r\n    progress = \"d373b2\", -- progressTracker\r\n}\r\n\r\nsetmetatable(instances, {__index = function(t, k)\r\n  if guidList[k] then\r\n    local obj = getObjectFromGUID(guidList[k])\r\n    assert(obj, \"instances: can't get \" .. k .. \" from GUID \" .. guidList[k])\r\n    t[k] = obj\r\n    return obj\r\n  end\r\n  error(\"instances: no preset GUID for \" .. k)\r\nend\r\n})\r\n\r\nreturn instances\r\n\nend)\nreturn __bundle_require(\"__root\")" ],
+    "teleporters": []
+  },
+  "Area 3": {
+    "ammoTokens": [],
+    "colorMonsters": [],
+    "doors": [ {
+      "name": "Door3",
+      "position": {
+        "x": 21.9998950958252,
+        "y": 1.23503947257996,
+        "z": -2.00003957748413
+      },
+      "reveal": "Area 1 behind corner",
+      "rotation": {
+        "x": 0.000440284260548651,
+        "y": 359.985870361328,
+        "z": 0.00966802425682545
+      }
+    }, {
+      "name": "Door3",
+      "position": {
+        "x": 24.9999980926514,
+        "y": 1.23500037193298,
+        "z": -1.99999916553497
+      },
+      "reveal": "Area 5",
+      "rotation": {
+        "x": -4.90407182951458E-06,
+        "y": 359.990142822266,
+        "z": -4.38893875980284E-05
+      }
+    } ],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 23.5,
+        "y": 0.960000872612,
+        "z": -1.5
+      },
+      "rotation": {
+        "x": 6.84765200276161E-06,
+        "y": 89.9988555908203,
+        "z": -2.60660763160558E-05
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [],
+    "scripts": [],
+    "teleporters": []
+  },
+  "Area 4": {
+    "ammoTokens": [ {
+      "name": "Shells/Bullets",
+      "position": {
+        "x": 29.5,
+        "y": 1.24860525131226,
+        "z": 6.5
+      },
+      "rotation": {
+        "x": -0.000103822094388306,
+        "y": 179.968414306641,
+        "z": 1.53634846355999E-05
+      }
+    }, {
+      "name": "Shells/Bullets",
+      "position": {
+        "x": 32.5,
+        "y": 1.24860537052155,
+        "z": 4.5
+      },
+      "rotation": {
+        "x": -4.46209833171451E-06,
+        "y": 179.97102355957,
+        "z": 1.26326233385043E-06
+      }
+    }, {
+      "name": "Shells/Bullets",
+      "position": {
+        "x": 32.5,
+        "y": 1.24860548973084,
+        "z": 3.5
+      },
+      "rotation": {
+        "x": -4.51160212833202E-06,
+        "y": 179.97102355957,
+        "z": 1.35483230678801E-06
+      }
+    } ],
+    "colorMonsters": [ {
+      "name": "Green Mancubus",
+      "position": {
+        "x": 30,
+        "y": 1.27755761146545,
+        "z": 5
+      },
+      "rotation": {
+        "x": -8.24436654056626E-07,
+        "y": 269.991943359375,
+        "z": -6.88156023898046E-06
+      }
+    } ],
+    "doors": [ {
+      "name": "Door2",
+      "position": {
+        "x": 30.0000057220459,
+        "y": 1.23452639579773,
+        "z": 1.99993479251862
+      },
+      "reveal": "Area 5",
+      "rotation": {
+        "x": 5.96974532527383E-05,
+        "y": 269.999267578125,
+        "z": 359.711090087891
+      }
+    } ],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 30.4999980926514,
+        "y": 0.960000097751617,
+        "z": 6.50000476837158
+      },
+      "rotation": {
+        "x": 1.50732266774867E-05,
+        "y": 90.0036468505859,
+        "z": 0.000104368693428114
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 27.5,
+        "y": 0.960000038146973,
+        "z": 4.5
+      },
+      "rotation": {
+        "x": -3.84872492986688E-07,
+        "y": 0.0295722652226686,
+        "z": -6.94850859872531E-06
+      }
+    }, {
+      "name": "Map Intersection 4x4",
+      "position": {
+        "x": 30.4999980926514,
+        "y": 0.960000157356262,
+        "z": 3.50000023841858
+      },
+      "rotation": {
+        "x": -7.10350877852761E-06,
+        "y": 180.011016845703,
+        "z": 7.56108022414992E-07
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 32.5,
+        "y": 0.960000574588776,
+        "z": 3.5
+      },
+      "rotation": {
+        "x": -5.46088722330751E-06,
+        "y": 179.991912841797,
+        "z": 1.42696842431178E-06
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Adrenaline",
+      "position": {
+        "x": 30.5,
+        "y": 1.24860501289368,
+        "z": 6.5
+      },
+      "rotation": {
+        "x": -0.000104157079476863,
+        "y": 180.005340576172,
+        "z": 1.57048762048362E-05
+      }
+    }, {
+      "name": "Yellow Key",
+      "position": {
+        "x": 31.5,
+        "y": 1.24860489368439,
+        "z": 4.5
+      },
+      "rotation": {
+        "x": -6.22138259132043E-06,
+        "y": 180.000839233398,
+        "z": 8.50857247769454E-07
+      }
+    }, {
+      "name": "Encounter",
+      "position": {
+        "x": 28.5000057220459,
+        "y": 1.24860501289368,
+        "z": 4.49999904632568
+      },
+      "rotation": {
+        "x": -5.43371970707085E-06,
+        "y": 180.027236938477,
+        "z": 4.21693539465196E-06
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Health",
+      "position": {
+        "x": 27.5,
+        "y": 1.24860489368439,
+        "z": 4.5
+      },
+      "rotation": {
+        "x": 6.61745843899553E-07,
+        "y": 180.005508422852,
+        "z": 7.27701717551099E-06
+      }
+    }, {
+      "name": "Encounter",
+      "position": {
+        "x": 28.5,
+        "y": 1.24860501289368,
+        "z": 3.5
+      },
+      "rotation": {
+        "x": -5.95076971876551E-06,
+        "y": 180.027313232422,
+        "z": 3.33094135385181E-07
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Health",
+      "position": {
+        "x": 27.5,
+        "y": 1.24860489368439,
+        "z": 3.49999952316284
+      },
+      "rotation": {
+        "x": 4.15883903315262E-07,
+        "y": 180.005554199219,
+        "z": 6.94257460054359E-06
+      }
+    } ],
+    "scripts": [ "-- Bundled by luabundle {\"version\":\"1.6.0\"}\nlocal __bundle_require, __bundle_loaded, __bundle_register, __bundle_modules = (function(superRequire)\n\tlocal loadingPlaceholder = {[{}] = true}\n\n\tlocal register\n\tlocal modules = {}\n\n\tlocal require\n\tlocal loaded = {}\n\n\tregister = function(name, body)\n\t\tif not modules[name] then\n\t\t\tmodules[name] = body\n\t\tend\n\tend\n\n\trequire = function(name)\n\t\tlocal loadedModule = loaded[name]\n\n\t\tif loadedModule then\n\t\t\tif loadedModule == loadingPlaceholder then\n\t\t\t\treturn nil\n\t\t\tend\n\t\telse\n\t\t\tif not modules[name] then\n\t\t\t\tif not superRequire then\n\t\t\t\t\tlocal identifier = type(name) == 'string' and '\\\"' .. name .. '\\\"' or tostring(name)\n\t\t\t\t\terror('Tried to require ' .. identifier .. ', but no such module has been registered')\n\t\t\t\telse\n\t\t\t\t\treturn superRequire(name)\n\t\t\t\tend\n\t\t\tend\n\n\t\t\tloaded[name] = loadingPlaceholder\n\t\t\tloadedModule = modules[name](require, loaded, register, modules)\n\t\t\tloaded[name] = loadedModule\n\t\tend\n\n\t\treturn loadedModule\n\tend\n\n\treturn require, loaded, register, modules\nend)(nil)\n__bundle_register(\"__root\", function(require, _LOADED, __bundle_register, __bundle_modules)\nrequire(\"instances\")\r\nrequire(\"utils\")\r\n\r\nfunction onMarineDrop(marine)\r\n  if not instances.progress.call(\"check\", \"remote controller\") then\r\n    broadcastToAll(\"Nothing happens\", \"Teal\")\r\n    return\r\n  end\r\n\r\n  broadcastToAll(\"Wall opens exposing the vault!\", \"Teal\")\r\n\r\n  local objects = utils.getObjectsInZone(\r\n    {27.50, 2.00, 4.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    function(o)\r\n      return utils.isToken(o) or utils.isMapTile(o) or utils.isCharacter(o)\r\n    end\r\n  )\r\n\r\n  for _, obj in ipairs(objects) do\r\n    obj.translate({-3, 0, 0})\r\n  end\r\n\r\n  instances.map.call(\"revealArea\",\r\n    {area=\"Area 4 vault\", color=\"Teal\"})\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {28.50, 2.00, 4.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isEncounterToken\r\n  )\r\n\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n\nend)\n__bundle_register(\"utils\", function(require, _LOADED, __bundle_register, __bundle_modules)\nutils = {}\r\nlocal package = utils\r\n\r\n-- PACKAGE IMPORT\r\nsetmetatable(utils, {__index = _G})\r\nlocal constants = require(\"constants\")\r\n\r\n-- PACKAGE BODY\r\nlocal _ENV = package\r\n\r\n-- Variables\r\nlocal marines = {}\r\nlocal guideGUID = \"\"\r\n\r\n-- Local methods declaration\r\n\r\nfunction getMarine(color)\r\n  if #marines == 0 then\r\n    for _,obj in ipairs(getAllObjects()) do\r\n      if isMarine(obj) then\r\n        local objColor = getColor(obj.getName())\r\n        marines[objColor] = obj.getGUID()\r\n      end\r\n    end\r\n  end\r\n  return getObjectFromGUID(marines[color])\r\nend\r\n\r\nfunction getMarineCount()\r\n  local count = 0\r\n  for _, clr in ipairs(constants.allMarineColors) do\r\n    if Player[clr].seated then\r\n      count = count + 1\r\n    end\r\n  end\r\n\r\n  return math.max(1, count)\r\nend\r\n\r\n\r\nfunction setTableDefaultValue(table, value)\r\n  local key = {}\r\n  local mt = getmetatable(table) or {}\r\n  mt.__index = function(t) return t[key] end\r\n  table[key] = value\r\n  setmetatable(table, mt)\r\nend\r\n\r\nfunction isSingleFigurine(obj)\r\n  -- Tag should be Figurine, but TTS apparently might set tag to Generic on first frame\r\n  return (obj.tag == \"Figurine\" or obj.tag == \"Generic\") and obj.getQuantity() == -1\r\nend\r\n\r\nfunction isMonster(obj)\r\n  if not isSingleFigurine(obj) then\r\n    return false\r\n  end\r\n\r\n  local name = obj.getName()\r\n  for i,v in ipairs(constants.mnstList) do\r\n    if (string.find(name, v, 1, true)) then\r\n      return true\r\n    end\r\n  end\r\n\r\n  return false\r\nend\r\n\r\nfunction isMarine(obj)\r\n  if not isSingleFigurine(obj) then\r\n    return false\r\n  end\r\n\r\n  return (string.find(obj.getName(), \"Marine\", 1, true) ~= nil)\r\nend\r\n\r\nfunction isCharacter(obj)\r\n  return isMonster(obj) or isMarine(obj)\r\nend\r\n\r\nfunction isDoor(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Door\") ~= nil\r\nend\r\n\r\nfunction isMapTile(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Map\") ~= nil\r\nend\r\n\r\nfunction isAmmoToken(obj)\r\n  return obj.tag == \"Card\" and\r\n    (string.find(obj.getName(), \"Shells/Bullets\") ~= nil\r\n    or string.find(obj.getName(), \"Rockets/Grenades\") ~= nil\r\n    or string.find(obj.getName(), \"Energy Cell\") ~= nil)\r\nend\r\n\r\nfunction isTeleporter(obj)\r\n  return obj.tag == \"Card\" and string.find(obj.getName(), \"Teleporter\") ~= nil\r\nend\r\n\r\nfunction isObstacleToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag == \"Generic\") and\r\n    (string.find(obj.getName(), \"Obstacle\") ~= nil\r\n    or string.find(obj.getName(), \"Barrel\") ~= nil\r\n    or string.find(obj.getName(), \"Duct\") ~= nil)\r\nend\r\n\r\nfunction isCompassToken(obj)\r\n  return obj.tag == \"Card\" and string.find(obj.getName(), \"Compass\") ~= nil\r\nend\r\n\r\nfunction isEncounterToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag==\"Generic\") and string.find(obj.getName(), \"Encounter\") ~= nil\r\nend\r\n\r\nfunction isInvisibleToken(obj)\r\n  return obj.tag == \"Generic\" and string.find(obj.getName(), \"Invisible Encounter\") ~= nil\r\nend\r\n\r\nfunction isToken(obj)\r\n  return (obj.tag == \"Card\" or obj.tag==\"Generic\") and constants.tokenList[obj.getName()]\r\nend\r\n\r\nfunction isDeckOfTokens(obj)\r\n  if obj.tag ~= \"Deck\" or obj.getQuantity() == -1 then\r\n    return false\r\n  end\r\n\r\n  for _, innerObj in ipairs(obj.getObjects()) do\r\n    if not constants.tokenList[innerObj.name] then\r\n      return false\r\n    end\r\n  end\r\n\r\n  return true\r\nend\r\n\r\n\r\n-- recursion is internal parameter, shouldn't be used from outside\r\nfunction getColor(str, recursion)\r\n  for _, clr in ipairs(constants.allPlayerColors) do\r\n    if string.find(str, clr, 1, true) then\r\n      -- ensure it's the only color present in str\r\n      if not recursion and getColor(string.gsub(str, clr, \"\", 1), true) then\r\n        log(str, \"ERROR getColor is used on string with two colors\")\r\n        return nil\r\n      else\r\n        return clr\r\n      end\r\n    end\r\n  end\r\n\r\n  return nil\r\nend\r\n\r\nfunction getActorLabel(color)\r\n  return Player[color].steam_name or getMarine(color).getName()\r\nend\r\n\r\n-- should be applied to strings like \"myXmlFieldRed\" to remove \"Red\"\r\nfunction stripXmlFieldColor(str)\r\n  for _, clr in ipairs(constants.allPlayerColors) do\r\n    if string.find(str, clr..\"$\") then\r\n      return string.gsub(str, clr..\"$\", \"\"), clr\r\n    end\r\n  end\r\n  return str\r\nend\r\n\r\n\r\n-- return true if figure is 2 or more spaces width in direction of X and Z\r\nfunction isLarge(figure)\r\n  local bounds = figure.getBounds()\r\n  return {\r\n    x = (bounds.size.x > 1.5),\r\n    z = (bounds.size.z > 1.5)\r\n  }\r\nend\r\n\r\nfunction getDistance(first, second)\r\n  local roundingDelta = {x = 0.5, z = 0.5}\r\n\r\n  local position = {first.getPosition(), second.getPosition()}\r\n\r\n  for i, figure in ipairs({first, second}) do\r\n    local isLargeFigure = isLarge(figure)\r\n    if isLargeFigure.x then\r\n      roundingDelta.x = roundingDelta.x - 0.5\r\n    end\r\n\r\n    if isLargeFigure.z then\r\n      roundingDelta.z = roundingDelta.z - 0.5\r\n    end\r\n\r\n    if isLargeFigure.x ~= isLargeFigure.z then\r\n      -- special handling for demon, since its position doesn't corresponsd to geometric center\r\n      -- current position is center of head cell\r\n      -- correct, so we use geometric center instead\r\n      local angle = figure.getRotation().y * math.pi / 180\r\n      position[i].x = position[i].x + 0.5 * math.cos(angle)\r\n      position[i].z = position[i].z - 0.5 * math.sin(angle)\r\n    end\r\n  end\r\n\r\n  local dx = math.floor(math.abs(position[2].x - position[1].x) + roundingDelta.x)\r\n  local dz = math.floor(math.abs(position[2].z - position[1].z) + roundingDelta.z)\r\n\r\n  return math.max(dx, dz)\r\nend\r\n\r\n-- only x and z values of position are meaningful\r\nfunction getObjectAt(position, filter)\r\n  local objects = getObjectsBelow({position.x, 10, position.z}, filter)\r\n\r\n  if #objects > 1 then\r\n    log(objects, \"ERROR getObjectAt found several objects\")\r\n  end\r\n\r\n  -- this is nil for empty table and proper object otherwise\r\n  return objects[1]\r\nend\r\n\r\nfunction getObjectsBelow(position, filter)\r\n  local hitTable = Physics.cast(\r\n    {origin=position, direction={0,-1,0}, debug=false, max_distance=10})\r\n\r\n  local result = {}\r\n  for _, hit in ipairs(hitTable) do\r\n    if filter(hit.hit_object) then\r\n      table.insert(result, hit.hit_object)\r\n    end\r\n  end\r\n\r\n  return result\r\nend\r\n\r\nfunction getObjectsInZone(position, rotation, size, filter)\r\n  -- prevent getting objects, which only touch border by reducing actual size\r\n  reducedSize = Vector(size) - Vector(0.5, 0.5, 0.5)\r\n  local hitTable = Physics.cast(\r\n    {type=3, origin=position, size=reducedSize, orientation=rotation, direction={0,-1,0}, maxDistance=0, debug=false})\r\n\r\n    print(\"casting\")\r\n  local result = {}\r\n  for _, hit in ipairs(hitTable) do\r\n    print(\"obj:\", hit.hit_object.getName())\r\n    if filter(hit.hit_object) then\r\n      print(\"inserted: \", hit.hit_object.getName())\r\n      table.insert(result, hit.hit_object)\r\n    end\r\n  end\r\n\r\n  return result\r\nend\r\n\r\nfunction isAboveMap(obj)\r\n  local castPosition = obj.getPosition()\r\n  local large = isLarge(obj)\r\n  if large.x and large.z then\r\n    -- for large creatures cast from center of any square instead of center of full figurine\r\n    -- this way even standing above connection of two pieces will still be reported as above map\r\n    -- despite figurine center is directly above crack\r\n    castPosition.x = castPosition.x + 0.5\r\n    castPosition.z = castPosition.z + 0.5\r\n  end\r\n\r\n  return #getObjectsBelow(castPosition, isMapTile) ~= 0\r\nend\r\n\r\nfunction getMonsterType(fullName)\r\n  for _, type in ipairs(constants.mnstList) do\r\n    if string.find(fullName, type) then\r\n      return type\r\n    end\r\n  end\r\n\r\n  return nil\r\nend\r\n\r\nfunction getGuide()\r\n  local guide = getObjectFromGUID(guideGUID)\r\n  if guide then\r\n    return guide\r\n  end\r\n\r\n  for _, obj in ipairs(getAllObjects()) do\r\n    if obj.getName() == \"Invader Player Guide\" then\r\n      guideGUID = obj.getGUID()\r\n      return obj\r\n    end\r\n  end\r\nend\r\n\r\n-- gets table with x,y,z keys and shifts value for key y according to parameter\r\n-- for tables with 1,2,3 shifts the second value\r\nfunction shiftY(vector, shift)\r\n  local result = vector\r\n  if result.y then\r\n    result.y = result.y + shift\r\n  elseif result[2] then\r\n    result[2] = result[2] + shift\r\n  end\r\n  return result\r\nend\r\n\r\nreturn package\r\n\nend)\n__bundle_register(\"constants\", function(require, _LOADED, __bundle_register, __bundle_modules)\nconstants = {}\r\nlocal package = constants\r\n\r\nlocal _ENV = package\r\n\r\nallPlayerColors = {\"Red\", \"Green\", \"Blue\", \"White\"}\r\nallMarineColors = {\"Red\", \"Green\", \"Blue\"}\r\n\r\n\r\n-- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place\r\nmnstList = {\r\n  \"Zombie\",\r\n  \"Trite\",\r\n  \"Imp\",\r\n  \"Demon\",\r\n  \"Mancubus\",\r\n  \"Archvile\",\r\n  \"Hellknight\",\r\n  \"Cyberdemon\",\r\n}\r\n\r\ntokenList = {\r\n  ['Armor']=true,\r\n\r\n  ['Shells/Bullets']=true,\r\n  ['Rockets/Grenades']=true,\r\n  ['Energy Cell']=true,\r\n\r\n  ['Chainsaw']=true,\r\n  ['Shotgun']=true,\r\n  ['Machine Gun']=true,\r\n  ['Chain Gun']=true,\r\n  ['Rocket Launcher']=true,\r\n  ['Plasma Gun']=true,\r\n  ['BFG']=true,\r\n\r\n  ['Berserk']=true,\r\n  ['Adrenaline']=true,\r\n\r\n  ['Blue Key']=true,\r\n  ['Yellow Key']=true,\r\n  ['Red Key']=true,\r\n\r\n  ['Health']=true,\r\n\r\n  ['Frag Location']= true,\r\n  ['Red Teleporter']= true,\r\n  ['Yellow Teleporter']= true,\r\n  ['Blue Teleporter']= true,\r\n  ['Compass Rose']= true,\r\n  ['Encounter']= true,\r\n  ['Cancel']= true,\r\n  ['Heal']= true,\r\n  ['Dodge']= true,\r\n  ['Guard']= true,\r\n  ['Aim']= true,\r\n  ['Blocking Obstacle 1']= true,\r\n  ['Blocking Obstacle 2']= true,\r\n  ['Blocking Obstacle 3']= true,\r\n  ['Damaging Obstacle']= true,\r\n  ['Exploding Barrel']= true,\r\n  ['Body Encounter']= true,\r\n  ['Duct']= true,\r\n\r\n  ['Invisible Encounter']= true,\r\n}\r\n\r\nreturn package\r\n\nend)\n__bundle_register(\"instances\", function(require, _LOADED, __bundle_register, __bundle_modules)\ninstances = {}\r\n\r\nlocal guidList = {\r\n    calc = \"6411e1\", -- damage calculator\r\n    hotkeys = \"0c9765\", -- hotkey handler\r\n    preproc = \"e8056f\", -- xml preprocessor\r\n    creator = \"4abf42\", -- object creator\r\n    vis = \"ad25a3\", -- interface visibility manager\r\n    inv = \"cb7512\", -- inventory\r\n    click = \"300ffb\", -- doubleclickHandler\r\n    luck = \"9c48d4\", -- luckTracker\r\n    monster = \"48b7e7\", -- monsterTemplate\r\n    door = \"c28d4a\", -- doorTemplate\r\n    scanner = \"457f3e\", -- mapScanner\r\n    map = \"a25fea\", -- mapCreation\r\n    teleport = \"07fbc0\", -- teleportTemplate\r\n    score = \"d30728\", -- scoreTracker\r\n    progress = \"d373b2\", -- progressTracker\r\n}\r\n\r\nsetmetatable(instances, {__index = function(t, k)\r\n  if guidList[k] then\r\n    local obj = getObjectFromGUID(guidList[k])\r\n    assert(obj, \"instances: can't get \" .. k .. \" from GUID \" .. guidList[k])\r\n    t[k] = obj\r\n    return obj\r\n  end\r\n  error(\"instances: no preset GUID for \" .. k)\r\nend\r\n})\r\n\r\nreturn instances\r\n\nend)\nreturn __bundle_require(\"__root\")" ],
+    "teleporters": []
+  },
+  "Area 4 vault": {
+    "ammoTokens": [ {
+      "name": "Rockets/Grenades",
+      "position": {
+        "x": 26.5,
+        "y": 1.24848437309265,
+        "z": 3.49998116493225
+      },
+      "rotation": {
+        "x": 0.00522325560450554,
+        "y": 179.982162475586,
+        "z": 0.00155683781486005
+      }
+    }, {
+      "name": "Energy Cell",
+      "position": {
+        "x": 25.5,
+        "y": 1.24851107597351,
+        "z": 3.49998593330383
+      },
+      "rotation": {
+        "x": 0.00214817863889039,
+        "y": 179.982055664063,
+        "z": 0.000626354885753244
+      }
+    } ],
+    "colorMonsters": [],
+    "doors": [],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Corridor 3x2",
+      "position": {
+        "x": 26.5,
+        "y": 0.959989249706268,
+        "z": 4.49999904632568
+      },
+      "rotation": {
+        "x": -0.000269818992819637,
+        "y": 89.9761352539063,
+        "z": -0.00145780271850526
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Chain Gun",
+      "position": {
+        "x": 27.5,
+        "y": 1.2485659122467,
+        "z": 4.49998188018799
+      },
+      "rotation": {
+        "x": 0.00382693693973124,
+        "y": 179.982131958008,
+        "z": -0.000541189918294549
+      }
+    }, {
+      "name": "Plasma Gun",
+      "position": {
+        "x": 26.4999980926514,
+        "y": 1.24852776527405,
+        "z": 4.4999852180481
+      },
+      "rotation": {
+        "x": 0.00363983423449099,
+        "y": 179.982009887695,
+        "z": 0.000428178522270173
+      }
+    }, {
+      "name": "Rocket Launcher",
+      "position": {
+        "x": 27.5,
+        "y": 1.24853241443634,
+        "z": 3.49998831748962
+      },
+      "rotation": {
+        "x": 0.00179903034586459,
+        "y": 179.982131958008,
+        "z": -0.000415604532463476
+      }
+    }, {
+      "name": "Armor",
+      "position": {
+        "x": 25.4999980926514,
+        "y": 1.24853348731995,
+        "z": 4.49998426437378
+      },
+      "rotation": {
+        "x": 0.00278445659205318,
+        "y": 179.982055664063,
+        "z": -1.82044391294767E-06
+      }
+    } ],
+    "scripts": [],
+    "teleporters": []
+  },
+  "Area 5": {
+    "ammoTokens": [ {
+      "name": "Rockets/Grenades",
+      "position": {
+        "x": 34.5,
+        "y": 1.24860465526581,
+        "z": -6.50000047683716
+      },
+      "rotation": {
+        "x": 3.31082810589578E-06,
+        "y": 180.005416870117,
+        "z": 3.49874972016551E-06
+      }
+    } ],
+    "colorMonsters": [ {
+      "name": "Green Mancubus",
+      "position": {
+        "x": 31.9999961853027,
+        "y": 1.27968955039978,
+        "z": -2.00000047683716
+      },
+      "rotation": {
+        "x": 9.36435711196282E-08,
+        "y": 359.96435546875,
+        "z": 5.05891932789382E-07
+      }
+    }, {
+      "name": "Blue Demon",
+      "position": {
+        "x": 32.5,
+        "y": 1.27968966960907,
+        "z": 0.499999910593033
+      },
+      "rotation": {
+        "x": -4.36506155665484E-07,
+        "y": 359.990661621094,
+        "z": 2.4549024146836E-07
+      }
+    } ],
+    "doors": [ {
+      "mark": "54ea36",
+      "name": "Yellow Door",
+      "position": {
+        "x": 29,
+        "y": 1.23499917984009,
+        "z": -7.99999523162842
+      },
+      "reveal": "Area 5",
+      "rotation": {
+        "x": 8.6866675701458E-06,
+        "y": 270.008972167969,
+        "z": 0.000355692754965276
+      }
+    }, {
+      "name": "Door3",
+      "position": {
+        "x": 24.9999980926514,
+        "y": 1.23500037193298,
+        "z": -1.99999916553497
+      },
+      "reveal": "Area 3",
+      "rotation": {
+        "x": -4.90407182951458E-06,
+        "y": 359.990142822266,
+        "z": -4.38893875980284E-05
+      }
+    }, {
+      "mark": "facbde",
+      "name": "Blue Door",
+      "position": {
+        "x": 34.0000038146973,
+        "y": 1.23499846458435,
+        "z": 0.999999940395355
+      },
+      "reveal": "Area 5",
+      "rotation": {
+        "x": -6.93250194672146E-06,
+        "y": 179.989608764648,
+        "z": 0.00141175778117031
+      }
+    }, {
+      "name": "Door2",
+      "position": {
+        "x": 30.0000057220459,
+        "y": 1.23452639579773,
+        "z": 1.99993479251862
+      },
+      "reveal": "Area 4",
+      "rotation": {
+        "x": 5.96974532527383E-05,
+        "y": 269.999267578125,
+        "z": 359.711090087891
+      }
+    } ],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 34.5,
+        "y": 0.959999680519104,
+        "z": -6.5
+      },
+      "rotation": {
+        "x": 4.23141227656743E-06,
+        "y": 179.991912841797,
+        "z": 3.43951842296519E-06
+      }
+    }, {
+      "name": "Map Room 10x9",
+      "position": {
+        "x": 29.4999923706055,
+        "y": 0.960000038146973,
+        "z": -3.50000095367432
+      },
+      "rotation": {
+        "x": 2.09532572625903E-07,
+        "y": 179.996536254883,
+        "z": 1.82279364935312E-07
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 24.5,
+        "y": 0.960000872612,
+        "z": -4.49999761581421
+      },
+      "rotation": {
+        "x": -1.45354506457807E-05,
+        "y": 359.961273193359,
+        "z": -0.000120446165965404
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Duct",
+      "position": {
+        "x": 32.5,
+        "y": 1.24860489368439,
+        "z": -6.49999952316284
+      },
+      "rotation": {
+        "x": 8.72367934334761E-07,
+        "y": 179.998825073242,
+        "z": 2.85941268884926E-07
+      }
+    }, {
+      "name": "Berserk",
+      "position": {
+        "x": 34.5,
+        "y": 1.24860465526581,
+        "z": -5.5
+      },
+      "rotation": {
+        "x": 4.77338016935391E-06,
+        "y": 180.004776000977,
+        "z": 3.80798564947327E-06
+      }
+    }, {
+      "name": "Blocking Obstacle 1",
+      "position": {
+        "x": 28.5,
+        "y": 1.24860489368439,
+        "z": -4.5
+      },
+      "rotation": {
+        "x": -1.17178529990269E-07,
+        "y": 180.012542724609,
+        "z": 8.15183724967028E-08
+      }
+    }, {
+      "name": "Encounter",
+      "position": {
+        "x": 24.5,
+        "y": 1.24860572814941,
+        "z": -4.5
+      },
+      "rotation": {
+        "x": 1.53384989971528E-05,
+        "y": 180.027328491211,
+        "z": 0.000120856224384625
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Blocking Obstacle 1",
+      "position": {
+        "x": 30.5,
+        "y": 1.24860501289368,
+        "z": -1.5
+      },
+      "rotation": {
+        "x": -6.13127042470296E-07,
+        "y": 180.012542724609,
+        "z": -7.8484013954494E-08
+      }
+    }, {
+      "name": "Duct",
+      "position": {
+        "x": 26.5,
+        "y": 1.24860501289368,
+        "z": 0.5
+      },
+      "rotation": {
+        "x": 1.6929725177306E-07,
+        "y": 179.99885559082,
+        "z": 7.88190959610802E-07
+      }
+    } ],
+    "scripts": [ "function onMarineDrop(marine)\r\n  -- modify body to trigger something useful\r\n  if Player[\"White\"].seated then\r\n    printToColor(marine.getName()..\" encounters something!\", \"White\", \"White\")\r\n  end\r\nend" ],
+    "teleporters": []
+  },
+  "Start area": {
+    "ammoTokens": [ {
+      "name": "Shells/Bullets",
+      "position": {
+        "x": 5.49999952316284,
+        "y": 1.24860453605652,
+        "z": 2.50000023841858
+      },
+      "rotation": {
+        "x": 2.04094303626334E-05,
+        "y": 179.971008300781,
+        "z": -6.75127148497268E-06
+      }
+    }, {
+      "name": "Shells/Bullets",
+      "position": {
+        "x": 5.50000143051147,
+        "y": 1.2486047744751,
+        "z": 7.49999952316284
+      },
+      "rotation": {
+        "x": -2.71483372671355E-06,
+        "y": 179.971038818359,
+        "z": 6.36302092971164E-06
+      }
+    }, {
+      "name": "Shells/Bullets",
+      "position": {
+        "x": 6.5,
+        "y": 1.24860465526581,
+        "z": 7.5
+      },
+      "rotation": {
+        "x": -3.20346157423046E-06,
+        "y": 179.971008300781,
+        "z": 6.35419246464153E-06
+      }
+    } ],
+    "colorMonsters": [],
+    "doors": [ {
+      "name": "Door3",
+      "position": {
+        "x": 8.00000476837158,
+        "y": 1.23500037193298,
+        "z": 5.00000190734863
+      },
+      "reveal": "Area 1",
+      "rotation": {
+        "x": 5.7731126617E-06,
+        "y": 359.968322753906,
+        "z": -6.41925726085901E-05
+      }
+    }, {
+      "mark": "737e3e",
+      "name": "Door3",
+      "position": {
+        "x": 3.99997568130493,
+        "y": 1.23499846458435,
+        "z": 4.99999952316284
+      },
+      "reveal": "Start area",
+      "rotation": {
+        "x": -5.27093579876237E-05,
+        "y": -0.00500477151945233,
+        "z": 7.39629831514321E-05
+      }
+    } ],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 5.49999904632568,
+        "y": 0.959999680519104,
+        "z": 2.49999499320984
+      },
+      "rotation": {
+        "x": 7.02192392054712E-06,
+        "y": 270.024261474609,
+        "z": 1.98197558347601E-05
+      }
+    }, {
+      "name": "Map Room 4x4",
+      "position": {
+        "x": 5.50000762939453,
+        "y": 0.960000336170197,
+        "z": 5.49998426437378
+      },
+      "rotation": {
+        "x": 4.19917159888428E-06,
+        "y": 359.967742919922,
+        "z": 3.7012549114479E-07
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 6.5,
+        "y": 0.959999680519104,
+        "z": 7.5
+      },
+      "rotation": {
+        "x": 6.05493096372811E-06,
+        "y": 90.0086364746094,
+        "z": 2.89095783045923E-06
+      }
+    } ],
+    "marines": [ {
+      "name": "Green Marine",
+      "position": {
+        "x": 4.49998712539673,
+        "y": 1.27968990802765,
+        "z": 4.49999809265137
+      },
+      "rotation": {
+        "x": -8.15710427559679E-06,
+        "y": 179.999237060547,
+        "z": -5.4677075240761E-06
+      }
+    }, {
+      "name": "Blue Marine",
+      "position": {
+        "x": 4.49998712539673,
+        "y": 1.27968990802765,
+        "z": 5.50000476837158
+      },
+      "rotation": {
+        "x": 3.64873699254531E-07,
+        "y": 180.009384155273,
+        "z": -5.94777065998642E-06
+      }
+    }, {
+      "name": "Red Marine",
+      "position": {
+        "x": 4.49998617172241,
+        "y": 1.27969014644623,
+        "z": 3.49998807907104
+      },
+      "rotation": {
+        "x": -4.12590452469885E-06,
+        "y": 180.036193847656,
+        "z": -1.58405316597054E-06
+      }
+    } ],
+    "otherTokens": [ {
+      "name": "Compass Rose",
+      "position": {
+        "x": 7.5,
+        "y": 0.973604917526245,
+        "z": 0.49999263882637
+      },
+      "rotation": {
+        "x": 2.38844165778573E-07,
+        "y": 180,
+        "z": 2.82554822206293E-07
+      }
+    }, {
+      "name": "Machine Gun",
+      "position": {
+        "x": 6.50000047683716,
+        "y": 1.24860465526581,
+        "z": 2.50000023841858
+      },
+      "rotation": {
+        "x": 1.97938425117172E-05,
+        "y": 180.013580322266,
+        "z": -6.50661286272225E-06
+      }
+    }, {
+      "name": "Shotgun",
+      "position": {
+        "x": 5.49999570846558,
+        "y": 1.24860537052155,
+        "z": 3.49998903274536
+      },
+      "rotation": {
+        "x": -4.17101682614884E-06,
+        "y": 180.004745483398,
+        "z": -8.81851690337498E-07
+      }
+    }, {
+      "name": "Machine Gun",
+      "position": {
+        "x": 4.49998617172241,
+        "y": 1.24860513210297,
+        "z": 6.50001287460327
+      },
+      "rotation": {
+        "x": -3.90371678804513E-06,
+        "y": 180.013412475586,
+        "z": -1.4361736475621E-06
+      }
+    } ],
+    "scripts": [],
+    "teleporters": []
+  }
+}
 ]]
 
 return package

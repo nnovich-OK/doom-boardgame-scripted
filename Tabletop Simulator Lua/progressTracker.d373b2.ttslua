@@ -1,0 +1,24 @@
+local progress = {}
+
+function onLoad(save_data)
+  local save = JSON.decode(save_data)
+  if save and save.progress then
+    progress = save.progress
+  end
+end
+
+function onSave()
+  self.script_state = JSON.encode({progress=progress})
+end
+
+function mark(achievment)
+  progress[achievment] = true
+end
+
+function check(achievment)
+  return progress[achievment] or false
+end
+
+function reset()
+  progress = {}
+end
