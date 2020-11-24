@@ -238,7 +238,7 @@ function getObjectsInZone(position, rotation, size, filter)
   reducedSize = Vector(size) - Vector(0.5, 0.5, 0.5)
   local hitTable = Physics.cast(
     {type=3, origin=position, size=reducedSize, orientation=rotation,
-      direction={0,-1,0}, maxDistance=0, debug=false})
+      direction={0,1,0}, maxDistance=0, debug=false})
 
   local result = {}
   for _, hit in ipairs(hitTable) do
