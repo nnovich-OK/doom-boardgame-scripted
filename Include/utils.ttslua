@@ -56,14 +56,7 @@ function isMonster(obj)
     return false
   end
 
-  local name = obj.getName()
-  for i,v in ipairs(constants.mnstList) do
-    if (string.find(name, v, 1, true)) then
-      return true
-    end
-  end
-
-  return false
+  return getMonsterType(obj.getName()) ~= nil
 end
 
 function isMarine(obj)
@@ -114,6 +107,10 @@ end
 
 function isInvisibleToken(obj)
   return obj.tag == "Generic" and string.find(obj.getName(), "Invisible Encounter") ~= nil
+end
+
+function isPickableToken(obj)
+  return (obj.tag == "Card" or obj.tag=="Generic") and constants.pickableTokens[obj.getName()] ~= nil
 end
 
 function isToken(obj)
@@ -209,7 +206,9 @@ end
 
 -- only x and z values of position are meaningful
 function getObjectAt(position, filter)
-  local objects = getObjectsBelow({position.x, 10, position.z}, filter)
+  position = Vector(position)
+  position.y = 10
+  local objects = getObjectsBelow(position, filter)
 
   if #objects > 1 then
     log(objects, "ERROR getObjectAt found several objects")
@@ -264,16 +263,6 @@ function isAboveMap(obj)
   return #getObjectsBelow(castPosition, isMapTile) ~= 0
 end
 
-function getMonsterType(fullName)
-  for _, type in ipairs(constants.mnstList) do
-    if string.find(fullName, type) then
-      return type
-    end
-  end
-
-  return nil
-end
-
 function getGuide()
   local guide = getObjectFromGUID(guideGUID)
   if guide then
@@ -298,6 +287,33 @@ function shiftY(vector, shift)
     result[2] = result[2] + shift
   end
   return result
+end
+
+-- remove trailing, leading and double pipes
+-- "|Red||White|Blue|" becomes "Red|White|Blue"
+function fixPipes(str)
+  --trim
+  local trimmed = string.gsub(str or "", "^|*(.-)|*$", "%1")
+  --remove doulbes
+  return (string.gsub(trimmed, "||+", "|"))
+end
+
+function getMonsterType(fullName)
+  for type in pairs(constants.mnstStats) do
+    if string.find(fullName, type) then
+      return type
+    end
+  end
+
+  return nil
+end
+
+function getMonsterStats(name)
+  for k,v in pairs(constants.mnstStats) do
+    if (string.find(name, k, 1, true)) then
+      return v
+    end
+  end
 end
 
 return package

@@ -32,7 +32,7 @@ function isMonsterBag(obj)
     return false
   end
 
-  for _,monster in ipairs(constants.mnstList) do
+  for monster in pairs(constants.mnstStats) do
     if string.find(obj.getName(), monster) then
       return true, monster
     end
@@ -217,7 +217,7 @@ function spawnElement(req)
   if string.find(req.elem.name, "Grey") and monsterType then
     local maxCount = 0
     for _, color in ipairs(constants.allMarineColors) do
-      if Player[color].seated or dbg.cfg.unconditionalGreySpawn then
+      if Player[color].seated or dbg.cfg.pretendAllMarinesSeated then
         local currentCount = getBagContentCount(allBags[color.." "..monsterType])
         if maxCount < currentCount then
           maxCount = currentCount
@@ -254,7 +254,7 @@ function spawnElement(req)
 
       if req.script then
         local encounterScript = string.gsub(instances.requireAll.getLuaScript(),
-          [[%-%-ENCOUNTER_SCRIPT_LOCATION%-%-]],
+          [[%-%-ENCOUNTER_SCRIPT_BODY]],
           req.script)
         obj.setLuaScript(encounterScript)
       end

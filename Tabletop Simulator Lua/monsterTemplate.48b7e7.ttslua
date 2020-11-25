@@ -1,31 +1,20 @@
 require("instances")
 require("utils")
+require("constants")
 
 if string.find(self.getName(), "Template") then
   return
 end
 
-mnstStats = {
-  Zombie     = {speed=3, armor=2, health=2, score=1},
-  Trite      = {speed=5, armor=1, health=1, score=1},
-  Imp        = {speed=4, armor=2, health=1, score=1},
-  Demon      = {speed=4, armor=3, health=2, score=2},
-  Mancubus   = {speed=2, armor=3, health=3, score=2},
-  Archvile   = {speed=4, armor=3, health=2, score=2},
-  Hellknight = {speed=3, armor=4, health=3, score=2},
-  Cyberdemon = {speed=4, armor=5, health=4, score=4},
-}
+local mnstStats = constants.mnstStats
 
--- mnstAttackDice
--- mnstSpecial
-
-identity = {
+local identity = {
   fullname = "",
   name = "",
   color = "",
 }
 
-health = {
+local health = {
    value = 10,
    max = 10,
 }

@@ -6,17 +6,58 @@ local _ENV = package
 allPlayerColors = {"Red", "Green", "Blue", "White"}
 allMarineColors = {"Red", "Green", "Blue"}
 
+mnstStats = {
+  Zombie     = {speed=3, armor=2, health=2, score=1,
+                attack = {"red", "blue1"},
+                melee=true,
+                attackMod = {},
+                reminder = "",
+              },
 
--- TODO: maybe join mnstList, mnstCount and mnstStats somwhere in one place
-mnstList = {
-  "Zombie",
-  "Trite",
-  "Imp",
-  "Demon",
-  "Mancubus",
-  "Archvile",
-  "Hellknight",
-  "Cyberdemon",
+  Trite      = {speed=5, armor=1, health=1, score=1,
+                attack = {"red", "green1"},
+                melee=true,
+                attackMod = {},
+                reminder = "scuttle",
+              },
+
+  Imp        = {speed=4, armor=2, health=1, score=1,
+                attack = {"yellow", "blue2"},
+                attackMod = {accuracy=1},
+                reminder = "",
+              },
+
+  Demon      = {speed=4, armor=3, health=2, score=2,
+                attack = {"red", "blue1", "blue2"},
+                melee=true,
+                attackMod = {},
+                reminder = "watchful",
+              },
+
+  Mancubus   = {speed=2, armor=3, health=3, score=2,
+                attack = {"yellow", "green2" ,"blue2"},
+                attackMod = {deadly=1},
+                reminder = "blow-through",
+              },
+
+  Archvile   = {speed=4, armor=3, health=2, score=2,
+                attack = {"yellow", "green1", "green2" ,"blue2"},
+                attackMod = {accuracy=4},
+                reminder = "aimed",
+            },
+
+  Hellknight = {speed=3, armor=4, health=3, score=2,
+                attack = {"red", "blue1", "blue2"},
+                melee=true,
+                attackMod = {},
+                reminder = "sweep, knockback",
+              },
+
+  Cyberdemon = {speed=4, armor=5, health=4, score=4,
+                attack = {"red", "yellow", "green1", "green2", "blue1", "blue2"},
+                attackMod = {},
+                reminder = "aimed",
+              },
 }
 
 tokenList = {
@@ -63,6 +104,31 @@ tokenList = {
   ['Duct']= true,
 
   ['Invisible Encounter']= true,
+}
+
+pickableTokens = {
+  ['Armor']='armor',
+
+  ['Shells/Bullets']='shell',
+  ['Rockets/Grenades']='rocket',
+  ['Energy Cell']='cell',
+
+  ['Chainsaw']='chainsaw',
+  ['Shotgun']='shotgun',
+  ['Machine Gun']='machinegun',
+  ['Chain Gun']='chaingun',
+  ['Rocket Launcher']='launcher',
+  ['Plasma Gun']='plasma',
+  ['BFG']='bfg',
+
+  ['Berserk']='berserk',
+  ['Adrenaline']='adrenalin',
+
+  ['Blue Key']='bluekey',
+  ['Yellow Key']='yellowkey',
+  ['Red Key']='redkey',
+
+  ['Health']='health',
 }
 
 return package

@@ -19,31 +19,6 @@ local lastInvMode = {Red={}, Green={}, Blue={}, White={}}
 
 local startingAmmoModifier = {2, 2, 0, -1, -1}
 
-local pickableTokens = {
-  ['Armor']='armor',
-
-  ['Shells/Bullets']='shell',
-  ['Rockets/Grenades']='rocket',
-  ['Energy Cell']='cell',
-
-  ['Chainsaw']='chainsaw',
-  ['Shotgun']='shotgun',
-  ['Machine Gun']='machinegun',
-  ['Chain Gun']='chaingun',
-  ['Rocket Launcher']='launcher',
-  ['Plasma Gun']='plasma',
-  ['BFG']='bfg',
-
-  ['Berserk']='berserk',
-  ['Adrenaline']='adrenalin',
-
-  ['Blue Key']='bluekey',
-  ['Yellow Key']='yellowkey',
-  ['Red Key']='redkey',
-
-  ['Health']='health',
-}
-
 local saveStateItems = {
   armor=true,
   shell=true,
@@ -565,12 +540,12 @@ end
 
 function pickToken(player_color, marineColor, tokenInfo)
   local name = type(tokenInfo) == "table" and tokenInfo.name or tokenInfo.getName()
-  local mainItem = pickableTokens[name]
+  local mainItem = constants.pickableTokens[name]
 
   local gmNotes = type(tokenInfo) == "table" and tokenInfo.gm_notes or tokenInfo.getGMNotes()
   local bonusItem = nil
   if string.find(gmNotes, "^Bonus:") then
-    bonusItem = pickableTokens[string.gsub(gmNotes, "^Bonus:", "")]
+    bonusItem = constants.pickableTokens[string.gsub(gmNotes, "^Bonus:", "")]
   end
 
   if not mainItem then

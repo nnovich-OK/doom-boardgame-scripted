@@ -84,7 +84,7 @@ function storeObject(mapTable, object)
     description.mark = object.getName()
     description.reveal = areaName
   elseif utils.isEncounterToken(object) then
-    local script = object.getLuaScript()
+    local script = getScriptBody(object)
     if script and script ~= "" then
       local alreadyStored = false
       for i,v in ipairs(map[areaName].scripts) do
@@ -176,4 +176,17 @@ function onCheckClick(player, value, id)
     end
     hiddenObjects = nil
   end
+end
+
+function getScriptBody(obj)
+  local script = obj.getLuaScript()
+  if not script or script == "" then
+    return script
+  end
+
+  -- due to "pattern too complex" error, forced to abstain from regex
+  local _, scriptStart = string.find(script, [[--ENCOUNTER_SCRIPT_START]], 1, true)
+  local scriptEnd = string.find(script, [[--ENCOUNTER_SCRIPT_END]], 1, true)
+  script = string.sub(script, scriptStart+1, scriptEnd-1)
+  return script
 end

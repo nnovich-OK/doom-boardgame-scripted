@@ -1,0 +1,18 @@
+<Panel
+  id="encounterConfirmationPanel"
+  rectAlignment="middleCenter"
+
+  width="400"
+  height="150"
+
+  color="rgba(0, 0, 0, 0.95)"
+  active="false"
+  >
+  <VerticalLayout>
+    <Text id="encounterConfirmationPrompt" text="Activate?" fontSize="24"/>
+    <HorizontalLayout padding="30 30 25 25" spacing="30">
+      <Button id="encounterConfirmButton" text="Yes" fontSize="24"/>
+      <Button id="encounterDeclineButton" text="No" fontSize="24"/>
+    </HorizontalLayout>
+  </VerticalLayout>
+</Panel>

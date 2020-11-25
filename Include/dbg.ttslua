@@ -10,9 +10,7 @@ local _ENV = package
 cfg = {
   scanEnabled = false,
   unlimitedMonsters = false,
-  unconditionalGreySpawn = false,
-  unconditionalColorSpawn = false,
-  unconditionalMarineSpawn = false,
+  pretendAllMarinesSeated = false,
   marineMapAccess = false,
   miscHotkeyEnable = false,
 }

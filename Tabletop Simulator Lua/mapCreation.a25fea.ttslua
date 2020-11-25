@@ -294,7 +294,7 @@ function revealArea(req)
 
 
   for _, mnst in ipairs(area.colorMonsters) do
-    if Player[utils.getColor(mnst.name)].seated or dbg.cfg.unconditionalColorSpawn then
+    if Player[utils.getColor(mnst.name)].seated or dbg.cfg.pretendAllMarinesSeated then
       instances.creator.call("spawnElement", {elem=mnst})
     end
   end
@@ -311,7 +311,7 @@ function revealArea(req)
   for _, mrn in ipairs(area.marines) do
     local color = utils.getColor(mrn.name)
     local marine = utils.getMarine(color)
-    if Player[color].seated or dbg.cfg.unconditionalMarineSpawn then
+    if Player[color].seated or dbg.cfg.pretendAllMarinesSeated then
       marine.setPosition(mrn.position)
     else
       marine.call("resetPosition")

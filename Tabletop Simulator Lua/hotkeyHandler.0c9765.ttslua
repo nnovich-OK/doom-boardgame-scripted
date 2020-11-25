@@ -2,59 +2,6 @@ require("instances")
 require("utils")
 require("dbg")
 
-mnstStats = {
-  Zombie     = {speed=3, armor=2, health=2,
-                attack = {"red", "blue1"},
-                melee=true,
-                attackMod = {},
-                reminder = "",
-              },
-
-  Trite      = {speed=5, armor=1, health=1,
-                attack = {"red", "green1"},
-                melee=true,
-                attackMod = {},
-                reminder = "scuttle",
-              },
-
-  Imp        = {speed=4, armor=2, health=1,
-                attack = {"yellow", "blue2"},
-                attackMod = {accuracy=1},
-                reminder = "",
-              },
-
-  Demon      = {speed=4, armor=3, health=2,
-                attack = {"red", "blue1", "blue2"},
-                melee=true,
-                attackMod = {},
-                reminder = "watchful",
-              },
-
-  Mancubus   = {speed=2, armor=3, health=3,
-                attack = {"yellow", "green2" ,"blue2"},
-                attackMod = {deadly=1},
-                reminder = "blow-through",
-              },
-
-  Archvile   = {speed=4, armor=3, health=2,
-                attack = {"yellow", "green1", "green2" ,"blue2"},
-                attackMod = {accuracy=4},
-                reminder = "aimed",
-            },
-
-  Hellknight = {speed=3, armor=4, health=3,
-                attack = {"red", "blue1", "blue2"},
-                melee=true,
-                attackMod = {},
-                reminder = "sweep, knockback",
-              },
-
-  Cyberdemon = {speed=4, armor=5, health=4,
-                attack = {"red", "yellow", "green1", "green2", "blue1", "blue2"},
-                attackMod = {},
-                reminder = "aimed",
-              },
-}
 
 
 local attackingChar = {}
@@ -62,7 +9,6 @@ local monsterActivationIndex = 0
 local gmOut = false
 
 -- Local methods declaration
-local getMonsterStats
 local saveAttackingCharacterHovered
 local prepareAttackParameters
 local findMonsterToActivate
@@ -110,14 +56,6 @@ function renameHoveredMonsterToGrey(player_color)
   else
     broadcastToColor("Hotkey is intended to rename/recolor to grey monster which is hovered over.",
       player_color, player_color)
-  end
-end
-
-function getMonsterStats(name)
-  for k,v in pairs(mnstStats) do
-    if (string.find(name, k, 1, true)) then
-      return v
-    end
   end
 end
 
@@ -192,7 +130,7 @@ function prepareAttackParameters(player_color)
   --                      set for monster attacks only
   local params = {color=player_color}
   if utils.isMonster(attackingChar[player_color]) then
-    local stats = getMonsterStats(attackingChar[player_color].getName()) --guaranteed to exist
+    local stats = utils.getMonsterStats(attackingChar[player_color].getName()) --guaranteed to exist
     params["dice"] = stats.attack
     params["bonus"] = stats.attackMod or "none"
 
@@ -206,7 +144,7 @@ function prepareAttackParameters(player_color)
   -- TARGET PARAMETERS: distance and armor
   local armor = 1
   if utils.isMonster(target) then
-    armor = getMonsterStats(target.getName()).armor
+    armor = utils.getMonsterStats(target.getName()).armor
   else
     armor = tonumber(target.UI.getAttribute("armor", "text"))
   end

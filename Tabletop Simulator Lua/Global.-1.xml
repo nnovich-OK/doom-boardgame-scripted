@@ -17,3 +17,5 @@
 <Include src="mapScanner.xml"/>
 
 <Include src="scoreTracker.xml"/>
+
+<Include src="encounterPrompt.xml"/>

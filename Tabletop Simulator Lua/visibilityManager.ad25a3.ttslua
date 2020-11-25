@@ -32,10 +32,8 @@ local sharedUI = {
 -- Local methods declaration
 local interfaceRequestCorrect
 local hideOtherInterfacesInGroup
-local fixPipes
 local changeVisibility
 local handleSpecialCases
-local isActive
 local cachedShow
 local cachedHide
 local commitVisibility
@@ -209,15 +207,6 @@ function commitVisibility()
   end
 end
 
--- remove trailing, leading and double pipes
--- "|Red||White|Blue|" becomes "Red|White|Blue"
-function fixPipes(str)
-  --trim
-  local trimmed = string.gsub(str or "", "^|*(.-)|*$", "%1")
-  --remove doulbes
-  return (string.gsub(trimmed, "||+", "|"))
-end
-
 -- mode is add/rem/tgl
 function changeVisibility(id, color, mode)
   local visBase = visibilityCached[id] or ""
@@ -233,13 +222,13 @@ function changeVisibility(id, color, mode)
     end
   end
 
-  vis=fixPipes(vis)
+  vis=utils.fixPipes(vis)
   --log(
   --  (visBase or "") .. " => " .. (vis),
   --  mode .. " visibility of " .. id .. " for " .. color .. ":")
 
   if vis~=visBase then
-    visibilityCached[id] = fixPipes(vis)
+    visibilityCached[id] = utils.fixPipes(vis)
   end
 
   local act = isActive(id)
