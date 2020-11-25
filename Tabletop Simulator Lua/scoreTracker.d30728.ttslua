@@ -53,8 +53,12 @@ function onSave()
 end
 
 function changeScore(req)
-  if not req.color or not req.delta or req.delta == 0 then
+  if not req or not req.color or not req.delta then
     log(req, "ERROR changeScore incorrect request")
+    return
+  end
+
+  if req.delta == 0 then
     return
   end
 

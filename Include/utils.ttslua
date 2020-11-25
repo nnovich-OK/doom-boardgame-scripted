@@ -4,6 +4,7 @@ local package = utils
 -- PACKAGE IMPORT
 setmetatable(utils, {__index = _G})
 local constants = require "constants"
+local dbg = require "dbg"
 
 -- PACKAGE BODY
 local _ENV = package
@@ -29,7 +30,7 @@ end
 function getMarineCount()
   local count = 0
   for _, clr in ipairs(constants.allMarineColors) do
-    if Player[clr].seated then
+    if Player[clr].seated or dbg.cfg.pretendAllMarinesSeated then
       count = count + 1
     end
   end
