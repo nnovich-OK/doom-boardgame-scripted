@@ -638,10 +638,13 @@ end
 function gainItem(req)
   assert(req and req.item and req.marineColor, "gainItem incorrect request")
   req.actorColor = req.actorColor or req.marineColor
+  req.count = req.count or 1
 
   if obtainableItems[req.item] then
-    if adjustItemCount(req.marineColor, req.item, 1) == 1 then
-      printToAll(utils.getActorLabel(req.marineColor) .. " gained " .. req.item, req.actorColor)
+    if adjustItemCount(req.marineColor, req.item, req.count) == req.count then
+      local countStr = req.count == 1 and "" or (" x"..req.count)
+      printToAll(utils.getActorLabel(req.marineColor) .. " gained " .. req.item .. countStr,
+        req.actorColor)
     else
       broadcastToColor("Can't have more", req.actorColor, req.actorColor)
     end
