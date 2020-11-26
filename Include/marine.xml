@@ -13,13 +13,13 @@
       <!-- Health Bar -->
       <HorizontalLayout>
          <Panel id="healthSubPanel" active="false">
-            <Button id="subMax" onClick="hits(subMax)" text="◄"></Button>
+            <Button id="subMax" onClick="changeMaxHp(-1)" text="◄"></Button>
          </Panel>
          <Panel id="health" width="300">
             <Text id="healthbar" width="600"></Text>
          </Panel>
          <Panel id="healthAddPanel" active="false">
-            <Button id="addMax" onClick="hits(addMax)" text="►"></Button>
+            <Button id="addMax" onClick="changeMaxHp(1)" text="►"></Button>
          </Panel>
       </HorizontalLayout>
       <Button id="editButton" onClick="onCustomizationUiClick" width="300"></Button>

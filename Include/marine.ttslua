@@ -14,8 +14,6 @@ local initialLocation = {
   Blue = {pos = {39.50, 1.01, 29.50}, rot = {0.00, 270.00, 0.00}},
 }
 
-local armor = 2
-
 -- Local methods declaration
 local checkLoaded
 local createBtns
@@ -45,6 +43,9 @@ function onSave()
    self.script_state = save_state
 end
 
+-- If buttons were statically added to XML, they wouldn't be acessible inside
+-- figurine collider. However, creating them with script avoids this trouble:
+-- even within collider they somehow got priority, so they consume mouse button press.
 function createBtns()
   local buttonParameter = {
     click_function = "add",
@@ -65,12 +66,11 @@ function createBtns()
 end
 
 
-function add(self, playerColor, value, id) healthChange(playerColor, "add") end
-function sub(self, playerColor, value, id) healthChange(playerColor, "sub") end
+function add(self, playerColor, value, id) healthChange(playerColor, 1) end
+function sub(self, playerColor, value, id) healthChange(playerColor, -1) end
 
--- Do the appropriate healing / damaging
-function hits(player, change)
-  healthChange(player.color, change)
+function changeMaxHp(player, change)
+  healthChange(player.color, tonumber(change), true)
 end
 
 function isFullHp()
@@ -79,85 +79,82 @@ end
 
 function onUpgrade(upgrade)
   if upgrade == "heal" then
-    if (health.value == health.max) then
+    if isFullHp() then
       local color = utils.getColor(self.getName())
       broadcastToColor("Already at full health", color, color)
       return false
     else
-      healthChange(utils.getColor(self.getName()), "add")
+      healthChange(utils.getColor(self.getName()), 1)
       return true
     end
 
   elseif upgrade == "maxhp" then
-    healthChange(utils.getColor(self.getName()), "addMax")
+    healthChange(utils.getColor(self.getName()), 1, true)
     return true
   end
 end
 
 function onHealthPickup(player_color)
-  if (health.value == health.max) then
+  if isFullHp() then
     return false
   end
 
-  for i = 1, 3 do
-    healthChange(player_color, "add")
-  end
+  healthChange(player_color, 3)
 
   return true
 end
 
 function onBarrelExplosion(player_color)
-  healthChange(player_color, "sub")
+  healthChange(player_color, -1)
 end
 
-function healthChange(playerColor, change)
+-- number of actually lost hitpoints is determined by armor
+function inflictDamage(req)
+  local armor = tonumber(self.UI.getAttribute("armor", "text"), 10)
+  local wounds = math.floor(req.damage/armor)
+  healthChange(req.color, -wounds)
+end
+
+function healthChange(playerColor, delta, isMaxHp)
+  if delta == 0 then
+    return
+  end
+
   local oldHP = health.value
   local oldMax = health.max
 
-  if change == "add" then
-    health.value = health.value + 1
-  elseif change == "addMax" then
-    health.value = health.value + 1
-    health.max = health.max + 1
-  elseif change == "sub" then
-    health.value = health.value - 1
-  elseif change == "subMax" then
-    health.value = health.value - 1
-    if health.max > 0 then health.max = health.max - 1 end
+  local sign = delta > 0 and "+" or "" -- minus wil be printed anyway
+
+  if isMaxHp then
+    health.max = math.max(1, health.max + delta)
+    health.value = math.max(0, health.value + delta)
+
+    if oldMax ~= health.max then
+      printToAll("MaxHP of " .. self.getName() .. ": " .. health.max
+        .. " (" .. sign .. delta .. ")",
+        stringColorToRGB(playerColor))
+    end
+
+  else
+    health.value = math.max(0, health.value + delta)
+    health.value = math.min(health.max, health.value)
+
+    if oldHP ~= health.value then
+      printToAll("HP of " .. self.getName() .. ": " .. health.value
+        .. " (" .. sign .. delta .. ")",
+        stringColorToRGB(playerColor))
+    end
+
+    if oldHP > health.value then
+      instances.inv.call("onMarineWounded", utils.getColor(self.getName()))
+    end
   end
 
-  -- Boundary-check health values
-  if health.value > health.max then health.value = health.max end
-  if health.value < 0 then health.value = 0 end
   updateHealthUI()
-
-  if change == "add" then
-     if oldHP ~= health.value then
-        printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (+1)", stringColorToRGB(playerColor))
-     end
-
-  elseif change == "sub" then
-     if oldHP ~= health.value then
-        printToAll("HP of " .. self.getName() .. ": " .. health.value .. " (-1)", stringColorToRGB(playerColor))
-        instances.inv.call("onMarineWounded", utils.getColor(self.getName()))
-     end
-
-  elseif change == "addMax" then
-     if oldMax ~= health.max then
-        printToAll("MaxHP of " .. self.getName() .. ": " .. health.max .. " (+1)", stringColorToRGB(playerColor))
-     end
-
-  elseif change == "subMax" then
-     if oldMax ~= health.max then
-        printToAll("MaxHP of " .. self.getName() .. ": " .. health.max .. " (-1)", stringColorToRGB(playerColor))
-     end
-
-  end
 end
 
 -- Sets health in the UI
 function updateHealthUI()
-
    -- Activate defeat interface
    if health.value < 1 then
       self.UI.setAttribute("defeatPanel", "active", true)

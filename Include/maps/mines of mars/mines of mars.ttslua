@@ -89,7 +89,34 @@ map = [[
       }
     } ],
     "marines": [],
-    "otherTokens": [],
+    "otherTokens": [ {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 13.5000085830688,
+        "y": 1.23500549793243,
+        "z": -0.500002443790436
+      },
+      "rotation": {
+        "x": 0.000190090184332803,
+        "y": 269.97412109375,
+        "z": -0.000358180142939091
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 13.5,
+        "y": 1.2350115776062,
+        "z": -1.50000059604645
+      },
+      "rotation": {
+        "x": 0.000204791896976531,
+        "y": 269.974243164063,
+        "z": -0.000327484536683187
+      },
+      "scriptIndex": 1
+    } ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"Suddenly bridge collapses\", \"Teal\")\r\n\r\n  local bridge = utils.getObjectAt({15.50, 2.00, -1.00}, utils.isMapTile)\r\n  if bridge then\r\n    bridge.destruct()\r\n  end\r\n\r\n  instances.map.call(\"revealArea\", {area=\"Broken bridge\", color=\"Teal\"})\r\n\r\n  local gapObjects = utils.getObjectsInZone(\r\n    {15.50, 2.00, -1.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isCharacter\r\n  )\r\n\r\n  local chasmRevealed = false\r\n  for _, obj in ipairs(gapObjects) do\r\n    if utils.isMonster(obj) then\r\n      obj.destruct()\r\n    elseif utils.isMarine(obj) then\r\n      if not chasmRevealed then\r\n        instances.map.call(\"revealArea\", {area=\"Chasm\", color=\"Teal\"})\r\n        chasmRevealed = true\r\n      end\r\n      printToAll(obj.getName() .. \" falls into the chasm\", \"Teal\")\r\n      obj.setPosition(obj.getPosition() + Vector(8, 1.5, 0))\r\n      obj.call(\"inflictDamage\", {color=\"Teal\", damage=6})\r\n    end\r\n  end\r\n\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {13.50, 2.00, -1.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isInvisibleToken\r\n  )\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 2": {
@@ -295,7 +322,34 @@ map = [[
       }
     } ],
     "marines": [],
-    "otherTokens": [],
+    "otherTokens": [ {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 22.5000114440918,
+        "y": 1.23500096797943,
+        "z": 6.49999666213989
+      },
+      "rotation": {
+        "x": -3.5772216051555E-06,
+        "y": 269.974243164063,
+        "z": -2.14913634408731E-05
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 22.4999980926514,
+        "y": 1.23500061035156,
+        "z": 7.50000095367432
+      },
+      "rotation": {
+        "x": -3.39764915224805E-06,
+        "y": 269.974365234375,
+        "z": -2.1271540390444E-05
+      },
+      "scriptIndex": 1
+    } ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"BLGRRRRAAAAAHHH!!!\", \"Teal\")\r\n  instances.map.call(\"revealArea\", {area=\"Area 6\", color=\"Teal\"})\r\n\r\n  local door = utils.getObjectAt({17.06, 1.24, 6.93}, utils.isDoor)\r\n  if door then\r\n    door.destruct()\r\n  end\r\n\r\n  local objects = utils.getObjectsInZone(\r\n    {22.50, 2.00, 7.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isInvisibleToken\r\n  )\r\n\r\n  for _, obj in ipairs(objects) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 4": {
@@ -604,7 +658,8 @@ map = [[
         "x": 1.62782623647217E-06,
         "y": 270.111175537109,
         "z": -2.9578902740468E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Encounter",
       "position": {
@@ -616,7 +671,8 @@ map = [[
         "x": 1.98785983229754E-06,
         "y": 270.111297607422,
         "z": -2.27041277867102E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Blocking Obstacle 3",
       "position": {
@@ -652,7 +708,8 @@ map = [[
         "x": 1.03532283901586E-06,
         "y": 270.111175537109,
         "z": -3.42255702889815E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Blocking Obstacle 3",
       "position": {
@@ -676,7 +733,8 @@ map = [[
         "x": 7.12771054622863E-07,
         "y": 270.111389160156,
         "z": -3.31346063831006E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "BFG",
       "position": {
@@ -714,6 +772,7 @@ map = [[
         "z": -8.6630939222232E-07
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"Locker opens, but then power goes down\", \"Teal\")\r\n\r\n  local teleportPos = Vector(29.50, 1.31, -3.50)\r\n  local vectorToLocker = teleportPos - self.getPosition()\r\n  for k, v in pairs(vectorToLocker) do\r\n    if math.abs(v) < 1.5 then\r\n      vectorToLocker[k] = 0\r\n    else\r\n      vectorToLocker[k] = 2 * vectorToLocker[k]\r\n    end\r\n  end\r\n\r\n  local locker = utils.getObjectAt(self.getPosition() + vectorToLocker, utils.isObstacleToken)\r\n  if locker then\r\n    locker.destruct()\r\n  end\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {29.50, 2.00, -3.50},\r\n    {0.00, 0.00, 0.00},\r\n    {5.00, 4.00, 5.00},\r\n    utils.isEncounterToken\r\n  )\r\n\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": [ {
       "name": "Blue Teleporter",
       "position": {
@@ -800,6 +859,41 @@ map = [[
         "z": -4.70946019959229E-08
       }
     } ]
+  },
+  "Broken bridge": {
+    "ammoTokens": [],
+    "colorMonsters": [],
+    "doors": [],
+    "greyMonsters": [],
+    "mapTiles": [ {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 16.5334167480469,
+        "y": 0.960000455379486,
+        "z": -0.500491976737976
+      },
+      "rotation": {
+        "x": 6.01858664595056E-06,
+        "y": 359.976013183594,
+        "z": 1.20903132483363E-05
+      }
+    }, {
+      "name": "Map Deadend 2x1",
+      "position": {
+        "x": 14.5,
+        "y": 0.959999799728394,
+        "z": -1.49999952316284
+      },
+      "rotation": {
+        "x": -2.34972435464442E-06,
+        "y": 180.000061035156,
+        "z": -1.16472556328517E-05
+      }
+    } ],
+    "marines": [],
+    "otherTokens": [],
+    "scripts": [],
+    "teleporters": []
   },
   "Chasm": {
     "ammoTokens": [],

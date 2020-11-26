@@ -579,7 +579,7 @@ function pickToken(player_color, marineColor, tokenInfo)
       if item == "berserk" then
         printToAll(marine.getName() .. " activated " .. item, player_color)
       else
-        local xStr = amount~=1 and " x"..amount or ""
+        local xStr = amount > 1 and " x"..amount or ""
         printToAll(marine.getName() .. " picked " .. item .. xStr, player_color)
       end
     end
