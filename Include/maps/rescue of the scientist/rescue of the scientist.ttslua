@@ -397,8 +397,10 @@ map = [[
         "x": 0.00405164994299412,
         "y": 359.967376708984,
         "z": 0.563826858997345
-      }
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  instances.inv.call(\"gainItem\", {\r\n    item=\"bluekey\",\r\n    marineColor=utils.getColor(marine.getName()),\r\n    actorColor=\"Teal\"})\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Red area": {
