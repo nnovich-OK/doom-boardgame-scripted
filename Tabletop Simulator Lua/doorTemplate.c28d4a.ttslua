@@ -1,11 +1,12 @@
 require("instances")
+require("utils")
 
 if string.find(self.getName(), "Template") then
   return
 end
 
 -- Local methods declaration
-
+local getSquashedMonsters
 
 function onLoad(save_state)
   saved_data = JSON.decode(save_state)
@@ -51,16 +52,85 @@ end
 function toggleOpen(params)
   local state = self.getStateId()
   if state == 1 then
-    local gmNotes = self.getGMNotes()
-    if gmNotes and string.find(gmNotes, "Reveal:") then
-      instances.map.call("revealArea", {
-        area=string.gsub(gmNotes, "Reveal:", ""),
-        color=params.color
-      })
-      self.setGMNotes("")
-    end
-    self.setState(2)
+    openDoor(params.color)
   elseif state == 2 then
-    self.setState(1)
+    closeDoor({textColor=params.color, force=false})
   end
 end
+
+function openDoor(color)
+  local gmNotes = self.getGMNotes()
+  if gmNotes and string.find(gmNotes, "Reveal:") then
+    instances.map.call("revealArea", {
+      area=string.gsub(gmNotes, "Reveal:", ""),
+      color=color
+    })
+    self.setGMNotes("")
+  end
+  self.setState(2)
+end
+
+-- When force is set, door squashes any unlucky monsters.
+-- Otherwise it can't be closed if blocked.
+function closeDoor(req)
+  assert(req and req.textColor, "closeDoor incorrect request")
+  req.scoreColor = req.scoreColor or req.textColor
+  local monsters, score = getSquashedMonsters()
+
+  if #monsters == 0 then
+    self.setState(1)
+
+  elseif not req.force then
+    local msg = "Door closing is blocked by monsters"
+    if Player[req.textColor] and Player[req.textColor].seated then
+      broadcastToColor(msg, req.textColor, req.textColor)
+    else
+      broadcastToAll(msg, req.textColor)
+    end
+
+  else
+    for _, mnst in ipairs(monsters) do
+      mnst.destruct()
+    end
+    if utils.isMarineColor(req.scoreColor) then
+      broadcastToAll("Door squashed monsters for " .. score .. " scores", req.textColor)
+      instances.score.call("changeScore", {color=req.scoreColor, delta=score})
+    end
+    self.setState(1)
+
+  end
+end
+
+function getSquashedMonsters()
+  local squashed = {}
+  local killScore = 0
+  local pos = self.getPosition()
+  local rot = self.getRotation()
+  local n = Vector(0.5, 0, 0):rotateOver("y", rot.y) -- normal to door plane
+  local t = Vector(0, 0, 0.5):rotateOver("y", rot.y) -- tangential
+
+  -- Monsters are named according to quadrants if door plane is along z axis:
+  --  ^  z
+  -- 2|1
+  -- -+---> x
+  -- 3|4
+
+  local m1 = utils.getObjectAt(pos+n+t, utils.isMonster)
+  local m2 = utils.getObjectAt(pos-n+t, utils.isMonster)
+  if m1 and m2 and m1.getGUID() == m2.getGUID() then
+    table.insert(squashed, m1)
+    killScore = killScore + utils.getMonsterStats(m1.getName()).score
+  end
+
+  local m3 = utils.getObjectAt(pos-n-t, utils.isMonster)
+  local m4 = utils.getObjectAt(pos+n-t, utils.isMonster)
+  if m3 and m4 and m3.getGUID() == m4.getGUID()
+    and (not squashed[1] or squashed[1].getGUID() ~= m3.getGUID())
+  then
+    table.insert(squashed, m3)
+    killScore = killScore + utils.getMonsterStats(m3.getName()).score
+  end
+
+  return squashed, killScore
+end
+

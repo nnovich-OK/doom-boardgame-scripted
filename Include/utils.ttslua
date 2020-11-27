@@ -317,4 +317,20 @@ function getMonsterStats(name)
   end
 end
 
+function isMarineColor(color)
+  if not Player[color]
+    or (not Player[color].seated and not dbg.cfg.pretendAllMarinesSeated)
+  then
+    return false
+  end
+
+  for _, clr in ipairs(constants.allMarineColors) do
+    if clr == color then
+      return true
+    end
+  end
+
+  return false
+end
+
 return package

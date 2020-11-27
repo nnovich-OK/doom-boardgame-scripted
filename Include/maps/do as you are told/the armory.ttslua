@@ -11,14 +11,14 @@ map = [[
     "ammoTokens": [ {
       "name": "Shells/Bullets",
       "position": {
-        "x": 22.2531299591064,
-        "y": 1.29805779457092,
-        "z": 3.42138767242432
+        "x": 22.5000514984131,
+        "y": 1.24859893321991,
+        "z": 3.50008916854858
       },
       "rotation": {
-        "x": 359.961608886719,
-        "y": 271.797821044922,
-        "z": -0.000646146712824702
+        "x": -9.77329546003602E-06,
+        "y": 269.931518554688,
+        "z": -6.9062334659975E-05
       }
     }, {
       "name": "Shells/Bullets",
@@ -196,7 +196,83 @@ map = [[
         "y": 180.024917602539,
         "z": 1.03579550341237E-05
       }
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 24.4997463226318,
+        "y": 1.23499500751495,
+        "z": 2.52505707740784
+      },
+      "rotation": {
+        "x": -8.24485414341325E-06,
+        "y": 270.023620605469,
+        "z": -6.92695393809117E-05
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 24.4997577667236,
+        "y": 1.24043476581573,
+        "z": 1.4999543428421
+      },
+      "rotation": {
+        "x": 359.474273681641,
+        "y": 270.021453857422,
+        "z": 0.249947711825371
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 24.4997158050537,
+        "y": 1.24044191837311,
+        "z": 0.500037312507629
+      },
+      "rotation": {
+        "x": 359.473327636719,
+        "y": 270.027954101563,
+        "z": 359.748657226563
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 24.4999732971191,
+        "y": 1.23831903934479,
+        "z": -0.500087857246399
+      },
+      "rotation": {
+        "x": -1.33402139113059E-07,
+        "y": 270.031036376953,
+        "z": 0.380417227745056
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  if not instances.progress.call(\"check\", \"blue card inserted\") then\r\n    return\r\n  end\r\n\r\n  broadcastToAll(\"SCRRREEEEEEECH!!!\", \"Teal\")\r\n  instances.map.call(\"revealArea\", {area=\"Reinforcement\", color=\"Teal\"})\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {24.50, 2.00, 1.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 4.00},\r\n    utils.isInvisibleToken\r\n  )\r\n\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
+    "teleporters": []
+  },
+  "Reinforcement": {
+    "ammoTokens": [],
+    "colorMonsters": [],
+    "doors": [],
+    "greyMonsters": [ {
+      "name": "Grey Cyberdemon",
+      "position": {
+        "x": 13.0000028610229,
+        "y": 2.5,
+        "z": 1.99998104572296
+      },
+      "rotation": {
+        "x": -3.44650543411262E-05,
+        "y": 270,
+        "z": -3.17927951982711E-05
+      }
+    } ],
+    "mapTiles": [],
+    "marines": [],
+    "otherTokens": [],
+    "scripts": [],
     "teleporters": []
   },
   "Area 2": {
@@ -1095,10 +1171,11 @@ map = [[
         "z": -5.49999952316284
       },
       "rotation": {
-        "x": 2.26601443387153E-07,
+        "x": 2.26601500230572E-07,
         "y": 270.008972167969,
         "z": 1.54289170950506E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Blocking Obstacle 1",
       "position": {
@@ -1160,6 +1237,7 @@ map = [[
         "z": -1.72003694842715E-07
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" digs the human from under the debris...\", \"Teal\")\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 5": {
@@ -1245,7 +1323,7 @@ map = [[
       },
       "scriptIndex": 1
     } ],
-    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" notices a slot in the device in front of you. \"\r\n    .. \"It looks like your blue keycard would fit into it.\", \"Teal\")\r\n  instances.map.call(\"revealArea\",\r\n    {area=\"Area 5 device\", color=\"Teal\"})\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {11.50, 2.00, -4.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isInvisibleToken\r\n  )\r\n\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" notices a slot in the device in front of him. \"\r\n    .. \"It looks like blue keycard would fit into it.\", \"Teal\")\r\n  instances.map.call(\"revealArea\",\r\n    {area=\"Area 5 device\", color=\"Teal\"})\r\n\r\n  local encounters = utils.getObjectsInZone(\r\n    {11.50, 2.00, -4.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isInvisibleToken\r\n  )\r\n\r\n  for _, obj in ipairs(encounters) do\r\n    if obj.getGUID() ~= self.getGUID() then\r\n      obj.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 5 device": {
@@ -1269,7 +1347,7 @@ map = [[
       },
       "scriptIndex": 1
     } ],
-    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  local marineColor = utils.getColor(marine.getName())\r\n\r\n  if not instances.inv.call(\"haveItem\", {item=\"bluekey\", color=marineColor}) then\r\n    broadcastToAll(\"Blue key should fit into device slot, but you don't have one\",\r\n      \"Teal\")\r\n    return\r\n  end\r\n\r\n  broadcastToAll(marine.getName() .. \" inserts blue key into device\", \"Teal\")\r\n  instances.inv.call(\"loseItem\", {\r\n    item=\"bluekey\",\r\n    marineColor=utils.getColor(marine.getName()),\r\n    actorColor=\"Teal\"\r\n  })\r\n  instances.progress.call(\"mark\", \"blue card inserted\")\r\n  printToAll(\"Something opens up with hissing sound, but blue door locks up\", \"Teal\")\r\n\r\n  local blueDoor = utils.getObjectAt({29.00, 1.23, 1.00}, utils.isDoor)\r\n  if blueDoor and string.find(blueDoor.getName(), \"Open\") then\r\n    blueDoor.setState(1)\r\n  end\r\n\r\n  local blastDoor = utils.getObjectAt({30.50, 1.24, -1.50}, utils.isObstacleToken)\r\n  if blastDoor then\r\n    blastDoor.destruct()\r\n  end\r\n\r\n  local yellowDoor = utils.getObjectAt({27.00, 1.23, 3.00}, utils.isDoor)\r\n  if yellowDoor and string.find(yellowDoor.getName(), \"Open\") then\r\n    instances.map.call(\"revealArea\",\r\n      {area=\"Area 3 zombies\", color=\"Teal\"})\r\n  else\r\n    if instances.map.call(\"isRevealed\", \"Area 3\") then\r\n      yellowDoor.setGMNotes(\"Reveal:Area 3 zombies\")\r\n    else\r\n      -- zombie spawn will be triggered automatically with Area 3 reveal\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  local marineColor = utils.getColor(marine.getName())\r\n\r\n  if not instances.inv.call(\"haveItem\", {item=\"bluekey\", color=marineColor}) then\r\n    broadcastToAll(\"Blue key should fit into device slot, but you don't have one\",\r\n      \"Teal\")\r\n    return\r\n  end\r\n\r\n  broadcastToAll(marine.getName() .. \" inserts blue key into device\", \"Teal\")\r\n  instances.inv.call(\"loseItem\", {\r\n    item=\"bluekey\",\r\n    marineColor=utils.getColor(marine.getName()),\r\n    actorColor=\"Teal\"\r\n  })\r\n  instances.progress.call(\"mark\", \"blue card inserted\")\r\n  printToAll(\"Something opens up with hissing sound, but blue door locks up\", \"Teal\")\r\n\r\n  local blueDoor = utils.getObjectAt({29.00, 1.23, 1.00}, utils.isDoor)\r\n  if blueDoor and string.find(blueDoor.getName(), \"Open\") then\r\n    -- shut the door and crush unlucky monsters\r\n    blueDoor.call(\"closeDoor\", {textColor=\"Teal\", scoreColor=marineColor, force=true})\r\n  end\r\n\r\n  local blastDoor = utils.getObjectAt({30.50, 1.24, -1.50}, utils.isObstacleToken)\r\n  if blastDoor then\r\n    blastDoor.destruct()\r\n  end\r\n\r\n  local yellowDoor = utils.getObjectAt({27.00, 1.23, 3.00}, utils.isDoor)\r\n  if yellowDoor and string.find(yellowDoor.getName(), \"Open\") then\r\n    instances.map.call(\"revealArea\",\r\n      {area=\"Area 3 zombies\", color=\"Teal\"})\r\n  else\r\n    if instances.map.call(\"isRevealed\", \"Area 3\") then\r\n      yellowDoor.setGMNotes(\"Reveal:Area 3 zombies\")\r\n    else\r\n      -- zombie spawn will be triggered automatically with Area 3 reveal\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Start area": {
