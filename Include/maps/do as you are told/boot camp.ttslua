@@ -998,7 +998,8 @@ map = [[
         "x": -2.6049921871163E-05,
         "y": 270.030517578125,
         "z": 1.2553891792777E-05
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Duct",
       "position": {
@@ -1012,6 +1013,7 @@ map = [[
         "z": -8.20737625417678E-07
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" accesses the coms console...\", \"Teal\")\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Start area": {
