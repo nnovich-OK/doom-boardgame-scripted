@@ -213,7 +213,6 @@ local clearInvMode
 local setInvMode
 local setItemCount
 local adjustItemCount
-local haveItem
 local fullWithItem
 local pickToken
 local activateMarineOrder
@@ -362,15 +361,7 @@ function onInventoryItemClick(player, value, id)
     gainItem({marineColor=itemColor, item=item, actorColor=player.color})
 
   elseif invMode[player.color].action == "loseItem" then
-    if obtainableItems[item] then
-      if adjustItemCount(itemColor, item, -1) == -1 then
-        printToAll(utils.getActorLabel(itemColor) .. " lost " .. item, player.color)
-      else
-        broadcastToColor("Can't lose what is already missing", player.color, player.color)
-      end
-    else
-      broadcastToColor("Can't lose " .. item, player.color, player.color)
-    end
+    loseItem({marineColor=itemColor, item=item, actorColor=player.color})
 
   elseif string.find(invMode[player.color].action or "", "giveTo") then
     transferItem(player.color, itemColor, utils.getColor(invMode[player.color].action), item)
@@ -387,15 +378,15 @@ function prepareGunAttack(player_color, item)
     or player_color
 
   local marine = utils.getMarine(marineColor)
-  if haveItem(marineColor, "berserk") and item ~= "fist" then
+  if haveItem({color=marineColor, item="berserk"}) and item ~= "fist" then
     broadcastToColor(marine.getName() .. " can't use weapons while berserk, yet proceeding as usual",
       player_color,
       player_color)
-  elseif not haveItem(marineColor, item) then
+  elseif not haveItem({color=marineColor, item=item}) then
     broadcastToColor(marine.getName() .. " doesn't possess this weapon, yet proceeding as usual",
       player_color,
       player_color)
-  elseif gunStats[item].ammo ~= "" and not haveItem(marineColor, gunStats[item].ammo) then
+  elseif gunStats[item].ammo ~= "" and not haveItem({color=marineColor, item=gunStats[item].ammo}) then
     broadcastToColor(marine.getName() .. " doesn't have ammo, yet proceeding as usual",
       player_color,
       player_color)
@@ -599,7 +590,7 @@ function transferItem(player_color, givingColor, takingColor, item)
     return
   end
 
-  if not haveItem(givingColor, item) then
+  if not haveItem({color=givingColor, item=item}) then
     broadcastToColor("Can't transfer " .. item .. " since none is owned",
       player_color,
       player_color)
@@ -623,8 +614,8 @@ function getItemCount(req)
   return tonumber(Global.UI.getAttribute(req.item.."InvText"..req.color, "text"), 10)
 end
 
-function haveItem(player_color, item)
-  return getItemCount({color=player_color, item=item}) > 0
+function haveItem(req)
+  return getItemCount({color=req.color, item=req.item}) > 0
 end
 
 function fullWithItem(player_color, item)
@@ -650,6 +641,24 @@ function gainItem(req)
     end
   else
     broadcastToColor("Can't gain " .. req.item, req.actorColor, req.actorColor)
+  end
+end
+
+function loseItem(req)
+  assert(req and req.item and req.marineColor, "gainItem incorrect request")
+  req.actorColor = req.actorColor or req.marineColor
+  req.count = req.count or 1
+
+  if obtainableItems[req.item] then
+    if adjustItemCount(req.marineColor, req.item, -1) == -1 then
+      local countStr = req.count == 1 and "" or (" x"..req.count)
+      printToAll(utils.getActorLabel(req.marineColor) .. " lost " .. req.item .. countStr,
+        req.actorColor)
+    else
+      broadcastToColor("Can't lose what is already missing", req.actorColor, req.actorColor)
+    end
+  else
+    broadcastToColor("Can't lose " .. req.item, req.actorColor, req.actorColor)
   end
 end
 

@@ -106,10 +106,13 @@ end
 function storeDeckOfTokens(deck)
   local deckPos = deck.getPosition()
   local deckRot = deck.getRotation()
-  for _, obj in ipairs(deck.getObjects()) do
+  for i, obj in ipairs(deck.getObjects()) do
+    -- shift height for each object so they are spawned separately
+    -- they'll fall on top of each other after spawning and finally stack
+    -- but this way they can be adjusted separately while in mid-air
     local description = {
       name = obj.name,
-      position = deckPos,
+      position = deckPos + Vector(0, (i-1)*2, 0),
       rotation = deckRot,
     }
 

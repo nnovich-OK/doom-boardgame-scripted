@@ -320,3 +320,7 @@ function revealArea(req)
 
   revealedAreas[req.area] = true
 end
+
+function isRevealed(name)
+  return revealedAreas[name] == true
+end
