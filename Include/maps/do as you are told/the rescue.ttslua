@@ -762,8 +762,10 @@ map = [[
         "x": -9.4446104412782E-06,
         "y": 270.030517578125,
         "z": -6.57496420899406E-05
-      }
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  local marineColor = utils.getColor(marine.getName())\r\n\r\n  broadcastToAll(\"Rescue sequence activated. Shuttle lifts off.\", \"Teal\")\r\n\r\n  local door = utils.getObjectAt({14.00, 1.23, -10.00}, utils.isDoor)\r\n  local doorGuid = \"\"\r\n  if door then\r\n    if string.find(door.getName(), \"Open\") then\r\n      door = door.call(\"closeDoor\", {textColor=\"Teal\", scoreColor=marineColor, force=true})\r\n    end\r\n    door.setGMNotes(\"Reveal:Area 5\")\r\n    doorGuid = door.getGUID()\r\n  end\r\n\r\n  local objects = utils.getObjectsInZone(\r\n  {8.50, 2.00, -10.00},\r\n  {0.00, 0.00, 0.00},\r\n  {11.00, 4.00, 6.00},\r\n  function(o)\r\n    return utils.isCharacter(o)\r\n      or utils.isMapTile(o)\r\n      or utils.isDoor(o)\r\n      or utils.isToken(o)\r\n  end\r\n  )\r\n\r\n  for _, obj in ipairs(objects) do\r\n    if utils.isMarine(obj) then\r\n      obj.call(\"defeatClick\")\r\n\r\n    elseif obj.getGUID() ~= doorGuid then\r\n      obj.destruct()\r\n\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 5": {
@@ -916,8 +918,10 @@ map = [[
         "x": 0.00341865653172135,
         "y": 89.9873733520508,
         "z": 0.413478463888168
-      }
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"Sergeant is still alive...\", \"Teal\")\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Start area": {
