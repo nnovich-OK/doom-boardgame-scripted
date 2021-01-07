@@ -363,7 +363,8 @@ map = [[
         "x": 2.4866019430192E-06,
         "y": 6.03202970523853E-05,
         "z": 6.27804001851473E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Health",
       "position": {
@@ -401,6 +402,7 @@ map = [[
         "z": -4.97941073263064E-06
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  instances.inv.call(\"gainItem\", {\r\n    marineColor=utils.getColor(marine.getName()),\r\n    actorColor=\"Teal\",\r\n    item=\"redkey\"\r\n  })\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 3": {
@@ -810,7 +812,140 @@ map = [[
         "y": 270.007873535156,
         "z": -7.2789924161043E-05
       }
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 17.5000019073486,
+        "y": 1.26176869869232,
+        "z": 10.5000581741333
+      },
+      "rotation": {
+        "x": 0.00147584150545299,
+        "y": 359.985687255859,
+        "z": 0.0140209225937724
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\nend\r\n\r\nfunction onMarineDrop(marine)\r\n  local faceIndex = math.random(1,6) -- emulate green die throw\r\n  local keyBroken = false\r\n  if faceIndex == 1 then\r\n    -- range is 1\r\n    printToColor(\"Green die emulated: range 1\", \"White\", \"Teal\")\r\n    broadcastToAll(\"You're in luck! The key appears to be in working order.\", \"Teal\")\r\n  elseif faceIndex >= 5 then\r\n    -- range is 3\r\n    printToColor(\"Green die emulated: range 3\", \"White\", \"Teal\")\r\n    broadcastToAll(\"The security key appears to be broken\", \"Teal\")\r\n    keyBroken = true\r\n  else\r\n    -- range is 2\r\n    printToColor(\"Green die emulated: range 2\", \"White\", \"Teal\")\r\n    broadcastToAll(\"*chittering noise*\", \"Teal\")\r\n    keyBroken = true\r\n    instances.map.call(\"revealArea\", {area=\"Area 4 ambush\", color=\"Teal\"})\r\n  end\r\n\r\n  if keyBroken then\r\n    local key = utils.getObjectAt({17.50, 1.26, 10.50}, function(obj)\r\n      return string.find(obj.getName(), \"Blue Key\")\r\n    end)\r\n    if key then\r\n      key.destruct()\r\n    end\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
+    "teleporters": []
+  },
+  "Area 4 ambush": {
+    "ammoTokens": [],
+    "colorMonsters": [ {
+      "name": "Blue Trite",
+      "position": {
+        "x": 19.5,
+        "y": 1.00468969345093,
+        "z": 14.5
+      },
+      "rotation": {
+        "x": -3.95363599636767E-07,
+        "y": 269.991943359375,
+        "z": 2.2363367691014E-07
+      }
+    }, {
+      "name": "Green Trite",
+      "position": {
+        "x": 19.5,
+        "y": 1.00468969345093,
+        "z": 15.5
+      },
+      "rotation": {
+        "x": -1.6383437184686E-07,
+        "y": 269.979644775391,
+        "z": -1.42622425869376E-07
+      }
+    }, {
+      "name": "Blue Trite",
+      "position": {
+        "x": 18.5,
+        "y": 1.00468969345093,
+        "z": 14.5
+      },
+      "rotation": {
+        "x": 3.63722136853539E-08,
+        "y": 269.991943359375,
+        "z": -8.79386519159198E-08
+      }
+    }, {
+      "name": "Green Trite",
+      "position": {
+        "x": 18.5,
+        "y": 1.00468969345093,
+        "z": 15.5
+      },
+      "rotation": {
+        "x": -1.03674516083174E-07,
+        "y": 269.979644775391,
+        "z": 2.50559253345273E-07
+      }
+    }, {
+      "name": "Red Trite",
+      "position": {
+        "x": 19.5,
+        "y": 1.00468969345093,
+        "z": 16.5
+      },
+      "rotation": {
+        "x": -2.66522857117479E-08,
+        "y": 269.991455078125,
+        "z": -2.64466137878117E-07
+      }
+    }, {
+      "name": "Blue Trite",
+      "position": {
+        "x": 17.5,
+        "y": 1.00468969345093,
+        "z": 14.5
+      },
+      "rotation": {
+        "x": -2.12041470604163E-07,
+        "y": 269.991943359375,
+        "z": -3.8453517703374E-08
+      }
+    }, {
+      "name": "Green Trite",
+      "position": {
+        "x": 17.5,
+        "y": 1.00468969345093,
+        "z": 15.5
+      },
+      "rotation": {
+        "x": 3.96631776311551E-07,
+        "y": 269.979644775391,
+        "z": -6.57286918226418E-08
+      }
+    }, {
+      "name": "Red Trite",
+      "position": {
+        "x": 18.5,
+        "y": 1.00468969345093,
+        "z": 16.5
+      },
+      "rotation": {
+        "x": 7.14489303277333E-08,
+        "y": 269.991455078125,
+        "z": 2.64589061771403E-08
+      }
+    }, {
+      "name": "Red Trite",
+      "position": {
+        "x": 17.5,
+        "y": 1.00468969345093,
+        "z": 16.5
+      },
+      "rotation": {
+        "x": 4.99349425808759E-07,
+        "y": 269.991455078125,
+        "z": -1.70527087561823E-07
+      }
+    } ],
+    "doors": [],
+    "greyMonsters": [],
+    "mapTiles": [],
+    "marines": [],
+    "otherTokens": [],
+    "scripts": [],
     "teleporters": []
   },
   "Area 5": {
@@ -929,7 +1064,8 @@ map = [[
         "x": 0.000153833854710683,
         "y": 179.990020751953,
         "z": 0.000350509973941371
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Blocking Obstacle 2",
       "position": {
@@ -943,6 +1079,7 @@ map = [[
         "z": -0.000152821579831652
       }
     } ],
+    "scripts": [ "\r\nlocal fragLocations = { {11.50, 0.97, 2.50}, {11.50, 0.97, -2.50} }\r\nlocal fragCount = 0\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" manages to speak with the scientist...\", \"Teal\")\r\n\r\n  if instances.map.call(\"isRevealed\", \"Area 7\") then\r\n    instances.map.call(\"revealArea\", {area=\"Area 7 vault\", color=\"Teal\"})\r\n  else\r\n    instances.progress.call(\"mark\", \"combination\")\r\n  end\r\n\r\n  cleanup()\r\nend\r\n\r\nfunction onPlayerTurnEnd(colorEnd, colorNext)\r\n  if colorEnd ~= \"White\" then\r\n    return\r\n  end\r\n\r\n  fragCount = fragCount + 1\r\n  if fragCount >= 3 then\r\n    broadcastToAll(\"The scientist expires with a soft sigh.\", \"Teal\")\r\n    cleanup()\r\n  else\r\n    local elem = {name=\"Frag Location\", position = fragLocations[fragCount], rotation = {0,0,0}}\r\n    instances.creator.call(\"spawnElement\", {elem=elem, lock=true})\r\n  end\r\nend\r\n\r\nfunction cleanup()\r\n  frag1 = utils.getObjectAt(fragLocations[1], utils.isFragToken)\r\n  if frag1 then\r\n    frag1.destruct()\r\n  end\r\n\r\n  frag2 = utils.getObjectAt(fragLocations[2], utils.isFragToken)\r\n  if frag2 then\r\n    frag2.destruct()\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 6": {
@@ -1362,7 +1499,58 @@ map = [[
         "y": 179.999008178711,
         "z": -1.55494137743517E-06
       }
+    }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 7.5,
+        "y": 0.960000038146973,
+        "z": -11.5
+      },
+      "rotation": {
+        "x": 3.95160071775535E-07,
+        "y": 359.985931396484,
+        "z": -3.97712000221873E-07
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\n\r\n  if self.getDescription() == \"HALT\" then\r\n    return\r\n  end\r\n\r\n  if instances.progress.call(\"check\", \"combination\") then\r\n    Wait.time(revealVault, 0.5)\r\n  else\r\n    Wait.time(function() self.destruct() end, 0.5)\r\n  end\r\nend\r\n\r\nfunction revealVault()\r\n  instances.map.call(\"revealArea\", {area=\"Area 7 vault\", color=\"Teal\"})\r\n  self.destruct()\r\nend\r\n" ],
+    "teleporters": []
+  },
+  "Area 7 vault": {
+    "ammoTokens": [],
+    "colorMonsters": [],
+    "doors": [],
+    "greyMonsters": [],
+    "mapTiles": [],
+    "marines": [],
+    "otherTokens": [ {
+      "name": "Encounter",
+      "position": {
+        "x": 6.5,
+        "y": 1.24860513210297,
+        "z": -8.5
+      },
+      "rotation": {
+        "x": -5.07194181409432E-06,
+        "y": 270.014434814453,
+        "z": 4.55483677797019E-06
+      },
+      "scriptIndex": 1
+    }, {
+      "name": "Encounter",
+      "position": {
+        "x": 6.5,
+        "y": 1.24860501289368,
+        "z": -9.5
+      },
+      "rotation": {
+        "x": -5.92823880651849E-06,
+        "y": 270.014434814453,
+        "z": 5.63176172363455E-06
+      },
+      "scriptIndex": 1
+    } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" opens the vault...\", \"Teal\")\r\n  marineColor = utils.getColor(marine.getName())\r\n  instances.inv.call(\"gainItem\", {item = \"bfg\", marineColor = marineColor, actorColor = \"Teal\"})\r\n  instances.inv.call(\"gainItem\", {item = \"cell\", marineColor = marineColor, count = 2, actorColor = \"Teal\"})\r\n\r\n  encounters = utils.getObjectsInZone(\r\n    {6.50, 2.00, -9.00},\r\n    {0.00, 0.00, 0.00},\r\n    {1.00, 4.00, 2.00},\r\n    utils.isEncounterToken\r\n  )\r\n\r\n  for _, enc in ipairs(encounters) do\r\n    if enc.getGUID() ~= self.getGUID() then\r\n      enc.destruct()\r\n    end\r\n  end\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 8": {

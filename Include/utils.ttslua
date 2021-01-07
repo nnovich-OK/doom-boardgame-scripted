@@ -102,6 +102,10 @@ function isCompassToken(obj)
   return obj.tag == "Card" and string.find(obj.getName(), "Compass") ~= nil
 end
 
+function isFragToken(obj)
+  return obj.tag == "Card" and string.find(obj.getName(), "Frag Location") ~= nil
+end
+
 function isEncounterToken(obj)
   return (obj.tag == "Card" or obj.tag=="Generic") and string.find(obj.getName(), "Encounter") ~= nil
 end
