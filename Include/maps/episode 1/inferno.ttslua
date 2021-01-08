@@ -615,7 +615,8 @@ map = [[
         "x": 1.63595304911723E-05,
         "y": 270.030517578125,
         "z": 2.2800886654295E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Health",
       "position": {
@@ -677,6 +678,7 @@ map = [[
         "z": -1.47760556501453E-06
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"Marines find Dr. Barnes...\", \"Teal\")\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 3": {
@@ -963,7 +965,8 @@ map = [[
         "x": 359.810485839844,
         "y": 179.995071411133,
         "z": -0.000156874710228294
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Health",
       "position": {
@@ -1001,6 +1004,7 @@ map = [[
         "z": -4.67964491690509E-06
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(\"Marines find Dr. Peregrine\", \"Teal\")\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 5": {
