@@ -215,7 +215,7 @@ function spawnElement(req)
   local monsterType = utils.getMonsterType(req.elem.name)
 
   if string.find(req.elem.name, "Grey") and monsterType then
-    local maxCount = 0
+    local maxCount = -1
     for _, color in ipairs(constants.allMarineColors) do
       if Player[color].seated or dbg.cfg.pretendAllMarinesSeated then
         local currentCount = getBagContentCount(allBags[color.." "..monsterType])
@@ -226,7 +226,7 @@ function spawnElement(req)
       end
     end
 
-    if maxCount == 0 then
+    if maxCount == 0 and not dbg.cfg.unlimitedMonsters then
       broadcastToAll("No figures left for ".. req.elem.name, Color.Oragne)
       return
     end
