@@ -279,7 +279,8 @@ map = [[
         "x": -2.27205282499199E-06,
         "y": 179.994781494141,
         "z": 1.11731951619731E-05
-      }
+      },
+      "scriptIndex": 2
     }, {
       "name": "Blocking Obstacle 1",
       "position": {
@@ -315,8 +316,10 @@ map = [[
         "x": -3.08533299175906E-06,
         "y": 179.995330810547,
         "z": -4.54275686934125E-06
-      }
+      },
+      "scriptIndex": 1
     } ],
+    "scripts": [ "\r\nlocal fragLocations = { {3.11, 0.97, -9.12}, {3.11, 0.97, -10.12} }\r\nlocal fragCount = 0\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" reaches wounded woman...\", \"Teal\")\r\n  instances.progress.call(\"mark\", \"pass1\")\r\n  cleanup()\r\nend\r\n\r\nfunction onPlayerTurnEnd(colorEnd, colorNext)\r\n  if colorEnd ~= \"White\" then\r\n    return\r\n  end\r\n\r\n  fragCount = fragCount + 1\r\n  if fragCount >= 3 then\r\n    broadcastToAll(\"Woman succumbs to her wounds.\", \"Teal\")\r\n    cleanup()\r\n  else\r\n    local elem = {name=\"Frag Location\", position = fragLocations[fragCount], rotation = {0,0,0}}\r\n    instances.creator.call(\"spawnElement\", {elem=elem, lock=true})\r\n  end\r\nend\r\n\r\nfunction cleanup()\r\n  local frag1 = utils.getObjectAt(fragLocations[1], utils.isFragToken)\r\n  if frag1 then\r\n    frag1.destruct()\r\n  end\r\n\r\n  local frag2 = utils.getObjectAt(fragLocations[2], utils.isFragToken)\r\n  if frag2 then\r\n    frag2.destruct()\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n", "\r\nlocal fragLocations = { {14.83, 0.97, -6.01}, {14.83, 0.97, -7.01} }\r\nlocal fragCount = 0\r\n\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" reaches dying man...\", \"Teal\")\r\n  instances.progress.call(\"mark\", \"pass2\")\r\n  cleanup()\r\nend\r\n\r\nfunction onPlayerTurnEnd(colorEnd, colorNext)\r\n  if colorEnd ~= \"White\" then\r\n    return\r\n  end\r\n\r\n  fragCount = fragCount + 1\r\n  if fragCount >= 3 then\r\n    broadcastToAll(\"Dying man releases his final, terrible scream.\", \"Teal\")\r\n    cleanup()\r\n  else\r\n    local elem = {name=\"Frag Location\", position = fragLocations[fragCount], rotation = {0,0,0}}\r\n    instances.creator.call(\"spawnElement\", {elem=elem, lock=true})\r\n  end\r\nend\r\n\r\nfunction cleanup()\r\n  local frag1 = utils.getObjectAt(fragLocations[1], utils.isFragToken)\r\n  if frag1 then\r\n    frag1.destruct()\r\n  end\r\n\r\n  local frag2 = utils.getObjectAt(fragLocations[2], utils.isFragToken)\r\n  if frag2 then\r\n    frag2.destruct()\r\n  end\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 2": {
@@ -761,6 +764,19 @@ map = [[
     } ],
     "marines": [],
     "otherTokens": [ {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 3.5,
+        "y": 0.960000038146973,
+        "z": 2.5
+      },
+      "rotation": {
+        "x": -3.17114256631612E-07,
+        "y": 359.985961914063,
+        "z": 3.33839381028156E-07
+      },
+      "scriptIndex": 1
+    }, {
       "name": "Chain Gun",
       "position": {
         "x": 0.499997287988663,
@@ -773,33 +789,8 @@ map = [[
         "z": 3.96549268089075E-07
       }
     } ],
-    "teleporters": [ {
-      "name": "Blue Teleporter",
-      "position": {
-        "x": 1.50000011920929,
-        "y": 1.24860763549805,
-        "z": -4.5
-      },
-      "reveal": "Area 5",
-      "rotation": {
-        "x": 1.50728783410159E-06,
-        "y": 270.008697509766,
-        "z": 0.000202693074243143
-      }
-    }, {
-      "name": "Red Teleporter",
-      "position": {
-        "x": 0.499999761581421,
-        "y": 1.24860751628876,
-        "z": -4.5
-      },
-      "reveal": "Area 6",
-      "rotation": {
-        "x": 4.27059421781451E-06,
-        "y": 270.011657714844,
-        "z": 0.000205342643312179
-      }
-    } ]
+    "scripts": [ "\nfunction onLoad()\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\n\n  if self.getDescription() == \"HALT\" then\n    return\n  end\n\n  local elem = {\n    name = \"Red Teleporter\",\n    position = {0.50, 1.25, -4.50},\n    rotation = {0.00, 270.00, 0.00},\n    reveal = \"Area 6\"\n  }\n\n  if instances.progress.call(\"check\", \"pass1\")\n    and instances.progress.call(\"check\", \"pass2\")\n  then\n    instances.progress.call(\"mark\", \"short path\")\n    elem.name = \"Blue Teleporter\"\n    elem.position = {1.50, 1.25, -4.50}\n    elem.reveal = \"Area 5\"\n  end\n\n  instances.creator.call(\"spawnElement\", {elem=elem, lock=true})\n\n  Wait.time(function() self.destruct() end, 0.5)\nend\n" ],
+    "teleporters": []
   },
   "Area 4": {
     "ammoTokens": [ {
@@ -1778,19 +1769,6 @@ map = [[
     "doors": [ {
       "name": "Door3",
       "position": {
-        "x": 16.0000019073486,
-        "y": 1.23500037193298,
-        "z": 14.9999933242798
-      },
-      "reveal": "Area 6",
-      "rotation": {
-        "x": -8.44868009153288E-06,
-        "y": 269.999786376953,
-        "z": -0.000655303534585983
-      }
-    }, {
-      "name": "Door3",
-      "position": {
         "x": 19.9999980926514,
         "y": 1.23500061035156,
         "z": 10.9999980926514
@@ -1890,6 +1868,19 @@ map = [[
         "z": 1.29214424759994E-06
       }
     }, {
+      "name": "Invisible Encounter",
+      "position": {
+        "x": 18.5,
+        "y": 0.960000038146973,
+        "z": 13.5
+      },
+      "rotation": {
+        "x": 3.39795818149469E-08,
+        "y": 0.00995479058474302,
+        "z": 3.21764389354939E-07
+      },
+      "scriptIndex": 1
+    }, {
       "name": "Duct",
       "position": {
         "x": 16.5,
@@ -1926,6 +1917,7 @@ map = [[
         "z": 4.30399222750566E-06
       }
     } ],
+    "scripts": [ "\r\nfunction onLoad()\r\n  self.setInvisibleTo({\"Blue\", \"Green\", \"Red\", \"Grey\"})\r\n\r\n  if self.getDescription() == \"HALT\" then\r\n    return\r\n  end\r\n\r\n  if instances.progress.call(\"check\", \"short path\") then\r\n    local elem = {\r\n      name = \"Blue Door\",\r\n      position = {16.00, 1.24, 15.00},\r\n      rotation = {0.00, 270.00, 0.00},\r\n      reveal = \"Area 6\"\r\n    }\r\n\r\n    instances.creator.call(\"spawnElement\", {elem=elem, lock=true})\r\n  end\r\n\r\n  Wait.time(function() self.destruct() end, 0.5)\r\nend\r\n" ],
     "teleporters": [ {
       "name": "Yellow Teleporter",
       "position": {
