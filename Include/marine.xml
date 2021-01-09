@@ -3,7 +3,7 @@
    <Text fontSize="80" fontStyle="Bold" color="White" outline="Black"/>
 </Defaults>
 
-<Panel id="panel" position="0 0 -240" rotation="0 90 270" scale="0.2 0.2">
+<Panel id="panel" position="0 0 -240" rotation="0 90 270" scale="0.14 0.14">
    <Panel color="Black" height="100" width="600">
       <ProgressBar id="progressBar" height="90" width="590" showPercentageText="false" color="Blac" percentage="100" fillImageColor="#710000">
       <!-- Defeat marine at 0 hp -->
