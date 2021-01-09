@@ -303,7 +303,8 @@ map = [[
         "x": -1.15333943995211E-06,
         "y": 89.931282043457,
         "z": 1.89529669114563E-06
-      }
+      },
+      "scriptIndex": 1
     }, {
       "name": "Blocking Obstacle 2",
       "position": {
@@ -329,6 +330,7 @@ map = [[
         "z": 3.93790514863213E-06
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  instances.inv.call(\"gainItem\", {\r\n    item = \"yellowkey\",\r\n    marineColor = utils.getColor(marine.getName()),\r\n    actorColor = \"Teal\"\r\n  })\r\n\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   },
   "Area 2": {
@@ -2331,6 +2333,19 @@ map = [[
         "z": -4.4081053829359E-07
       }
     }, {
+      "name": "Body Encounter",
+      "position": {
+        "x": 10.5000028610229,
+        "y": 1.2350001335144,
+        "z": -15.5
+      },
+      "rotation": {
+        "x": -4.98714280183776E-06,
+        "y": 179.991333007813,
+        "z": -7.32800003788725E-07
+      },
+      "scriptIndex": 1
+    }, {
       "name": "Armor",
       "position": {
         "x": 9.50000476837158,
@@ -2379,6 +2394,7 @@ map = [[
         "z": -4.62658863398246E-06
       }
     } ],
+    "scripts": [ "\r\nfunction onMarineDrop(marine)\r\n  broadcastToAll(marine.getName() .. \" finds a dead marine...\", \"Teal\")\r\n  self.destruct()\r\nend\r\n" ],
     "teleporters": []
   }
 }
