@@ -10,6 +10,7 @@ local trackedMarine = nil
 
 -- Local methods declaration
 local moveMarineFigurine
+local findBestRotation
 
 
 function onLoad(save_state)
@@ -89,6 +90,7 @@ end
 
 function onMarineDrop(obj)
   trackedMarine = obj
+  self.UI.setAttribute("teleport", "rotation", findBestRotation(utils.getColor(obj.getName())))
   self.UI.setAttribute("teleport", "active", "true")
   self.UI.setAttribute("teleport", "textColor", "White")
 end
@@ -102,6 +104,32 @@ end
 
 function onMarineArrived(marine)
   trackedMarine = marine
+  self.UI.setAttribute("teleport", "rotation", findBestRotation(utils.getColor(marine.getName())))
   self.UI.setAttribute("teleport", "active", "true")
   self.UI.setAttribute("teleport", "textColor", "White")
+end
+
+function findBestRotation(marineColor)
+  -- rotation around Y vs quadrant index: 0 - 0, 90 - 1, 180 - 2, 270 - 3
+  local selfQuadrant = math.floor((self.getRotation().y + 45) / 90)
+  local playerFacingQuadrant = 0 -- OK for red
+  if marineColor == "Green" then
+    playerFacingQuadrant = 3
+  elseif marineColor == "Blue" then
+    playerFacingQuadrant = 2
+  end
+
+  local delta = playerFacingQuadrant - selfQuadrant
+  if delta < 0 then
+    delta = delta + 4
+  end
+
+  local rotations = {
+    "270 0 0",
+    "0 90 270",
+    "90 180 0",
+    "0 270 90",
+  }
+
+  return rotations[delta + 1]
 end
