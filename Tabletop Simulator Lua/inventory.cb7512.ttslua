@@ -354,8 +354,13 @@ function onInventoryItemClick(player, value, id)
   if not invMode[player.color].action and gunStats[item] then
     prepareGunAttack(player.color, item)
 
-  elseif not invMode[player.color].action and orderItems[item] then
-    activateMarineOrder(player.color, item)
+  elseif orderItems[item] then
+    if (not invMode[player.color].action)
+      or (invMode[player.color].action == "gainItem" and marineOrder[itemColor] ~= item)
+      or (invMode[player.color].action == "loseItem" and marineOrder[itemColor] == item)
+    then
+      activateMarineOrder(player.color, item)
+    end
 
   elseif invMode[player.color].action == "gainItem" then
     gainItem({marineColor=itemColor, item=item, actorColor=player.color})
