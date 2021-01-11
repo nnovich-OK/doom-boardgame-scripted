@@ -23,6 +23,7 @@ local lingeringTrails = {}
 local addPathToTrails
 local positionToPathPoint
 local cutPath
+local trackObject
 
 function onLoad()
   --Wait.time(checkConfig, 0.2, -1)
@@ -91,21 +92,9 @@ function onObjectPickUp(player_color, object)
     return
   end
 
-  if tracked[object.getGUID()] then
-    tracked[object.getGUID()].inMotion = true
-    tracked[object.getGUID()].path = {pathPoint}
-  else
-    tracked[object.getGUID()] = {
-      object = object,
-      path = {pathPoint},
-      speed = utils.isMarine(object) and 4 or utils.getMonsterStats(object.getName()).speed,
-      travelled = 0,
-      scuttle = (utils.getMonsterType(object.getName()) == "Trite"),
-      teleport = utils.isMarine(object),
-      large = large,
-      inMotion = true,
-    }
-  end
+  trackObject(object)
+  tracked[object.getGUID()].inMotion = true
+  tracked[object.getGUID()].path = {pathPoint}
 end
 
 function onObjectDrop(player_color, dropped_object)
@@ -186,4 +175,27 @@ function cutPath(path, condition)
   else
     return false
   end
+end
+
+function onMoveSpent(req)
+  assert(req.obj and req.move, "onMoveSpent: incorrect request")
+  trackObject(req.obj)
+  tracked[req.obj.getGUID()].travelled = tracked[req.obj.getGUID()].travelled + req.move
+end
+
+function trackObject(object)
+  if tracked[object.getGUID()] then
+    return
+  end
+
+  tracked[object.getGUID()] = {
+    object = object,
+    path = {},
+    speed = utils.isMarine(object) and 4 or utils.getMonsterStats(object.getName()).speed,
+    travelled = 0,
+    scuttle = (utils.getMonsterType(object.getName()) == "Trite"),
+    teleport = utils.isMarine(object),
+    large = large,
+    inMotion = false,
+  }
 end

@@ -73,6 +73,10 @@ function openDoor(color)
     })
     self.setGMNotes("")
   end
+
+  if utils.isMarineColor(color) then
+    instances.path.call("onMoveSpent", {obj=utils.getMarine(color), move=2})
+  end
   return self.setState(2)
 end
 
@@ -84,6 +88,9 @@ function closeDoor(req)
   local monsters, score = getSquashedMonsters()
 
   if #monsters == 0 then
+    if utils.isMarineColor(params.textColor) then
+      instances.path.call("onMoveSpent", {obj=utils.getMarine(params.color), move=2})
+    end
     return self.setState(1)
 
   elseif not req.force then
@@ -103,8 +110,10 @@ function closeDoor(req)
       broadcastToAll("Door squashed monsters for " .. score .. " scores", req.textColor)
       instances.score.call("changeScore", {color=req.scoreColor, delta=score})
     end
+    if utils.isMarineColor(params.textColor) then
+      instances.path.call("onMoveSpent", {obj=utils.getMarine(params.color), move=2})
+    end
     return self.setState(1)
-
   end
 end
 

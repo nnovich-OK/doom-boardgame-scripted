@@ -608,6 +608,7 @@ function transferItem(player_color, givingColor, takingColor, item)
     adjustItemCount(takingColor, item, 1)
     broadcastToAll(utils.getActorLabel(givingColor) .. " transfered " .. item ..
       " to " .. utils.getActorLabel(takingColor), player_color)
+    instances.path.call("onMoveSpent", {obj=utils.getMarine(givingColor), move=1})
   end
 end
 

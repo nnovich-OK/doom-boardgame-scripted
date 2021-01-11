@@ -83,6 +83,7 @@ function moveMarineFigurine(player_color)
       trackedMarine.setPositionSmooth(obj.getPosition())
       self.UI.setAttribute("teleport", "active", "false")
       obj.call("onMarineArrived", trackedMarine)
+      instances.path.call("onMoveSpent", {obj=trackedMarine, move=1})
       trackedMarine = nil
     end
   end
