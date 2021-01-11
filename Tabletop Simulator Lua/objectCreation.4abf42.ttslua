@@ -180,8 +180,7 @@ function onObjectDrop(player_color, obj)
   -- also help position 2x2 monsters and doors on the grid
   local alignWithGrid = false
   if utils.isMonster(obj) then
-    local isLarge = utils.isLarge(obj)
-    alignWithGrid = isLarge.x and isLarge.z
+    alignWithGrid = utils.isLarge(obj)
   elseif utils.isDoor(obj) then
     alignWithGrid = true
   end

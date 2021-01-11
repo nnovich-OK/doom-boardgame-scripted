@@ -1,0 +1,189 @@
+require("utils")
+require("constants")
+
+local pathTrackingEnabled = true
+local pathTrackingFrame = 0
+local pathTrackingRate = 0
+local trailHeight = 1.35
+local pathPointApprox = 0.38
+
+local trailClearTimer = nil
+
+local trailColors = {
+  "Green",
+  "Yellow",
+  "Red"
+}
+setmetatable(trailColors, {__index = "Grey"})
+
+local tracked = {}
+local lingeringTrails = {}
+
+-- Local methods declaration
+local addPathToTrails
+local positionToPathPoint
+local cutPath
+
+function onLoad()
+  --Wait.time(checkConfig, 0.2, -1)
+end
+
+function onUpdate()
+  if pathTrackingEnabled and pathTrackingFrame >= pathTrackingRate then
+    pathTrackingFrame = 0
+    updatePaths()
+  else
+    pathTrackingFrame = pathTrackingFrame + 1
+  end
+end
+
+function updatePaths()
+  for _, tracker in pairs(tracked) do
+    if tracker.inMotion then
+      local newPoint = positionToPathPoint(tracker.object.getPosition(), tracker.large)
+      if newPoint then
+        if cutPath(tracker.path, function(point) return point == newPoint end) then
+          -- we already had such point in path before, all points after are removed
+          drawTrails()
+        else
+          -- completely new point
+          -- TODO ducts and tp
+          local between = Vector.between(newPoint, tracker.path[#tracker.path])
+          if math.abs(between.x) <= 1.1 and math.abs(between.z) <= 1.1 then
+            table.insert(tracker.path, newPoint)
+            drawTrails()
+          end
+        end
+      end
+    end
+  end
+end
+
+function drawTrails()
+  local trails = {}
+  for _, tracker in pairs(tracked) do
+    addPathToTrails(tracker.path, tracker.speed, tracker.travelled, trails)
+  end
+  for _, trail in ipairs(lingeringTrails) do
+    table.insert(trails, trail)
+  end
+  Global.setVectorLines(trails)
+end
+
+function onPlayerTurnEnd(colorEnd, colorNext)
+  tracked = {}
+  lingeringTrails = {}
+  drawTrails()
+end
+
+function onObjectPickUp(player_color, object)
+  if not utils.isCharacter(object)
+    or not utils.isAboveMap(object)
+  then
+    return
+  end
+
+  local large = utils.isLarge(object)
+  local pathPoint = positionToPathPoint(object.getPosition(), large)
+
+  if not pathPoint then
+    log(object.getPosition(), "WTF! lifted object has wrong path point")
+    return
+  end
+
+  if tracked[object.getGUID()] then
+    tracked[object.getGUID()].inMotion = true
+    tracked[object.getGUID()].path = {pathPoint}
+  else
+    tracked[object.getGUID()] = {
+      object = object,
+      path = {pathPoint},
+      speed = utils.isMarine(object) and 4 or utils.getMonsterStats(object.getName()).speed,
+      travelled = 0,
+      scuttle = (utils.getMonsterType(object.getName()) == "Trite"),
+      teleport = utils.isMarine(object),
+      large = large,
+      inMotion = true,
+    }
+  end
+end
+
+function onObjectDrop(player_color, dropped_object)
+  local guid = dropped_object.getGUID()
+  if tracked[guid] then
+    tracked[guid].inMotion = false
+    addPathToTrails(tracked[guid].path, tracked[guid].speed, tracked[guid].travelled, lingeringTrails)
+    tracked[guid].travelled = tracked[guid].travelled + #tracked[guid].path - 1
+    tracked[guid].path = {}
+
+    if trailClearTimer then
+      Wait.stop(trailClearTimer)
+    end
+    trailClearTimer = Wait.time(function()
+      trailClearTimer = nil
+      lingeringTrails = {}
+      drawTrails()
+    end, 5)
+  end
+end
+
+function addPathToTrails(path, speed, travelled, trails)
+  local colorIndex = 1
+  -- pretend, that path starts with nonpositive indexes for each already travelled step
+  -- these negative indexes will be skipped, but colorIndex will be set properly
+  local stepIndex = 1 - travelled
+  while(stepIndex + 1 <= #path) do
+    local stepFinal = math.min(stepIndex + speed, #path)
+    local points = {}
+    for i = math.max(stepIndex, 1), stepFinal do
+      table.insert(points, path[i])
+    end
+
+    if #points > 0 then
+      table.insert(trails, {points = points, color = trailColors[colorIndex]})
+    end
+
+    stepIndex = stepIndex + speed
+    colorIndex = colorIndex + 1
+  end
+end
+
+function positionToPathPoint(pos, isLarge)
+  local roundedPos
+  if not isLarge then
+    roundedPos = Vector(math.floor(pos.x) + 0.5, trailHeight, math.floor(pos.z) + 0.5)
+  else
+    roundedPos = Vector(math.floor(pos.x + 0.5), trailHeight, math.floor(pos.z + 0.5))
+  end
+
+  if math.abs(roundedPos.x - pos.x) > pathPointApprox
+    or math.abs(roundedPos.z - pos.z) > pathPointApprox
+  then
+    -- in between path points
+    return nil
+  else
+    return roundedPos
+  end
+end
+
+-- searches for the first point to fulfill the condition
+-- then remove all points after that
+-- returns true if point was found even if it was last
+function cutPath(path, condition)
+  local cutIndex = -1
+  for i = 1, #path do
+    if condition(path[i]) then
+      cutIndex = i
+      break
+    end
+  end
+
+  if cutIndex ~= -1 then
+    for i = 1, #path - cutIndex do
+      table.remove(path)
+    end
+    return true
+  else
+    return false
+  end
+end

@@ -174,12 +174,17 @@ end
 
 
 -- return true if figure is 2 or more spaces width in direction of X and Z
-function isLarge(figure)
+function isLargeDimensions(figure)
   local bounds = figure.getBounds()
   return {
     x = (bounds.size.x > 1.5),
     z = (bounds.size.z > 1.5)
   }
+end
+
+function isLarge(figure)
+  local isLargeDim = isLargeDimensions(figure)
+  return isLargeDim.x and isLargeDim.z
 end
 
 function getDistance(first, second)
@@ -188,16 +193,16 @@ function getDistance(first, second)
   local position = {first.getPosition(), second.getPosition()}
 
   for i, figure in ipairs({first, second}) do
-    local isLargeFigure = isLarge(figure)
-    if isLargeFigure.x then
+    local isLargeDimensionsFigure = isLargeDimensions(figure)
+    if isLargeDimensionsFigure.x then
       roundingDelta.x = roundingDelta.x - 0.5
     end
 
-    if isLargeFigure.z then
+    if isLargeDimensionsFigure.z then
       roundingDelta.z = roundingDelta.z - 0.5
     end
 
-    if isLargeFigure.x ~= isLargeFigure.z then
+    if isLargeDimensionsFigure.x ~= isLargeDimensionsFigure.z then
       -- special handling for demon, since its position doesn't corresponsd to geometric center
       -- current position is center of head cell
       -- correct, so we use geometric center instead
@@ -260,8 +265,7 @@ end
 
 function isAboveMap(obj)
   local castPosition = obj.getPosition()
-  local large = isLarge(obj)
-  if large.x and large.z then
+  if isLarge(obj) then
     -- for large creatures cast from center of any square instead of center of full figurine
     -- this way even standing above connection of two pieces will still be reported as above map
     -- despite figurine center is directly above crack
