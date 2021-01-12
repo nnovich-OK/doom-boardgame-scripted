@@ -5,7 +5,7 @@ local pathTrackingEnabled = true
 local pathTrackingFrame = 0
 local pathTrackingRate = 0
 local trailHeight = 1.35
-local pathPointApprox = 0.38
+local pathPointApprox = 0.6
 
 local trailClearTimer = nil
 
@@ -84,8 +84,7 @@ function onObjectPickUp(player_color, object)
     return
   end
 
-  local large = utils.isLarge(object)
-  local pathPoint = positionToPathPoint(object.getPosition(), large)
+  local pathPoint = positionToPathPoint(object.getPosition(), utils.isLarge(object))
 
   if not pathPoint then
     log(object.getPosition(), "WTF! lifted object has wrong path point")
@@ -145,9 +144,7 @@ function positionToPathPoint(pos, isLarge)
     roundedPos = Vector(math.floor(pos.x + 0.5), trailHeight, math.floor(pos.z + 0.5))
   end
 
-  if math.abs(roundedPos.x - pos.x) > pathPointApprox
-    or math.abs(roundedPos.z - pos.z) > pathPointApprox
-  then
+  if math.abs(roundedPos.x - pos.x) + math.abs(roundedPos.z - pos.z) > pathPointApprox then
     -- in between path points
     return nil
   else
@@ -195,7 +192,7 @@ function trackObject(object)
     travelled = 0,
     scuttle = (utils.getMonsterType(object.getName()) == "Trite"),
     teleport = utils.isMarine(object),
-    large = large,
+    large = utils.isLarge(object),
     inMotion = false,
   }
 end
