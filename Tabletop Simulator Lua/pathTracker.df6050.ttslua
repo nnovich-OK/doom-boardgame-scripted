@@ -54,8 +54,12 @@ local updateMaps
 local performAssignment
 
 function onUpdate()
+  if not pathTrackingEnabled or not Turns.enable then
+    return
+  end
+
   pathTrackingFrame = pathTrackingFrame + 1
-  if pathTrackingEnabled and pathTrackingFrame >= pathTrackingRate then
+  if pathTrackingFrame >= pathTrackingRate then
     pathTrackingFrame = 0
     updatePaths()
   end
@@ -121,11 +125,16 @@ end
 function onPlayerTurnEnd(colorEnd, colorNext)
   tracked = {}
   lingeringTrails = {}
-  drawTrails()
+
+  if pathTrackingEnabled and Turns.enable then
+    drawTrails()
+  end
 end
 
 function onObjectPickUp(player_color, object)
-  if not utils.isCharacter(object)
+  if not pathTrackingEnabled
+    or not Turns.enable
+    or not utils.isCharacter(object)
     or not utils.isAboveMap(object)
   then
     return
@@ -144,6 +153,8 @@ function onObjectPickUp(player_color, object)
 end
 
 function onObjectDrop(player_color, dropped_object)
+  -- probably this is fine even when turns/paths disabled
+  -- it gives closure to objects already in air
   local guid = dropped_object.getGUID()
   if tracked[guid] then
     tracked[guid].inMotion = false
@@ -222,6 +233,10 @@ function cutPath(path, condition)
 end
 
 function onMoveSpent(req)
+  if not pathTrackingEnabled or not Turns.enable then
+    return
+  end
+
   assert(req.obj and req.move, "onMoveSpent: incorrect request")
   trackObject(req.obj)
   tracked[req.obj.getGUID()].travelled = tracked[req.obj.getGUID()].travelled + req.move
