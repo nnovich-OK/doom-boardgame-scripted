@@ -5,6 +5,9 @@ pathTrackingEnabled = true
 
 local pathTrackingFrame = 0
 local pathTrackingRate = 1
+local mapUpdateFrame = 0
+local mapUpdateRate = 120 -- depending on framerate this is 1 to 10 secs which is fine
+
 local trailHeight = 1.35
 local pathPointApprox = 0.6
 
@@ -20,21 +23,47 @@ setmetatable(trailColors, {__index = "Grey"})
 local tracked = {}
 local lingeringTrails = {}
 
+-- allow vector as key in the table, so we have "someMap[position] = objectData"
+-- two vectors as keys with different memory addresses but same content should lead to the same table value
+local metaMap = {
+  __index = function(t, k)
+    local tx = rawget(t, k.x)
+    return tx and tx[k.z]
+  end,
+  __newindex = function(t, k, v)
+    local tx = rawget(t, k.x)
+    if not tx then
+      rawset(t, k.x, {[k.z] = v})
+    else
+      tx[k.z] = v
+    end
+  end,
+}
+local teleporterMap = {}
+local ductMap = {}
+setmetatable(teleporterMap, metaMap)
+setmetatable(ductMap, metaMap)
+
 -- Local methods declaration
 local addPathToTrails
 local positionToPathPoint
 local cutPath
 local trackObject
-
-function onLoad()
-  --Wait.time(checkConfig, 0.2, -1)
-end
+local updatePaths
+local updateMaps
+local performAssignment
 
 function onUpdate()
   pathTrackingFrame = pathTrackingFrame + 1
   if pathTrackingEnabled and pathTrackingFrame >= pathTrackingRate then
     pathTrackingFrame = 0
     updatePaths()
+  end
+
+  mapUpdateFrame = mapUpdateFrame + 1
+  if mapUpdateFrame >= mapUpdateRate then
+    mapUpdateFrame = 0
+    updateMaps()
   end
 end
 
@@ -48,11 +77,29 @@ function updatePaths()
           drawTrails()
         else
           -- completely new point
-          -- TODO ducts and tp
-          local between = Vector.between(newPoint, tracker.path[#tracker.path])
-          if math.abs(between.x) <= 1.1 and math.abs(between.z) <= 1.1 then
+          -- check ducks and teleporters
+          local continious = true
+          if tracker.scuttle and ductMap[newPoint]
+            and cutPath(tracker.path, function(point) return ductMap[point] end)
+          then
+            continious = false
+          elseif tracker.teleport and teleporterMap[newPoint]
+            and cutPath(tracker.path, function(point) return teleporterMap[point] == teleporterMap[newPoint] end)
+          then
+            continious = false
+          end
+
+          if not continious then
+            -- jump from one location to another
             table.insert(tracker.path, newPoint)
             drawTrails()
+          else
+            -- simple move, check distance
+            local between = Vector.between(newPoint, tracker.path[#tracker.path])
+            if math.abs(between.x) <= 1.1 and math.abs(between.z) <= 1.1 then
+              table.insert(tracker.path, newPoint)
+              drawTrails()
+            end
           end
         end
       end
@@ -195,4 +242,33 @@ function trackObject(object)
     large = utils.isLarge(object),
     inMotion = false,
   }
+end
+
+function updateMaps()
+  ductMap = {}
+  teleporterMap = {}
+  setmetatable(ductMap, metaMap)
+  setmetatable(teleporterMap, metaMap)
+
+  for _, obj in ipairs(getAllObjects()) do
+    if utils.isDuct(obj) then
+      local pt = positionToPathPoint(obj.getPosition(), false)
+      if pt then
+        performAssignment(ductMap, pt, true)
+      end
+    elseif utils.isTeleporter(obj) then
+      local pt = positionToPathPoint(obj.getPosition(), false)
+      if pt then
+        performAssignment(teleporterMap, pt, obj.getName())
+      end
+    end
+  end
+end
+
+-- this function is a hack to prevent obscure error "Unexpected LuaType Tuple"
+-- apparently Vector from TTS and custom metatable interfere with each other
+-- in case both are in the same loop
+-- more info: https://forums.tabletopsimulator.com/showthread.php?5540-Cannot-iterate-with-newindex
+function performAssignment(t, k, v)
+  t[k] = v
 end

@@ -95,6 +95,10 @@ function isBarrel(obj)
   return obj.tag == "Card" and string.find(obj.getName(), "Barrel") ~= nil
 end
 
+function isDuct(obj)
+  return obj.tag == "Card" and string.find(obj.getName(), "Duct") ~= nil
+end
+
 function isObstacleToken(obj)
   return (obj.tag == "Card" or obj.tag == "Generic") and
     (string.find(obj.getName(), "Obstacle") ~= nil
