@@ -1,9 +1,10 @@
 require("utils")
 require("constants")
 
-local pathTrackingEnabled = true
+pathTrackingEnabled = true
+
 local pathTrackingFrame = 0
-local pathTrackingRate = 0
+local pathTrackingRate = 1
 local trailHeight = 1.35
 local pathPointApprox = 0.6
 
@@ -30,11 +31,10 @@ function onLoad()
 end
 
 function onUpdate()
+  pathTrackingFrame = pathTrackingFrame + 1
   if pathTrackingEnabled and pathTrackingFrame >= pathTrackingRate then
     pathTrackingFrame = 0
     updatePaths()
-  else
-    pathTrackingFrame = pathTrackingFrame + 1
   end
 end
 

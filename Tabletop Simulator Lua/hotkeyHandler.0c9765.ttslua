@@ -25,23 +25,28 @@ function onScriptingButtonDown(index,  player_color)
   elseif index == 7 then
     findMonsterToActivate(player_color)
 
+  elseif index == 9 and player_color == "White" then
+    local enabled = not instances.path.getVar("pathTrackingEnabled")
+    local msg = "Move trails are " .. (enabled and "ON" or "OFF")
+    broadcastToAll(msg, "Orange")
+    instances.path.setVar("pathTrackingEnabled", enabled)
+
   elseif index == 6 and player_color=="White" then
     local greeting = gmOut and ": I'm back!" or ": I'm out!"
     gmOut = not gmOut
     Player[player_color].blindfolded = not Player[player_color].blindfolded
-    broadcastToAll(Player[player_color].steam_name..greeting, text_color)
+    broadcastToAll(Player[player_color].steam_name..greeting, player_color)
 
-  elseif dbg.cfg.scanEnabled and index == 5 and player_color == "White" then
+  elseif index == 5 and dbg.cfg.scanEnabled and player_color == "White" then
     renameHoveredMonsterToGrey(player_color)
 
-  elseif dbg.cfg.marineMapAccess and index == 5 and player_color ~= "White" then
+  elseif index == 5 and dbg.cfg.marineMapAccess and player_color ~= "White" then
     instances.vis.call("toggleInterface", {id="newGameButton", color=player_color})
     utils.getGuide().setInvisibleTo({})
 
-  elseif dbg.cfg.miscHotkeyEnable and index == 8 then
+  elseif index == 8 and dbg.cfg.miscHotkeyEnable then
     local obj = Player[player_color].getHoverObject()
     print(obj.getLuaScript())
-
 
   end
 
