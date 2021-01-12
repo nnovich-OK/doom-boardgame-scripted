@@ -37,7 +37,5 @@
    </Panel>
 
    <!-- Marine order -->
-   <Button id="orderButton" active="false" height="230" width="230" offsetXY="0 230">
-     <Image id="orderImage" preserveAspect="true"></Image>
-   </Button>
+   <Image id="orderImage" active="false" height="230" width="230" offsetXY="0 230" preserveAspect="true" />
 </Panel>

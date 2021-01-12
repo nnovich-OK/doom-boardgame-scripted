@@ -259,9 +259,9 @@ end
 
 function onOrderChange(newOrder)
   if not newOrder then
-    self.UI.setAttribute("orderButton", "active", "false")
+    self.UI.setAttribute("orderImage", "active", "false")
   else
-    self.UI.setAttribute("orderButton", "active", "true")
+    self.UI.setAttribute("orderImage", "active", "true")
     self.UI.setAttribute("orderImage", "image", newOrder)
   end
 end
