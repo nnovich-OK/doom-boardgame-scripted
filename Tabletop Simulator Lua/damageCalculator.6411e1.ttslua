@@ -2,6 +2,11 @@ require("instances")
 require("constants")
 require("utils")
 
+local diceUpdateFrame = 0
+local diceUpdateRate = 23 -- 90 physical frames is 1 second
+local diceReturnFrame = 0
+local diceReturnRate = 45
+
 local redRotationValues = {
   {value="range=3 dmg=1",           rotation={x=0, y=0, z=0}},
   {value="range=0 dmg=4 ammo",      rotation={x=0, y=0, z=90}},
@@ -156,9 +161,20 @@ local setReroll
 
 function onload()
   initParams()
+end
 
-  Wait.time(updateDiceFaces, 0.25, -1)
-  Wait.time(bringDiceBack, 0.5, -1)
+function onFixedUpdate()
+  diceUpdateFrame = diceUpdateFrame + 1
+  if diceUpdateFrame >= diceUpdateRate then
+    diceUpdateFrame = 0
+    updateDiceFaces()
+  end
+
+  diceReturnFrame = diceReturnFrame + 1
+  if diceReturnFrame >= diceReturnRate then
+    diceReturnFrame = 0
+    bringDiceBack()
+  end
 end
 
 
