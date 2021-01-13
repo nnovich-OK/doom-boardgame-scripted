@@ -59,6 +59,26 @@ local obtainableItems = {
   redkey=true,
 }
 
+-- items which stays in hand after picking them up
+local holdableItems = {
+  armor=true,
+  shell=true,
+  rocket=true,
+  cell=true,
+  chainsaw=true,
+  machinegun=true,
+  shotgun=true,
+  chaingun=true,
+  launcher=true,
+  plasma=true,
+  bfg=true,
+  adrenalin=true,
+  cancel=true,
+  bluekey=true,
+  yellowkey=true,
+  redkey=true,
+}
+
 local transferableItems = {
   shell = true,
   rocket = true,
@@ -215,6 +235,8 @@ local setItemCount
 local adjustItemCount
 local fullWithItem
 local pickToken
+local pickInstantToken
+local pickHoldableToken
 local activateMarineOrder
 
 function onPreprocFinished()
@@ -491,10 +513,11 @@ function onAutopickClick(player, value, id)
     {origin=marine.getPosition(), direction={0,-1,0}, debug=false, max_distance=0.5})
 
   local pickWorked = false
+  local countChanges = {}
   for _, hit in ipairs(hitTable) do
 
     if utils.isToken(hit.hit_object) then
-      if pickToken(player.color, marineColor, hit.hit_object) then
+      if pickToken(player.color, marineColor, hit.hit_object, countChanges) then
         hit.hit_object.destruct()
         pickWorked = true
       end
@@ -502,7 +525,7 @@ function onAutopickClick(player, value, id)
     elseif utils.isDeckOfTokens(hit.hit_object) then
       local consumedIndexes = {}
       for _, innerObj in ipairs(hit.hit_object.getObjects()) do
-        if pickToken(player.color, marineColor, innerObj) then
+        if pickToken(player.color, marineColor, innerObj, countChanges) then
           pickWorked = true
           table.insert(consumedIndexes, 1, innerObj.index)
         end
@@ -531,10 +554,45 @@ function onAutopickClick(player, value, id)
     broadcastToColor("No pickable items under " .. marine.getName() .. " figurine",
       player.color,
       player.color)
+  else
+    for item, amount in pairs(countChanges) do
+      adjustItemCount(marineColor, item, amount)
+    end
   end
 end
 
-function pickToken(player_color, marineColor, tokenInfo)
+function pickToken(player_color, marineColor, tokenInfo, countChanges)
+  return pickInstantToken(player_color, marineColor, tokenInfo)
+    or pickHoldableToken(player_color, marineColor, tokenInfo, countChanges)
+end
+
+function pickInstantToken(player_color, marineColor, tokenInfo)
+  local tokenName = type(tokenInfo) == "table" and tokenInfo.name or tokenInfo.getName()
+  local item = constants.pickableTokens[tokenName]
+
+  if not item or holdableItems[item] then
+    return false
+  end
+
+  local marine = utils.getMarine(marineColor)
+  local pickedSomething = false
+
+  local picked = true
+  if item == "health" then
+    picked = marine.call("onHealthPickup", marineColor)
+    if picked then
+      printToAll(marine.getName() .. " picked " .. item, player_color)
+    end
+  elseif item == "berserk" then
+    adjustItemCount(marineColor, item, 3)
+    printToAll(marine.getName() .. " activated " .. item, player_color)
+  end
+
+  return picked
+end
+
+-- doesn't increase overall item count, but buffers changes to countChanges
+function pickHoldableToken(player_color, marineColor, tokenInfo, countChanges)
   local name = type(tokenInfo) == "table" and tokenInfo.name or tokenInfo.getName()
   local mainItem = constants.pickableTokens[name]
 
@@ -544,7 +602,7 @@ function pickToken(player_color, marineColor, tokenInfo)
     bonusItem = constants.pickableTokens[string.gsub(gmNotes, "^Bonus:", "")]
   end
 
-  if not mainItem then
+  if not mainItem or not holdableItems[mainItem] then
     return false
   end
 
@@ -560,24 +618,15 @@ function pickToken(player_color, marineColor, tokenInfo)
 
   for i = 1, #items do
     local item = items[i]
-    local picked = true
     local amount = doubleItem and i==1 and 2 or 1
-    if item == "health" then
-      amount = 0 -- no item is stored, health is applied immediately, can't be doubleItem
-      picked = marine.call("onHealthPickup", marineColor)
-    elseif item == "berserk" then
-      amount = 3
-    end
 
-    if picked then
+    local currentCount = getItemCount({color = marineColor, item=item})
+    if currentCount + (countChanges[item] or 0) < itemLimit[item] then
+      -- we can fit more into inventory :)
       pickedSomething = true
-      adjustItemCount(marineColor, item, amount)
-      if item == "berserk" then
-        printToAll(marine.getName() .. " activated " .. item, player_color)
-      else
-        local xStr = amount > 1 and " x"..amount or ""
-        printToAll(marine.getName() .. " picked " .. item .. xStr, player_color)
-      end
+      countChanges[item] = (countChanges[item] or 0) + amount
+      local xStr = amount > 1 and " x"..amount or ""
+      printToAll(marine.getName() .. " picked " .. item .. xStr, player_color)
     end
   end
 
