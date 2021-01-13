@@ -152,6 +152,11 @@ Recommended mods: Organized Marines, Well-Trained, Unending Pistols."
       guidePage = 5,
       areasJSON = require("maps/damoqles part1/damoqles5").map,
     },
+
+    ["Map 6"] = {
+      guidePage = 6,
+      areasJSON = require("maps/damoqles part1/damoqles6").map,
+    },
   }
 }
 
