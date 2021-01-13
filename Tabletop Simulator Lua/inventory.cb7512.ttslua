@@ -627,6 +627,8 @@ function pickHoldableToken(player_color, marineColor, tokenInfo, countChanges)
       countChanges[item] = (countChanges[item] or 0) + amount
       local xStr = amount > 1 and " x"..amount or ""
       printToAll(marine.getName() .. " picked " .. item .. xStr, player_color)
+    else
+      printToAll(marine.getName() .. " can't have more " .. item, player_color)
     end
   end
 
