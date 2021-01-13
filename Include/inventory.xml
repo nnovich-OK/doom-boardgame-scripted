@@ -64,6 +64,8 @@
     onClick="cb7512/updateFrag"
     preproc="splitNumber6"
     tooltip="Double click to add"
+    tooltipBackgroundColor = "#4d4a43"
+    tooltipPosition="Right"
     >
     <Image
       id="fragImage"
@@ -93,12 +95,20 @@
       class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Gain"
+      tooltip="Double click for sticky mode"
+      tooltipBackgroundColor = "rgba(0, 0, 0, 0.95)"
+      tooltipPosition="Below"
+      tooltipBorderColor = "clear"
       />
     <Button
       id="loseItem"
       class="whiteOnBlack"
       onClick="cb7512/onModeControlClick"
       text="Lose"
+      tooltip="Double click for sticky mode"
+      tooltipBackgroundColor = "rgba(0, 0, 0, 0.95)"
+      tooltipPosition="Below"
+      tooltipBorderColor = "clear"
       />
     <Button
       id="autopickItem"
@@ -106,6 +116,9 @@
       onClick="cb7512/onAutopickClick"
       text="Pick"
       tooltip="Automatically picks ammunition from under your marine figurine"
+      tooltipBackgroundColor = "rgba(0, 0, 0, 0.95)"
+      tooltipPosition="Below"
+      tooltipBorderColor = "clear"
       />
     <Button
       id="giveToBlueItem"
@@ -114,6 +127,10 @@
       text="Give Blue"
       textColor="blue"
       minWidth="75"
+      tooltip="Double click for sticky mode"
+      tooltipBackgroundColor = "rgba(0, 0, 0, 0.95)"
+      tooltipPosition="Below"
+      tooltipBorderColor = "clear"
       />
     <Button
       id="giveToGreenItem"
@@ -122,6 +139,10 @@
       text="Give Green"
       textColor="green"
       minWidth="75"
+      tooltip="Double click for sticky mode"
+      tooltipBackgroundColor = "rgba(0, 0, 0, 0.95)"
+      tooltipPosition="Below"
+      tooltipBorderColor = "clear"
       />
     <Button
       id="giveToRedItem"
@@ -130,6 +151,10 @@
       text="Give Red"
       textColor="red"
       minWidth="75"
+      tooltip="Double click for sticky mode"
+      tooltipBackgroundColor = "rgba(0, 0, 0, 0.95)"
+      tooltipPosition="Below"
+      tooltipBorderColor = "clear"
       />
   </HorizontalLayout>
 </VerticalLayout>
