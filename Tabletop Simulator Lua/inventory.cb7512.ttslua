@@ -769,6 +769,15 @@ function onMarineDeath(color)
   printToAll("On death cleared berserk, order, set armor to base value", Color.Orange)
 end
 
+function onMarineMove(color)
+  if marineOrder[color] == "aim" then
+    -- clear aim if marine moves or is pushed
+    broadcastToAll(utils.getMarine(color).getName() .. " lost aim due to movement",
+      Color.Orange)
+    activateMarineOrder(color, nil)
+  end
+end
+
 function onArmorBaseChange(req)
   -- adjust base armor
   armorBase[req.marineColor] = armorBase[req.marineColor] + req.delta

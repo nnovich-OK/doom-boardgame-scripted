@@ -6,6 +6,7 @@ require("dbg")
 local attackingCandidate = nil
 local activeMonster = nil
 local monsterPickPosition = nil
+local marinePickPosition = {}
 
 local allBags = {}
 
@@ -157,6 +158,10 @@ function onObjectPickUp(player_color, obj)
       monsterPickPosition = nil
     end
   end
+
+  if utils.isMarine(obj) then
+    marinePickPosition[utils.getColor(obj.getName())] = obj.getPosition()
+  end
 end
 
 function onObjectDrop(player_color, obj)
@@ -175,6 +180,21 @@ function onObjectDrop(player_color, obj)
       setActiveMonster(obj)
     end
     monsterPickPosition = nil
+  end
+
+  -- send event if it was marine, who moved
+  -- doesn't care about turns or being above map, since it only removes aim anyway
+  if utils.isMarine(obj) then
+    local clr = utils.getColor(obj.getName())
+    if marinePickPosition[clr] then
+      local pos = obj.getPosition()
+      if math.abs(marinePickPosition[clr].x - pos.x) > 0.5
+        or math.abs(marinePickPosition[clr].z - pos.z) > 0.5
+      then
+        instances.inv.call("onMarineMove", clr)
+      end
+      marinePickPosition[clr] = nil
+    end
   end
 
   -- also help position 2x2 monsters and doors on the grid
