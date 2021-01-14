@@ -1,7 +1,7 @@
 {
   "SaveName": "stable",
   "GameMode": "new doom redo",
-  "Date": "1/14/2021 12:51:17 PM",
+  "Date": "1/14/2021 1:01:44 PM",
   "Gravity": 0.5,
   "PlayArea": 0.5,
   "GameType": "",
@@ -168,9 +168,9 @@
           "rotX": 0.0,
           "rotY": 90.0106,
           "rotZ": 0.0,
-          "scaleX": 24.6363621,
+          "scaleX": 24.6352654,
           "scaleY": 7.0,
-          "scaleZ": 7.566347
+          "scaleZ": 7.56618929
         }
       },
       {
@@ -196,9 +196,9 @@
           "rotX": 0.0,
           "rotY": 269.88147,
           "rotZ": 0.0,
-          "scaleX": 26.6010513,
+          "scaleX": 26.60246,
           "scaleY": 7.0,
-          "scaleZ": 8.769784
+          "scaleZ": 8.770144
         }
       },
       {
@@ -212,7 +212,7 @@
           "rotZ": 0.0,
           "scaleX": 23.4871788,
           "scaleY": 7.0,
-          "scaleZ": 7.257565
+          "scaleZ": 7.257307
         }
       }
     ]
@@ -15359,53 +15359,6 @@
         }
       ],
       "GUID": "3ac7c4"
-    },
-    {
-      "Name": "MP3_Player",
-      "Transform": {
-        "posX": 23.4999962,
-        "posY": 1.20889819,
-        "posZ": 29.5,
-        "rotX": -5.29608258E-07,
-        "rotY": 180.000015,
-        "rotZ": 1.65591791E-06,
-        "scaleX": 1.0,
-        "scaleY": 1.0,
-        "scaleZ": 1.0
-      },
-      "Nickname": "",
-      "Description": "",
-      "GMNotes": "",
-      "ColorDiffuse": {
-        "r": 0.117241837,
-        "g": 0.0,
-        "b": 1.0
-      },
-      "Locked": false,
-      "Grid": true,
-      "Snap": true,
-      "IgnoreFoW": false,
-      "MeasureMovement": false,
-      "DragSelectable": true,
-      "Autoraise": true,
-      "Sticky": true,
-      "Tooltip": true,
-      "GridProjection": false,
-      "HideWhenFaceDown": false,
-      "Hands": false,
-      "Mp3Player": {
-        "songTitle": "MP3_Locally_Sourced",
-        "genre": "Pop",
-        "volume": 0.7,
-        "isPlaying": false,
-        "loopOne": false,
-        "menuTitle": "Locally Sourced",
-        "menu": 2
-      },
-      "LuaScript": "",
-      "LuaScriptState": "",
-      "XmlUI": "",
-      "GUID": "257343"
     },
     {
       "Name": "Custom_Model_Infinite_Bag",
