@@ -18,7 +18,7 @@ local loadAreas
 
 maps["Episode 1"] = {
   notes = "The first half of official 10 maps campaign. The secodn one requires expansion set.",
-  guide = "https://www.dropbox.com/s/0rs2ev6j9r9ohrn/Doom_ep_1_web.pdf?dl=1",
+  guide = "http://cloud-3.steamusercontent.com/ugc/1761438059581112171/5DBC48A4669DC18FBF331496CCE0EEAE8AD5F7A1/",
   scenarios = {
     ["Knee Deep in the Dead"] = {
       guidePage = 0,
