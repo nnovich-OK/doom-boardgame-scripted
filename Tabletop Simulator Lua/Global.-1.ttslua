@@ -1,10 +1,14 @@
 require("instances")
+require("dbg")
 
 -- Local methods declaration
 local refreshObjectUI
+local hideInstances
 
 function onload()
   math.randomseed(os.time())
+
+  hideInstances()
 
   -- assets sometimes load later than they are needed by objects
   -- so blank squares are shown instead of images for armor, speed etc
@@ -36,4 +40,13 @@ function refreshObjectUI()
     5)
 end
 
-
+function hideInstances()
+  local revealForDebug = dbg.cfg.revealInstances
+  for name, _ in pairs(instances.guidList) do
+    local pos = instances[name].getPosition()
+    pos.y = revealForDebug and 0.96 or 0
+    instances[name].setPosition(pos)
+    instances[name].setLock(not revealForDebug)
+    instances[name].interactable = revealForDebug
+  end
+end

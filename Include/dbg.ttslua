@@ -13,6 +13,7 @@ cfg = {
   pretendAllMarinesSeated = false,
   marineMapAccess = false,
   miscHotkeyEnable = false,
+  revealInstances = false,
 }
 
 -- Local methods declaration

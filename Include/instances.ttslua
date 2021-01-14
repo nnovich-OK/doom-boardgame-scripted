@@ -1,6 +1,18 @@
 instances = {}
+local package = instances
 
-local guidList = {
+-- PACKAGE IMPORT
+local setmetatable = setmetatable
+local getObjectFromGUID = getObjectFromGUID
+local assert = assert
+local error = error
+
+-- PACKAGE BODY
+local _ENV = package
+
+-- non-local, but should be avoided
+-- preferred way to use other instance is "instances.calc.call()"
+guidList = {
     calc = "6411e1", -- damage calculator
     hotkeys = "0c9765", -- hotkey handler
     preproc = "e8056f", -- xml preprocessor
@@ -20,7 +32,7 @@ local guidList = {
     path = "df6050", -- pahtTracker
 }
 
-setmetatable(instances, {__index = function(t, k)
+setmetatable(package, {__index = function(t, k)
   if guidList[k] then
     local obj = getObjectFromGUID(guidList[k])
     assert(obj, "instances: can't get " .. k .. " from GUID " .. guidList[k])
@@ -31,4 +43,4 @@ setmetatable(instances, {__index = function(t, k)
 end
 })
 
-return instances
+return package
