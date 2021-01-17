@@ -293,19 +293,25 @@ function revealArea(req)
   end
 
 
+  local mnstSpawnDelay = 0
+  -- workaround with delay, so each monster has time to spawn and update counter
+  -- before spawning next one
   for _, mnst in ipairs(area.colorMonsters) do
     if Player[utils.getColor(mnst.name)].seated or dbg.cfg.pretendAllMarinesSeated then
-      instances.creator.call("spawnElement", {elem=mnst})
+      Wait.frames(function()
+        instances.creator.call("spawnElement", {elem=mnst})
+      end,
+      mnstSpawnDelay)
+      mnstSpawnDelay = mnstSpawnDelay + 5
     end
   end
 
-  for i, mnst in ipairs(area.greyMonsters) do
-    -- workaround with delay, so each monster has time to spawn and update counter
-    -- before spawning next one
-    Wait.time(function()
+  for _, mnst in ipairs(area.greyMonsters) do
+    Wait.frames(function()
       instances.creator.call("spawnElement", {elem=mnst})
     end,
-    0.5 * i)
+    mnstSpawnDelay)
+    mnstSpawnDelay = mnstSpawnDelay + 5
   end
 
   for _, mrn in ipairs(area.marines) do

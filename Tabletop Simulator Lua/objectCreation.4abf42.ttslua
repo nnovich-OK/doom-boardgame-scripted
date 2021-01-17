@@ -85,7 +85,7 @@ function onObjectSpawn(object)
     if decreaseMonsterCount(object.getName()) then
       object.setLuaScript(instances.monster.getLuaScript())
     else
-      broadcastToAll("No figures left of ".. object.getName(), Color.Oragne)
+      broadcastToAll("No figures left of ".. object.getName(), Color.Orange)
       -- make sure name is cleared before destruct, so onObjectDestroy doesn't change counter
       object.setName("")
       object.destruct()
@@ -245,10 +245,18 @@ function spawnElement(req)
       end
     end
 
-    if maxCount == 0 and not dbg.cfg.unlimitedMonsters then
-      broadcastToAll("No figures left for ".. req.elem.name, Color.Oragne)
+    if maxCount == -1 then
+      -- no marines seated, noting to do
       return
     end
+  end
+
+  -- both for grey and colored monsters don't do anything if no figurines left
+  -- empty bags actually quickly kill monster on leave,
+  -- but hack with microrotation below throws an error since no object to microrotate
+  if monsterType and getBagContentCount(allBags[bagName]) <=0 and not dbg.cfg.unlimitedMonsters then
+    broadcastToAll("No figures left for ".. req.elem.name, Color.Orange)
+    return
   end
 
   -- when spawning slightly change position and rotation, then change back after random delay
