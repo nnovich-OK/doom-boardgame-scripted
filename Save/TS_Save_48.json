@@ -1,7 +1,7 @@
 {
   "SaveName": "stable",
   "GameMode": "new doom redo",
-  "Date": "1/17/2021 8:09:31 PM",
+  "Date": "1/17/2021 10:07:03 PM",
   "Gravity": 0.5,
   "PlayArea": 0.5,
   "GameType": "",
@@ -12,7 +12,7 @@
   ],
   "PlayerCounts": [
     3,
-    7
+    6
   ],
   "Tags": [],
   "Table": "Table_Custom",
@@ -168,9 +168,9 @@
           "rotX": 0.0,
           "rotY": 90.0106,
           "rotZ": 0.0,
-          "scaleX": 24.632412,
+          "scaleX": 24.6200886,
           "scaleY": 7.0,
-          "scaleZ": 7.565778
+          "scaleZ": 7.564002
         }
       },
       {
@@ -196,9 +196,9 @@
           "rotX": 0.0,
           "rotY": 269.88147,
           "rotZ": 0.0,
-          "scaleX": 26.60613,
+          "scaleX": 26.6219749,
           "scaleY": 7.0,
-          "scaleZ": 8.771083
+          "scaleZ": 8.775134
         }
       },
       {
@@ -212,7 +212,7 @@
           "rotZ": 0.0,
           "scaleX": 23.4871788,
           "scaleY": 7.0,
-          "scaleZ": 7.256635
+          "scaleZ": 7.25563049
         }
       }
     ]
@@ -9077,17 +9077,17 @@
     {
       "Name": "Custom_PDF",
       "Transform": {
-        "posX": -15.521244,
-        "posY": 0.9612174,
-        "posZ": 28.499836,
-        "rotX": -9.160757E-08,
-        "rotY": 179.994781,
-        "rotZ": 8.59051639E-08,
-        "scaleX": 1.0,
+        "posX": -17.5,
+        "posY": 0.961217344,
+        "posZ": 32.5,
+        "rotX": 3.75687137E-07,
+        "rotY": 180.008591,
+        "rotZ": 6.468143E-08,
+        "scaleX": 2.0,
         "scaleY": 1.0,
-        "scaleZ": 1.0
+        "scaleZ": 2.0
       },
-      "Nickname": "",
+      "Nickname": "Instruction manual",
       "Description": "",
       "GMNotes": "",
       "ColorDiffuse": {
@@ -9095,7 +9095,7 @@
         "g": 1.0,
         "b": 1.0
       },
-      "Locked": false,
+      "Locked": true,
       "Grid": true,
       "Snap": true,
       "IgnoreFoW": false,
@@ -9110,7 +9110,7 @@
       "CustomPDF": {
         "PDFUrl": "http://cloud-3.steamusercontent.com/ugc/1761438059581098501/7ACF1DA7069AA5401AE8E36E7C8080EDD713D027/",
         "PDFPassword": "",
-        "PDFPage": 5,
+        "PDFPage": 0,
         "PDFPageOffset": 0
       },
       "LuaScript": "",
@@ -9121,17 +9121,17 @@
     {
       "Name": "Custom_PDF",
       "Transform": {
-        "posX": -15.5,
-        "posY": 0.961217344,
-        "posZ": 33.5,
-        "rotX": -1.616799E-07,
-        "rotY": 359.983765,
-        "rotZ": -8.34855456E-08,
-        "scaleX": 1.0,
+        "posX": -39.5000076,
+        "posY": 0.961217463,
+        "posZ": 32.5,
+        "rotX": -1.442324E-08,
+        "rotY": 180.0043,
+        "rotZ": 2.765319E-07,
+        "scaleX": 2.0,
         "scaleY": 1.0,
-        "scaleZ": 1.0
+        "scaleZ": 2.0
       },
-      "Nickname": "",
+      "Nickname": "FAQ and errata",
       "Description": "",
       "GMNotes": "",
       "ColorDiffuse": {
@@ -9139,7 +9139,7 @@
         "g": 1.0,
         "b": 1.0
       },
-      "Locked": false,
+      "Locked": true,
       "Grid": true,
       "Snap": true,
       "IgnoreFoW": false,
@@ -9154,7 +9154,7 @@
       "CustomPDF": {
         "PDFUrl": "http://cloud-3.steamusercontent.com/ugc/1761438059581103140/33E42F64173E744B1AC9A146376B81A4ED37C86B/",
         "PDFPassword": "",
-        "PDFPage": 1,
+        "PDFPage": 0,
         "PDFPageOffset": 0
       },
       "LuaScript": "",
@@ -9175,7 +9175,7 @@
         "scaleY": 1.0,
         "scaleZ": 4.0
       },
-      "Nickname": "",
+      "Nickname": "Rules summary",
       "Description": "",
       "GMNotes": "",
       "ColorDiffuse": {
@@ -9219,7 +9219,7 @@
         "scaleY": 1.0,
         "scaleZ": 4.0
       },
-      "Nickname": "",
+      "Nickname": "Rules summary",
       "Description": "",
       "GMNotes": "",
       "ColorDiffuse": {
