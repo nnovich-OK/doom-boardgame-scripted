@@ -67,7 +67,7 @@ function onLoad(save_state)
       self.UI.setAttribute("armor", "text", mnstStats[identity.name].armor)
       self.UI.setAttribute("speed", "text", mnstStats[identity.name].speed)
     end,
-    1)
+    3)
 
   createBtns()
 end
