@@ -9,7 +9,7 @@ local mapUpdateFrame = 0
 local mapUpdateRate = 120 -- depending on framerate this is 1 to 10 secs which is fine
 
 local trailHeight = 1.35
-local pathPointApprox = 0.6
+local pathPointApprox = 0.5
 
 local trailClearTimer = nil
 
@@ -157,6 +157,15 @@ function onObjectDrop(player_color, dropped_object)
   -- it gives closure to objects already in air
   local guid = dropped_object.getGUID()
   if tracked[guid] then
+    -- add last position to path if it isn't there already
+    local lastActualPos = positionToPathPoint(dropped_object.getPosition(), utils.isLarge(dropped_object), true)
+    local lastStoredPos = tracked[guid].path[#tracked[guid].path]
+    if lastActualPos ~= lastStoredPos then
+      table.insert(tracked[guid].path, lastActualPos)
+      drawTrails()
+    end
+
+    -- update tracking status and trails
     tracked[guid].inMotion = false
     addPathToTrails(tracked[guid].path, tracked[guid].speed, tracked[guid].travelled, lingeringTrails)
     tracked[guid].travelled = tracked[guid].travelled + #tracked[guid].path - 1
@@ -188,7 +197,7 @@ function addPathToTrails(path, speed, travelled, trails)
         -- might be overlapped by other objects even when they are behind
         -- Other segments are fine, so adding small useless segment just to mitigate this issue
         firstPoint = path[i]
-        table.insert(trails, {points = {firstPoint - Vector(0,0.001,0.1), firstPoint}, color="Orange"})
+        table.insert(trails, {points = {firstPoint - Vector(0,0.001,0), firstPoint}, color="Orange"})
       end
       table.insert(points, path[i])
     end
@@ -202,7 +211,7 @@ function addPathToTrails(path, speed, travelled, trails)
   end
 end
 
-function positionToPathPoint(pos, isLarge)
+function positionToPathPoint(pos, isLarge, doubtless)
   local roundedPos
   if not isLarge then
     roundedPos = Vector(math.floor(pos.x) + 0.5, trailHeight, math.floor(pos.z) + 0.5)
@@ -210,7 +219,7 @@ function positionToPathPoint(pos, isLarge)
     roundedPos = Vector(math.floor(pos.x + 0.5), trailHeight, math.floor(pos.z + 0.5))
   end
 
-  if math.abs(roundedPos.x - pos.x) + math.abs(roundedPos.z - pos.z) > pathPointApprox then
+  if not doubtless and math.abs(roundedPos.x - pos.x) + math.abs(roundedPos.z - pos.z) > pathPointApprox then
     -- in between path points
     return nil
   else
