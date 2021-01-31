@@ -16,9 +16,9 @@ local trailClearTimer = nil
 local trailColors = {
   "Green",
   "Yellow",
-  "Red"
+  "Red",
 }
-setmetatable(trailColors, {__index = "Grey"})
+setmetatable(trailColors, {__index = function() return "White" end})
 
 local tracked = {}
 local lingeringTrails = {}
@@ -175,6 +175,7 @@ end
 
 function addPathToTrails(path, speed, travelled, trails)
   local colorIndex = 1
+  local firstPoint = nil
   -- pretend, that path starts with nonpositive indexes for each already travelled step
   -- these negative indexes will be skipped, but colorIndex will be set properly
   local stepIndex = 1 - travelled
@@ -182,6 +183,13 @@ function addPathToTrails(path, speed, travelled, trails)
     local stepFinal = math.min(stepIndex + speed, #path)
     local points = {}
     for i = math.max(stepIndex, 1), stepFinal do
+      if not firstPoint then
+        -- HACK: TTS changed rendering in version 13, so the first segment of each poligonal line
+        -- might be overlapped by other objects even when they are behind
+        -- Other segments are fine, so adding small useless segment just to mitigate this issue
+        firstPoint = path[i]
+        table.insert(trails, {points = {firstPoint - Vector(0,0.001,0.1), firstPoint}, color="Orange"})
+      end
       table.insert(points, path[i])
     end
 
