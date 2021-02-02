@@ -191,7 +191,7 @@ function onTurnStatusClick(player, value, id)
     single = "askForDoubleClick",
     parametersSingle = {color=player.color},
     double = "deactivateTurnStatus",
-    parametersDouble = {manual=true}
+    parametersDouble = {manual=true, color=player.color}
   })
 end
 
@@ -212,6 +212,7 @@ function deactivateTurnStatus(params)
   if params and params.manual
   then
     instances.creator.call("onManualClearActive", self)
+    instances.path.call("onMoveReset", {obj = self, color = params.color})
   end
 end
 
