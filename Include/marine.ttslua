@@ -32,6 +32,10 @@ function onLoad(save_state)
 
   Wait.condition(updateHealthUI, checkLoaded)
   createBtns()
+
+  self.addContextMenuItem("Reset step count", function(color)
+    instances.path.call("onMoveReset", {obj = self, color = color})
+  end)
 end
 
 function checkLoaded()

@@ -283,6 +283,20 @@ function onMoveSpent(req)
   notifyStepCountUpdate(guid)
 end
 
+function onMoveReset(req)
+  if not pathTrackingEnabled or not Turns.enable then
+    return
+  end
+
+  assert(req.obj and req.color, "onMoveReset: incorrect request")
+  local guid = req.obj.getGUID()
+  if tracked[guid] then
+    tracked[guid] = nil
+    notifyStepCountUpdate(guid, 0)
+    printToAll("Reset movement for " .. req.obj.getName(), req.color)
+  end
+end
+
 function trackObject(object)
   if tracked[object.getGUID()] then
     return
