@@ -195,6 +195,13 @@ function onTurnStatusClick(player, value, id)
   })
 end
 
+function onStepCountUpdate(req)
+  if not req then
+    return
+  end
+  self.UI.setAttribute("speed", "text", math.max(0, mnstStats[identity.name].speed - req.steps))
+end
+
 function askForDoubleClick(params)
   broadcastToColor("Doubleclick on status icon to remove",
     params.color, params.color)
