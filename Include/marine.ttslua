@@ -266,6 +266,15 @@ function onOrderChange(newOrder)
   end
 end
 
+function onStepCountUpdate(req)
+  if not req or req.steps == 0 then
+    self.UI.setAttribute("speedPanel", "active", "false")
+  else
+    self.UI.setAttribute("speedPanel", "active", "true")
+    self.UI.setAttribute("speed", "text", req.steps)
+  end
+end
+
 function resetHealth(difficulty)
   health.max = 11 - utils.getMarineCount() + startingHealthModifier[difficulty]
   health.value = health.max

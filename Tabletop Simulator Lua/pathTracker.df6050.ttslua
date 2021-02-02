@@ -52,6 +52,8 @@ local trackObject
 local updatePaths
 local updateMaps
 local performAssignment
+local drawTrailsAndStepCount
+local notifyStepCountUpdate
 
 function onUpdate()
   if not pathTrackingEnabled or not Turns.enable then
@@ -72,13 +74,13 @@ function onUpdate()
 end
 
 function updatePaths()
-  for _, tracker in pairs(tracked) do
+  for guid, tracker in pairs(tracked) do
     if tracker.inMotion then
       local newPoint = positionToPathPoint(tracker.object.getPosition(), tracker.large)
-      if newPoint then
+      if newPoint and newpPoint ~= tracker.path[#tracker.path] then
         if cutPath(tracker.path, function(point) return point == newPoint end) then
           -- we already had such point in path before, all points after are removed
-          drawTrails()
+          drawTrailsAndStepCount(guid)
         else
           -- completely new point
           -- check ducks and teleporters
@@ -96,13 +98,13 @@ function updatePaths()
           if not continious then
             -- jump from one location to another
             table.insert(tracker.path, newPoint)
-            drawTrails()
+            drawTrailsAndStepCount(guid)
           else
             -- simple move, check distance
             local between = Vector.between(newPoint, tracker.path[#tracker.path])
             if math.abs(between.x) <= 1.1 and math.abs(between.z) <= 1.1 then
               table.insert(tracker.path, newPoint)
-              drawTrails()
+              drawTrailsAndStepCount(guid)
             end
           end
         end
@@ -111,7 +113,13 @@ function updatePaths()
   end
 end
 
-function drawTrails()
+function drawTrailsAndStepCount(initiatorGuid)
+  -- steps count for initiator. If every step count is to be updated, do it manually.
+  if initiatorGuid then
+    notifyStepCountUpdate(initiatorGuid)
+  end
+
+  -- trails
   local trails = {}
   for _, tracker in pairs(tracked) do
     addPathToTrails(tracker.path, tracker.speed, tracker.travelled, trails)
@@ -122,12 +130,26 @@ function drawTrails()
   Global.setVectorLines(trails)
 end
 
+-- notifies everyone if no guid provided
+function notifyStepCountUpdate(observerGuid, steps)
+  if observerGuid then
+    steps = steps or tracked[observerGuid].travelled + math.max(#tracked[observerGuid].path - 1, 0)
+    getObjectFromGUID(observerGuid).call("onStepCountUpdate", {steps = steps})
+  else
+    for guid in pairs(tracked) do
+      steps = steps or tracked[guid].travelled + math.max(#tracked[guid].path - 1, 0)
+      getObjectFromGUID(guid).call("onStepCountUpdate", {steps = steps})
+    end
+  end
+end
+
 function onPlayerTurnEnd(colorEnd, colorNext)
+  notifyStepCountUpdate(nil, 0)
   tracked = {}
   lingeringTrails = {}
 
   if pathTrackingEnabled and Turns.enable then
-    drawTrails()
+    drawTrailsAndStepCount(nil)
   end
 end
 
@@ -162,7 +184,7 @@ function onObjectDrop(player_color, dropped_object)
     local lastStoredPos = tracked[guid].path[#tracked[guid].path]
     if lastActualPos ~= lastStoredPos then
       table.insert(tracked[guid].path, lastActualPos)
-      drawTrails()
+      drawTrailsAndStepCount(guid)
     end
 
     -- update tracking status and trails
@@ -177,7 +199,7 @@ function onObjectDrop(player_color, dropped_object)
     trailClearTimer = Wait.time(function()
       trailClearTimer = nil
       lingeringTrails = {}
-      drawTrails()
+      drawTrailsAndStepCount(nil)
     end, 5)
   end
 end
@@ -256,7 +278,9 @@ function onMoveSpent(req)
 
   assert(req.obj and req.move, "onMoveSpent: incorrect request")
   trackObject(req.obj)
-  tracked[req.obj.getGUID()].travelled = tracked[req.obj.getGUID()].travelled + req.move
+  local guid = req.obj.getGUID()
+  tracked[guid].travelled = tracked[guid].travelled + req.move
+  notifyStepCountUpdate(guid)
 end
 
 function trackObject(object)

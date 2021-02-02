@@ -36,6 +36,12 @@
       </Image>
    </Panel>
 
+   <Panel id="speedPanel" height="200" width="150" offsetXY="410 -20" active="false">
+      <Image image="footprints" color="Blue" height="200" width="200" offsetXY="0 10">
+        <Text id="speed" height="200" width="200" offsetXY="0 8" text="1"></Text>
+      </Image>
+   </Panel>
+
    <!-- Marine order -->
    <Image id="orderImage" active="false" height="230" width="230" offsetXY="0 230" preserveAspect="true" />
 </Panel>
