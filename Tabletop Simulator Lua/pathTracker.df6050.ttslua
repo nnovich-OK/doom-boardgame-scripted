@@ -297,6 +297,10 @@ function onMoveReset(req)
   end
 end
 
+function onObjectDestroy(obj)
+  tracked[obj.getGUID()] = nil
+end
+
 function trackObject(object)
   if tracked[object.getGUID()] then
     return
