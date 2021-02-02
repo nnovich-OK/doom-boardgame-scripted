@@ -96,8 +96,10 @@ function onScoreEdit(player, value, id)
   printToAll(utils.getActorLabel(color) .. " score: " .. score[color] .. " (manual change)", color)
 end
 
-function resetScore()
+function reset()
+  armorUpgraded = {}
   for _, clr in ipairs(constants.allMarineColors) do
+    updateTakeArmorButton(clr)
     score[clr] = 0
     updateScoreUi(clr)
   end

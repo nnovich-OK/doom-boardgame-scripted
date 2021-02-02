@@ -205,7 +205,7 @@ function loadMap(player_color, campaign, scenario, difficulty, keepInventory)
     for _, clr in ipairs(constants.allMarineColors) do
       utils.getMarine(clr).call("resetHealth", difficulty)
     end
-    instances.score.call("resetScore")
+    instances.score.call("reset")
   end
 
   -- clear all tiles/tokens
