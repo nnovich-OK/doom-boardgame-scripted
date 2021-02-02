@@ -197,6 +197,7 @@ gunStats = {
     ammo = "rocket",
     attack = {"yellow", "blue1", "blue2"},
     melee = false,
+    blast = 1,
     attackMod = {},
     reminder = "seeking, blast 1",
   },
@@ -205,6 +206,7 @@ gunStats = {
     ammo = "rocket",
     attack = {"yellow", "blue2", "green1", "green2"},
     melee = false,
+    blast = 1,
     attackMod = {},
     reminder = "blast 1, knockback",
   },
@@ -221,6 +223,7 @@ gunStats = {
     ammo = "cell",
     attack = {"red", "yellow", "blue1", "green1", "blue2", "green2"},
     melee = false,
+    blast = 2,
     attackMod = {deadly=1},
     reminder = "blast 2",
   },
@@ -433,7 +436,7 @@ function prepareGunAttack(player_color, item)
     color = player_color,
     dice  = gunStats[item].attack,
     bonus = gunStats[item].attackMod or "none",
-    meta = {weaponType = weaponType}}
+    meta = {weaponType = weaponType, blast = gunStats[item].blast or 0}}
 
   instances.calc.call("configure", params)
   if player_color == "White" then
@@ -462,7 +465,7 @@ function onModeControlClick(player, value, id)
         or player.color
       local givingMarine = utils.getMarine(marineColor)
       local takingMarine = utils.getMarine(utils.getColor(newMode))
-      local dist = utils.getDistance(givingMarine, takingMarine)
+      local dist = utils.getDistance(givingMarine, takingMarine.getPosition())
       if dist ~= 1 then
         broadcastToColor(takingMarine.getName() .. " must be on adjacent space", player.color, player.color)
         instances.click.call("markNextClickAsSignle", {color = player.color, id = id})

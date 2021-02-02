@@ -191,33 +191,29 @@ function isLarge(figure)
   return isLargeDim.x and isLargeDim.z
 end
 
-function getDistance(first, second)
+function getDistance(attacker, targetedCell)
   local roundingDelta = {x = 0.5, z = 0.5}
-
-  local position = {first.getPosition(), second.getPosition()}
-
-  for i, figure in ipairs({first, second}) do
-    local isLargeDimensionsFigure = isLargeDimensions(figure)
-    if isLargeDimensionsFigure.x then
-      roundingDelta.x = roundingDelta.x - 0.5
-    end
-
-    if isLargeDimensionsFigure.z then
-      roundingDelta.z = roundingDelta.z - 0.5
-    end
-
-    if isLargeDimensionsFigure.x ~= isLargeDimensionsFigure.z then
-      -- special handling for demon, since its position doesn't corresponsd to geometric center
-      -- current position is center of head cell
-      -- correct, so we use geometric center instead
-      local angle = figure.getRotation().y * math.pi / 180
-      position[i].x = position[i].x + 0.5 * math.cos(angle)
-      position[i].z = position[i].z - 0.5 * math.sin(angle)
-    end
+  local isLarge = isLargeDimensions(attacker)
+  if isLarge.x then
+    roundingDelta.x = roundingDelta.x - 0.5
   end
 
-  local dx = math.floor(math.abs(position[2].x - position[1].x) + roundingDelta.x)
-  local dz = math.floor(math.abs(position[2].z - position[1].z) + roundingDelta.z)
+  if isLarge.z then
+    roundingDelta.z = roundingDelta.z - 0.5
+  end
+
+  local attackerCell = attacker.getPosition()
+  if isLarge.x ~= isLarge.z then
+    -- special handling for demon, since its position doesn't corresponsd to geometric center
+    -- current position is center of head cell
+    -- correct, so we use geometric center instead
+    local angle = attacker.getRotation().y * math.pi / 180
+    attackerCell.x = attackerCell.x + 0.5 * math.cos(angle)
+    attackerCell.z = attackerCell.z - 0.5 * math.sin(angle)
+  end
+
+  local dx = math.floor(math.abs(targetedCell.x - attackerCell.x) + roundingDelta.x)
+  local dz = math.floor(math.abs(targetedCell.z - attackerCell.z) + roundingDelta.z)
 
   return math.max(dx, dz)
 end
@@ -347,6 +343,18 @@ function isMarineColor(color)
   end
 
   return false
+end
+
+function getArmor(character)
+  if not character then
+    return 1
+  elseif utils.isMonster(character) then
+    return getMonsterStats(character.getName()).armor
+  elseif utils.isMarine(character) then
+    return tonumber(character.UI.getAttribute("armor", "text"))
+  else
+    return 1
+  end
 end
 
 return package

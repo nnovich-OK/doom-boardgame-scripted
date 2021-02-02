@@ -93,6 +93,7 @@ local lastRollBackup = {Red={}, Green={}, Blue={}, White={}}
 local lastRollNeedRestore = {}
 local reroll = {}
 local lastWeaponType = {Red={}, Green={}, Blue={}, White={}}
+local lastWeaponBlast = {Red=0, Green=0, Blue=0, White=0}
 local cumulativeStatsMode = {}
 local statsUpdateQueued = {}
 local syncMode = {}
@@ -795,7 +796,19 @@ function configure(params)
     then
       setParam(params.color, "distance", 0)
     end
+
+    -- if explosive, then adjust armor for the strongest creature in radius
+    -- It would be nice to have euristics here as well to prevent treating manual input
+    -- after previous shot with explosives as explosive. But it will do for now.
+    if not params.dice and not params.bonus
+      and params.meta.neighboursArmor
+      and lastWeaponBlast[params.color] > 0
+      and params.meta.neighboursArmor[lastWeaponBlast[params.color]]
+    then
+      setParam(params.color, "armor", params.meta.neighboursArmor[lastWeaponBlast[params.color]])
+    end
   end
+
 
   if params.bonus then
     setDefaultParams(params.color, "bonus")
@@ -817,6 +830,10 @@ function configure(params)
           setParam(params.color, "distance", 1)
         end
       end
+    end
+
+    if params.meta.blast then
+      lastWeaponBlast[params.color] = params.meta.blast
     end
   end
 

@@ -13,6 +13,7 @@ local saveAttackingCharacterHovered
 local prepareAttackParameters
 local findMonsterToActivate
 local renameHoveredMonsterToGrey
+local getStrongestNeighbourArmor
 
 
 function onScriptingButtonDown(index,  player_color)
@@ -113,23 +114,22 @@ function prepareAttackParameters(player_color)
     end
   end
 
-  local target = Player[player_color].getHoverObject()
-  if not target or not utils.isCharacter(target) then
-    broadcastToColor(
-      "Hotkey is intended to mark figurine as a target." ..
-      "Please hover your pointer over targeted character first.",
-      player_color,
-      stringColorToRGB(player_color))
-    return
-  end
+  local targetCell = Player[player_color].getPointerPosition()
+  targetCell.x = math.floor(targetCell.x) + 0.5
+  targetCell.z = math.floor(targetCell.z) + 0.5
+  targetCell.y = 0.5
+  Player[player_color].pingTable(targetCell)
 
-
+  local target = utils.getObjectAt(targetCell, utils.isCharacter)
+  target = target or utils.getObjectAt(targetCell, utils.isBarrel)
+  local targetName = target and target.getName() or "empty cell"
   printToColor(attackingChar[player_color].getName() .. " attacks "
-    .. target.getName() .. ". Ready to roll!",
+    .. targetName .. ". Ready to roll!",
     player_color,
     Color.Grey)
 
   local isMelee = false
+  local blast = 0
 
   -- ATTACKER PARAMETERS: dice, accuracy and deadly bonuses
   --                      set for monster attacks only
@@ -140,6 +140,7 @@ function prepareAttackParameters(player_color)
     params["bonus"] = stats.attackMod or "none"
 
     isMelee = stats.melee or false
+    blast = stats.blast or 0
 
     if stats.reminder and stats.reminder ~= "" then
       printToColor("Reminder: " .. stats.reminder, player_color, Color.Grey)
@@ -147,25 +148,24 @@ function prepareAttackParameters(player_color)
   end
 
   -- TARGET PARAMETERS: distance and armor
-  local armor = 1
-  if utils.isMonster(target) then
-    armor = utils.getMonsterStats(target.getName()).armor
-  else
-    armor = tonumber(target.UI.getAttribute("armor", "text"))
-  end
-
-  local dist = utils.getDistance(attackingChar[player_color], target)
+  local dist = utils.getDistance(attackingChar[player_color], targetCell)
   if dist >= 15 then dist = 15 end
   if isMelee then
     dist = 0
   end
 
-  params["target"] = {armor=armor, distance=dist}
+  local armor = utils.getArmor(target)
+  local neighboursArmor = getStrongestNeighbourArmor(targetCell)
+  if blast > 0 then
+    armor = neighboursArmor[blast]
+  end
+
+  params["target"] = {armor=utils.getArmor(target), distance=dist}
+  params["meta"] = {neighboursArmor = neighboursArmor}
 
   -- indicate with highlight
   attackingChar[player_color].highlightOn(stringColorToRGB(player_color), 5)
   attackingChar[player_color] = nil
-  target.highlightOn(stringColorToRGB(player_color), 5)
 
   instances.calc.call("configure", params)
 end
@@ -190,4 +190,25 @@ function findMonsterToActivate(player_color)
     monsterActivationIndex = monsterActivationIndex + 1
     Player[player_color].pingTable(allReadyMonsters[monsterActivationIndex].getPosition())
   end
+end
+
+function getStrongestNeighbourArmor(targetCell)
+  local rez = {}
+  for i = 1, 2 do --currently there are blasts for 1 or 2 radius only
+    rez[i] = 1
+    local targets = utils.getObjectsInZone(
+      targetCell, -- position
+      {0,0,0}, -- rotation
+      {2*i + 1, 3, 2*i + 1}, -- size
+      utils.isCharacter
+    )
+    for _, target in ipairs(targets) do
+      local curArmor = utils.getArmor(target)
+      if curArmor > rez[i] then
+        rez[i] = curArmor
+      end
+    end
+  end
+
+  return rez
 end
