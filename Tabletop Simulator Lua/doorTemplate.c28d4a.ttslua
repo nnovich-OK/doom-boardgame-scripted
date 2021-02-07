@@ -24,7 +24,7 @@ function onLoad(save_state)
       self.UI.setAttribute("open1", "active", "true")
       self.UI.setAttribute("open2", "active", "true")
     end,
-    1)
+    5)
 end
 
 function onSave()

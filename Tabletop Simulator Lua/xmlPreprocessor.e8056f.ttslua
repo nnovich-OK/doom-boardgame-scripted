@@ -63,7 +63,7 @@ function preprocess()
       for _,v in ipairs({"inv", "luck", "scanner", "score"}) do
         instances[v].call("onPreprocFinished")
       end
-    end, 1)
+    end, 5)
 end
 
 function walkDepth(xml, condition, action)
