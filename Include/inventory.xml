@@ -355,7 +355,7 @@
 
   <!-- AIM, GUARD, DODGE, HEAL -->
   <TableLayout
-    id="miscTable"
+    id="orderTable"
 
     columnWidths="50"
     preferredWidth="50"
@@ -407,7 +407,7 @@
   <!-- RED/YELLOW/BLUE KEYS -->
   <Panel preferredWidth="50">
     <TableLayout
-      id="miscTable"
+      id="keyTable"
       offsetXY="0 -29"
 
       columnWidths="50"

@@ -244,7 +244,7 @@
   childForceExpandWidth="true"
   childForceExpandHeight="false">
 
-  <TableLayout id="stats"
+  <TableLayout id="statsTable"
     padding="20 20 20 20"
     color="clear"
 
